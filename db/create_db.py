@@ -44,7 +44,7 @@ candidate_linkage_sql = """CREATE TABLE candidate_linkage ( \
                                            ID SERIAL NOT NULL, \
                                            CAND_ID VARCHAR(9) NOT NULL, \
                                            CAND_ELECTION_YR SMALLINT, \
-                                           FEC_ELECTION_YEAR SMALLINT, \
+                                           FEC_ELECTION_YR SMALLINT, \
                                            CMTE_ID VARCHAR(9), \
                                            CMTE_TP VARCHAR(1), \
                                            CMTE_DSGN VARCHAR(1), \
