@@ -1,1 +1,8 @@
+*.pyc
+*.kate-swp
+test/*
 data/*
+ftp/*.pyc
+ftp/*.kate-swp
+db/*.pyc
+db/*.kate-swp
