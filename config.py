@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-###################################
+##########################################
 ## MODIFY THIS FILE TO YOUR PREFERENCES ##
-##################################
+##########################################
 
 # Start year to maintain data from (must be >= 1998) default is 2004
 
