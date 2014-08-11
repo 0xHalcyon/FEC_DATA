@@ -79,7 +79,7 @@ comm_to_comm_sql = """CREATE TABLE comm_to_comm ( \
 cand_to_comm_sql = """CREATE TABLE cand_to_comm ( \
                                       ID SERIAL NOT NULL, \
                                       CMTE_ID VARCHAR(9) NOT NULL, \
-                                      AMNDT_ID VARCHAR(1), \
+                                      AMNDT_IND VARCHAR(1), \
                                       RPT_TP VARCHAR(3), \
                                       TRANSACTION_PGI VARCHAR(5), \
                                       IMAGE_NUM VARCHAR(11), \
