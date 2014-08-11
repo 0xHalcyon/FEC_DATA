@@ -23,7 +23,7 @@ for year in range(2004, 2015, 2):
   year_suffix = str(year)[2:]
   conn = psycopg2.connect(dbname="FEC_%s" %year, user="postgres")
   cur = conn.cursor()
-  for f in files:
+  for f in sorted(files):
     print "CURRENT YEAR: %s\nCURRENT TABLE: %s" % (year, f)
     temp = open(files[f][0] % (year, year_suffix))
     template = open(files[f][1]).read().strip()
