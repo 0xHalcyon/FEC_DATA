@@ -29,12 +29,12 @@ files_1998 = {"committee_master"  : ["data/%s/cm%s/cm.txt", "cm_header_file.csv"
 i = 0
 for year in range(config.start_year, config.end_year, 2):
   year_suffix = str(year)[2:]
-    conn = psycopg2.connect(dbname=config.db_prefix+year,
-			    user=config.db_user,
-			    password=config.db_password
-			    host=config.db_host
-			    port=config.db_port
-			    )
+  conn = psycopg2.connect(dbname=config.db_prefix+str(year),
+                          user=config.db_user,
+                          password=config.db_password
+			  host=config.db_host,
+			  port=config.db_port
+			  )
   cur = conn.cursor()
   if year == 1998:
     
