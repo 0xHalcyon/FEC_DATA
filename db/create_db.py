@@ -141,12 +141,7 @@ def create_db(start_year, end_year, cwd, db_prefix, db_user, db_password, db_hos
     
     except psycopg2.OperationalError as e:
       print "Database %s%s does not exist yet, creating now" % (db_prefix.lower(), year)
-      if db_password == "":      
-        print "Database has no password"
-        engine_stmt = 'postgresql+psycopg2:///template1'
-      else:
-        print "Database has a password"
-        engine_stmt = 'postgresql+psycopg2://%s:%s@%s:%s/template1' % \
+      engine_stmt = 'postgresql+psycopg2://%s:%s@%s:%s/template1' % \
 	              (db_user, db_password, db_host, db_port)
       engine = create_engine(engine_stmt)
       eng_conn = engine.connect()
