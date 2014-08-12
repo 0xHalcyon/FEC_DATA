@@ -14,19 +14,20 @@ start_year = 1998
 
 end_year = 2015
 
-# Database user, default is postgres
+# Database user *** THIS MUST BE CHANGED AND CANNOT BE EMPTY ***
 
-db_user = "postgres"
+db_user = ""
 
-# Database password, default is ""
+# Database password, *** THIS MUST NOT BE EMPTY ***
 
 db_password = ""
 
 # DB Prefix, default = FEC_
 # must conform to valid identifier/keyword rules for postgresql
 # for more information, see http://www.postgresql.org/docs/current/interactive/sql-syntax-lexical.html#SQL-SYNTAX-IDENTIFIERS
+# will be converted to lowercase when database is created for normalization purposes
 
-db_prefix = "FEC_"
+db_prefix = "fec_"
 
 # DB Host, default = localhost
 

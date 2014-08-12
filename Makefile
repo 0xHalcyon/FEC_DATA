@@ -13,3 +13,6 @@ createdb:
 
 populatedb:
 	./__init__.py populatedb
+	
+createuser:
+	./__init__.py createuser
