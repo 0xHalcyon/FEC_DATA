@@ -156,7 +156,7 @@ for year in range(config.start_year, config.end_year, 2):
     eng_conn.close()
     print dir(engine)
     print dir(eng_conn)
-    engine.close()
+    engine.dispose()
     sleep(1)
     conn = psycopg2.connect(dbname=config.db_prefix.lower()+str(year),
 			  user=config.db_user,
