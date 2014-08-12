@@ -129,7 +129,7 @@ individual_contrib_sql = """CREATE TABLE indiv_contrib ( \
                                           
 for year in range(config.start_year, config.end_year, 2):
   try:
-    conn = psycopg2.connect(dbname=config.db_prefix+str(year),
+    conn = psycopg2.connect(dbname=config.db_prefix.lower()+str(year),
 			  user=config.db_user,
 			  password=config.db_password,
 			  host=config.db_host,
