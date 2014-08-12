@@ -139,9 +139,12 @@ for year in range(config.start_year, config.end_year, 2):
     
   except psycopg2.OperationalError as e:
     print "Database %s%s does not exist yet, creating now" % (config.db_prefix, year)
-    
-    engine_stmt = 'postgresql+psycopg2://%s:%s@%s:%s/template1' % \
-                   (config.db_user, config.db_password, config.db_host, config.db_port)
+    if config.db_password == "":      
+      engine_stmt = 'postgresql+psycopg2://%s@%s:%s/template1' % \
+                   (config.db_user, config.db_host, config.db_port)
+    else:
+      engine_stmt = 'postgresql+psycopg2://%s:%s@%s:%s/template1' % \
+	            (config.db_user, config.db_password, config.db_host, config.db_port)
     engine = create_engine(engine_stmt)
     eng_conn = engine.connect()
     eng_conn.connection.connection.set_isolation_level(0)
