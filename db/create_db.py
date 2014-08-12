@@ -7,7 +7,7 @@ from time import sleep
 try:
   import config
 except ImportError:
-  os.symlink("config.py", "db/config.py")
+  os.symlink("../config.py", "./config.py")
   import config
 
 #http://www.fec.gov/finance/disclosure/metadata/DataDictionaryCandidateMaster.shtml

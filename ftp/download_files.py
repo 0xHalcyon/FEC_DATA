@@ -6,7 +6,7 @@ import os
 try:
   import config
 except ImportError:
-  os.symlink("config.py", "db/config.py")
+  os.symlink("../config.py", "./config.py")
   import config
   
 url = "ftp://ftp.fec.gov"
