@@ -1,7 +1,12 @@
 #!/usr/bin/env python
 import zipfile
 import os
-import config
+
+try:
+  import config
+except ImportError:
+  os.symlink("config.py", "db/config.py")
+  import config
 
 files = {"data/%s/cm%s.zip"    : "data/%s/cm%s/",    # Committee Master File
          "data/%s/cn%s.zip"    : "data/%s/cn%s/",    # Candidate Master File

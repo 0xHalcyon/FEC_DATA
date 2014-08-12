@@ -1,14 +1,21 @@
 #!/usr/bin/python
 
 from ftplib import FTP
-import config
 import os
+
+try:
+  import config
+except ImportError:
+  os.symlink("config.py", "db/config.py")
+  import config
+  
 url = "ftp://ftp.fec.gov"
 ftp =FTP("ftp.fec.gov")
 
 if not os.path.isdir("data"):
   os.mkdir("data")
   
+
 ftp.login()
 
 files = {"/FEC/%s/cm%s.zip"    : "data/%s/cm%s.zip",   # Committee Master File

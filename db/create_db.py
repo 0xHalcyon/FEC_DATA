@@ -1,8 +1,14 @@
 #!/usr/bin/env python
 import psycopg2
-import config
+import os
 from sqlalchemy import create_engine
 from time import sleep
+
+try:
+  import config
+except ImportError:
+  os.symlink("config.py", "db/config.py")
+  import config
 
 #http://www.fec.gov/finance/disclosure/metadata/DataDictionaryCandidateMaster.shtml
 candidate_master_sql = """CREATE TABLE candidate_master ( \
@@ -154,8 +160,6 @@ for year in range(config.start_year, config.end_year, 2):
     eng_conn.execute(create_db_stmt)
     eng_conn.connection.connection.set_isolation_level(1)
     eng_conn.close()
-    print dir(engine)
-    print dir(eng_conn)
     engine.dispose()
     sleep(1)
     conn = psycopg2.connect(dbname=config.db_prefix.lower()+str(year),

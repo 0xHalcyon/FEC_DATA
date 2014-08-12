@@ -1,9 +1,16 @@
 #!/usr/bin/env python
 
 import psycopg2
-import config
 import os
 from datetime import datetime
+
+try:
+  import config
+except ImportError:
+  os.symlink("config.py", "db/config.py")
+  import config
+  
+
 # files list
 #(year, year_suffix)
 
