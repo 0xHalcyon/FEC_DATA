@@ -5,6 +5,7 @@
 ##########################################
 
 # Start year to maintain data from (must be >= 1998) default is 2004
+# Can be 1998, 2000, 2002, 2004, 2006, 2008, 2010, 2012, 2014
 
 start_year = 2004
 

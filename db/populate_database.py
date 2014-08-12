@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import psycopg2
+import config
 from datetime import datetime
 # files list
 #(year, year_suffix)
@@ -12,12 +13,13 @@ def read_some_lines(file_object, chunk_size=1024):
       break
     yield data
     
-files = {"committee_master" : ["../data/%s/cm%s/cm.txt", "cm_header_file.csv"],
-             "candidate_master" : ["../data/%s/cn%s/cn.txt", "cn_header_file.csv"],
-             "candidate_linkage" : ["../data/%s/ccl%s/ccl.txt", "ccl_header_file.csv"],
-             "comm_to_comm" : ["../data/%s/oth%s/itoth.txt","oth_header_file.csv"],
-             "cand_to_comm" : ["../data/%s/pas2%s/itpas2.txt", "pas2_header_file.csv"],
-             "indiv_contrib" : ["../data/%s/indiv%s/itcont.txt", "indiv_header_file.csv"]}
+files = {"committee_master"  : ["data/%s/cm%s/cm.txt", "cm_header_file.csv"],
+         "candidate_master"  : ["data/%s/cn%s/cn.txt", "cn_header_file.csv"],
+         "candidate_linkage" : ["data/%s/ccl%s/ccl.txt", "ccl_header_file.csv"],
+         "comm_to_comm"      : ["data/%s/oth%s/itoth.txt","oth_header_file.csv"],
+         "cand_to_comm"      : ["data/%s/pas2%s/itpas2.txt", "pas2_header_file.csv"],
+         "indiv_contrib"     : ["data/%s/indiv%s/itcont.txt", "indiv_header_file.csv"]}
+
 i = 0
 for year in range(2004, 2015, 2):
   year_suffix = str(year)[2:]
