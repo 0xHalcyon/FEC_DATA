@@ -10,7 +10,7 @@ ftp.login()
 
 files = {"/FEC/%s/cm%s.zip"    : "data/%s/cm%s.zip",   # Committee Master File
          "/FEC/%s/cn%s.zip"    : "data/%s/cn%s.zip",   # Candidate Master File
-	 "/FEC/%s/ccl%s.zip"   : "data/%s/cn%s.zip",   # Candidate Committee Linkage File
+	 "/FEC/%s/ccl%s.zip"   : "data/%s/ccl%s.zip",   # Candidate Committee Linkage File
 	 "/FEC/%s/oth%s.zip"   : "data/%s/oth%s.zip",  # Any transaction from one committee to another
 	 "/FEC/%s/pas2%s.zip"  : "data/%s/pas2%s.zip", # Contributions to candidates (and other expenditures) from committees
 	 "/FEC/%s/indiv%s.zip" : "data/%s/indiv%s.zip" # Contributions by individuals
