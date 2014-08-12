@@ -2,6 +2,7 @@
 import psycopg2
 import config
 from sqlalchemy import create_engine
+from time import sleep
 
 #http://www.fec.gov/finance/disclosure/metadata/DataDictionaryCandidateMaster.shtml
 candidate_master_sql = """CREATE TABLE candidate_master ( \
@@ -153,6 +154,7 @@ for year in range(config.start_year, config.end_year, 2):
     eng_conn.execute(create_db_stmt)
     eng_conn.connection.connection.set_isolation_level(1)
     eng_conn.close()
+    sleep(1)
     conn = psycopg2.connect(dbname=config.db_prefix.lower()+str(year),
 			  user=config.db_user,
 			  password=config.db_password,
@@ -191,6 +193,10 @@ for year in range(config.start_year, config.end_year, 2):
     cur.execute(individual_contrib_sql)
     
   conn.commit()
+  cur.close()
+  conn.close()
+  sleep(1)
   
+
 
                                           
