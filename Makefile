@@ -3,13 +3,13 @@ all: download extract createdb populatedb
 
 
 download:
-	./ftp/download_files.py
+	./__init__.py download
 
 extract:
-	./ftp/extract_files.py
+	./__init__.py extract
 
 createdb:
-	./db/create_db.py
+	./__init__.py createdb
 
 populatedb:
-	./db/populate_database.py
+	./__init__.py populatedb

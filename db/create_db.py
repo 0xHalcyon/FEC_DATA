@@ -4,12 +4,6 @@ import os
 from sqlalchemy import create_engine
 from time import sleep
 
-try:
-  import config
-except ImportError:
-  os.symlink("./config.py", "../config.py")
-  import config
-
 #http://www.fec.gov/finance/disclosure/metadata/DataDictionaryCandidateMaster.shtml
 candidate_master_sql = """CREATE TABLE candidate_master ( \
                                            ID SERIAL NOT NULL, \
@@ -133,76 +127,77 @@ individual_contrib_sql = """CREATE TABLE indiv_contrib ( \
                                           MEMO_CD VARCHAR(5), \
                                           MEMO_TEXT VARCHAR(100), \
                                           SUB_ID BIGINT UNIQUE NOT NULL);"""
-                                          
-for year in range(config.start_year, config.end_year, 2):
-  try:
-    conn = psycopg2.connect(dbname=config.db_prefix.lower()+str(year),
-			  user=config.db_user,
-			  password=config.db_password,
-			  host=config.db_host,
-			  port=config.db_port
-			  )
-    cur = conn.cursor()
+def create_db(start_year, end_year, cwd, db_prefix, db_user, db_password, db_host, db_port):       
+  """Creates databases and populates those databases with the templates provided by config.py"""
+  for year in range(start_year, end_year, 2):
+    try:
+      conn = psycopg2.connect(dbname=db_prefix.lower()+str(year),
+			      user=db_user,
+			      password=db_password,
+			      host=db_host,
+			      port=db_port
+			     )
+      cur = conn.cursor()
     
-  except psycopg2.OperationalError as e:
-    print "Database %s%s does not exist yet, creating now" % (config.db_prefix, year)
-    if config.db_password == "":      
-      print "Database has no password"
-      engine_stmt = 'postgresql+psycopg2:///template1'
-    else:
-      print "Database has a password"
-      engine_stmt = 'postgresql+psycopg2://%s:%s@%s:%s/template1' % \
-	            (config.db_user, config.db_password, config.db_host, config.db_port)
-    engine = create_engine(engine_stmt)
-    eng_conn = engine.connect()
-    eng_conn.connection.connection.set_isolation_level(0)
-    create_db_stmt = "CREATE DATABASE %s%s" % (config.db_prefix.lower(), year)
-    eng_conn.execute(create_db_stmt)
-    eng_conn.connection.connection.set_isolation_level(1)
-    eng_conn.close()
-    engine.dispose()
-    sleep(1)
-    conn = psycopg2.connect(dbname=config.db_prefix.lower()+str(year),
-			  user=config.db_user,
-			  password=config.db_password,
-			  host=config.db_host,
-			  port=config.db_port
-			  )
-    cur = conn.cursor()
+    except psycopg2.OperationalError as e:
+      print "Database %s%s does not exist yet, creating now" % (db_prefix.lower(), year)
+      if db_password == "":      
+        print "Database has no password"
+        engine_stmt = 'postgresql+psycopg2:///template1'
+      else:
+        print "Database has a password"
+        engine_stmt = 'postgresql+psycopg2://%s:%s@%s:%s/template1' % \
+	              (db_user, db_password, db_host, db_port)
+      engine = create_engine(engine_stmt)
+      eng_conn = engine.connect()
+      eng_conn.connection.connection.set_isolation_level(0)
+      create_db_stmt = "CREATE DATABASE %s%s" % (db_prefix.lower(), year)
+      eng_conn.execute(create_db_stmt)
+      eng_conn.connection.connection.set_isolation_level(1)
+      eng_conn.close()
+      engine.dispose()
+      sleep(1)
+      conn = psycopg2.connect(dbname=db_prefix.lower()+str(year),
+			      user=db_user,
+			      password=db_password,
+			      host=db_host,
+			      port=db_port
+			     )
+      cur = conn.cursor()
     
   
-  if year <= 1998:
+    if year <= 1998:
     
-    cur.execute("""DROP TABLE IF EXISTS candidate_master;""")
-    cur.execute(candidate_master_sql)
-    cur.execute("""DROP TABLE IF EXISTS committee_master;""")
-    cur.execute(commitee_master_sql)
-    cur.execute("""DROP TABLE IF EXISTS comm_to_comm;""")
-    cur.execute(comm_to_comm_sql)
-    cur.execute("""DROP TABLE IF EXISTS cand_to_comm;""")
-    cur.execute(cand_to_comm_sql)
-    cur.execute("""DROP TABLE IF EXISTS indiv_contrib;""")
-    cur.execute(individual_contrib_sql)
+      cur.execute("""DROP TABLE IF EXISTS candidate_master;""")
+      cur.execute(candidate_master_sql)
+      cur.execute("""DROP TABLE IF EXISTS committee_master;""")
+      cur.execute(commitee_master_sql)
+      cur.execute("""DROP TABLE IF EXISTS comm_to_comm;""")
+      cur.execute(comm_to_comm_sql)
+      cur.execute("""DROP TABLE IF EXISTS cand_to_comm;""")
+      cur.execute(cand_to_comm_sql)
+      cur.execute("""DROP TABLE IF EXISTS indiv_contrib;""")
+      cur.execute(individual_contrib_sql)
     
-  else:
+    else:
     
-    cur.execute("""DROP TABLE IF EXISTS candidate_master;""")
-    cur.execute(candidate_master_sql)
-    cur.execute("""DROP TABLE IF EXISTS committee_master;""")
-    cur.execute(commitee_master_sql)
-    cur.execute("""DROP TABLE IF EXISTS candidate_linkage;""")
-    cur.execute(candidate_linkage_sql)
-    cur.execute("""DROP TABLE IF EXISTS comm_to_comm;""")
-    cur.execute(comm_to_comm_sql)
-    cur.execute("""DROP TABLE IF EXISTS cand_to_comm;""")
-    cur.execute(cand_to_comm_sql)
-    cur.execute("""DROP TABLE IF EXISTS indiv_contrib;""")
-    cur.execute(individual_contrib_sql)
+      cur.execute("""DROP TABLE IF EXISTS candidate_master;""")
+      cur.execute(candidate_master_sql)
+      cur.execute("""DROP TABLE IF EXISTS committee_master;""")
+      cur.execute(commitee_master_sql)
+      cur.execute("""DROP TABLE IF EXISTS candidate_linkage;""")
+      cur.execute(candidate_linkage_sql)
+      cur.execute("""DROP TABLE IF EXISTS comm_to_comm;""")
+      cur.execute(comm_to_comm_sql)
+      cur.execute("""DROP TABLE IF EXISTS cand_to_comm;""")
+      cur.execute(cand_to_comm_sql)
+      cur.execute("""DROP TABLE IF EXISTS indiv_contrib;""")
+      cur.execute(individual_contrib_sql)
     
-  conn.commit()
-  cur.close()
-  conn.close()
-  sleep(1)
+    conn.commit()
+    cur.close()
+    conn.close()
+    sleep(1)
   
 
 
