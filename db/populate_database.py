@@ -58,7 +58,7 @@ for year in range(config.start_year, config.end_year, 2):
 	  query = "INSERT INTO %s %s VALUES %s;" % (f, template, temp1)
           #print query
           cur.execute(query)
-          i+=1
+          #i+=1
       conn.commit()
       
   else:
@@ -83,8 +83,8 @@ for year in range(config.start_year, config.end_year, 2):
 	  query = "INSERT INTO %s %s VALUES %s;" % (f, template, temp1)
           #print query
           cur.execute(query)
-          i+=1
+          #i+=1
         conn.commit()
-      print "Total INSERTs so far %i" % i
+      #print "Total INSERTs so far %i" % i
 
     
