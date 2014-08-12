@@ -129,10 +129,10 @@ individual_contrib_sql = """CREATE TABLE indiv_contrib ( \
                                           
 for year in range(config.start_year, config.end_year, 2):
   try:
-    conn = psycopg2.connect(dbname=config.db_prefix+year,
+    conn = psycopg2.connect(dbname=config.db_prefix+str(year),
 			  user=config.db_user,
-			  password=config.db_password
-			  host=config.db_host
+			  password=config.db_password,
+			  host=config.db_host,
 			  port=config.db_port
 			  )
     cur = conn.cursor()
@@ -140,8 +140,8 @@ for year in range(config.start_year, config.end_year, 2):
   except psycopg2.OperationalError as e:
     print "Database %s%s does not exist yet, creating now" % (config.db_prefix, year)
     
-    engine_stmt = 'postgresql+psycopg2://%s:%s@%s:%s/template1' %
-                  (config.db_user, config.db_password, config.db_host, config.db_port)
+    engine_stmt = 'postgresql+psycopg2://%s:%s@%s:%s/template1' % \
+                   (config.db_user, config.db_password, config.db_host, config.db_port)
     engine = create_engine(engine_stmt)
     eng_conn = engine.connect()
     eng_conn.connection.connection.set_isolation_level(0)
@@ -149,10 +149,10 @@ for year in range(config.start_year, config.end_year, 2):
     eng_conn.execute(create_db_stmt)
     eng_conn.connection.connection.set_isolation_level(1)
     
-    conn = psycopg2.connect(dbname=config.db_prefix+year,
+    conn = psycopg2.connect(dbname=config.db_prefix+str(year),
 			  user=config.db_user,
-			  password=config.db_password
-			  host=config.db_host
+			  password=config.db_password,
+			  host=config.db_host,
 			  port=config.db_port
 			  )
     cur = conn.cursor()

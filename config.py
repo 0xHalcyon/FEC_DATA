@@ -12,7 +12,7 @@ start_year = 1998
 # End year to maintain data to, must be >= start_year+1, default is 2015
 # can be 1999, 2001, 2003, 2005, 2007, 2009, 2011, 2013, 2015 ...
 
-end_year = 2015
+end_year = 2003
 
 # Database user, default is postgres
 

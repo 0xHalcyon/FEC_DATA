@@ -13,25 +13,25 @@ def read_some_lines(file_object, chunk_size=1024):
       break
     yield data
     
-files = {"committee_master"  : ["data/%s/cm%s/cm.txt", "cm_header_file.csv"],
-         "candidate_master"  : ["data/%s/cn%s/cn.txt", "cn_header_file.csv"],
-         "candidate_linkage" : ["data/%s/ccl%s/ccl.txt", "ccl_header_file.csv"],
-         "comm_to_comm"      : ["data/%s/oth%s/itoth.txt","oth_header_file.csv"],
-         "cand_to_comm"      : ["data/%s/pas2%s/itpas2.txt", "pas2_header_file.csv"],
-         "indiv_contrib"     : ["data/%s/indiv%s/itcont.txt", "indiv_header_file.csv"]}
+files = {"committee_master"  : ["data/%s/cm%s/cm.txt", "db/headers/cm_header_file.csv"],
+         "candidate_master"  : ["data/%s/cn%s/cn.txt", "db/headers/cn_header_file.csv"],
+         "candidate_linkage" : ["data/%s/ccl%s/ccl.txt", "db/headers/ccl_header_file.csv"],
+         "comm_to_comm"      : ["data/%s/oth%s/itoth.txt","db/headers/oth_header_file.csv"],
+         "cand_to_comm"      : ["data/%s/pas2%s/itpas2.txt", "db/headers/pas2_header_file.csv"],
+         "indiv_contrib"     : ["data/%s/indiv%s/itcont.txt", "db/headers/indiv_header_file.csv"]}
 
-files_1998 = {"committee_master"  : ["data/%s/cm%s/cm.txt", "cm_header_file.csv"],
-              "candidate_master"  : ["data/%s/cn%s/cn.txt", "cn_header_file.csv"],
-              "comm_to_comm"      : ["data/%s/oth%s/itoth.txt","oth_header_file.csv"],
-              "cand_to_comm"      : ["data/%s/pas2%s/itpas2.txt", "pas2_header_file.csv"],
-              "indiv_contrib"     : ["data/%s/indiv%s/itcont.txt", "indiv_header_file.csv"]}
+files_1998 = {"committee_master"  : ["data/%s/cm%s/cm.txt", "db/headers/cm_header_file.csv"],
+              "candidate_master"  : ["data/%s/cn%s/cn.txt", "db/headers/cn_header_file.csv"],
+              "comm_to_comm"      : ["data/%s/oth%s/itoth.txt","db/headers/oth_header_file.csv"],
+              "cand_to_comm"      : ["data/%s/pas2%s/itpas2.txt", "db/headers/pas2_header_file.csv"],
+              "indiv_contrib"     : ["data/%s/indiv%s/itcont.txt", "db/headers/indiv_header_file.csv"]}
 
 i = 0
 for year in range(config.start_year, config.end_year, 2):
   year_suffix = str(year)[2:]
   conn = psycopg2.connect(dbname=config.db_prefix+str(year),
                           user=config.db_user,
-                          password=config.db_password
+                          password=config.db_password,
 			  host=config.db_host,
 			  port=config.db_port
 			  )
