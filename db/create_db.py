@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import psycopg2
+import config
 
 #http://www.fec.gov/finance/disclosure/metadata/DataDictionaryCandidateMaster.shtml
 candidate_master_sql = """CREATE TABLE candidate_master ( \
@@ -124,21 +125,41 @@ individual_contrib_sql = """CREATE TABLE indiv_contrib ( \
                                           MEMO_CD VARCHAR(5), \
                                           MEMO_TEXT VARCHAR(100), \
                                           SUB_ID BIGINT UNIQUE NOT NULL);"""
-for i in range(2004, 2015, 2):
-  conn = psycopg2.connect(dbname="FEC_%s"%i, user="postgres")
+                                          
+for year in range(config.start_year, config.end_year, 2):
+  conn = psycopg2.connect(dbname=config.db_prefix+year,
+			  user=config.db_user,
+			  password=config.db_password)
   cur = conn.cursor()
-  cur.execute("""DROP TABLE IF EXISTS candidate_master;""")
-  cur.execute(candidate_master_sql)
-  cur.execute("""DROP TABLE IF EXISTS committee_master;""")
-  cur.execute(commitee_master_sql)
-  cur.execute("""DROP TABLE IF EXISTS candidate_linkage;""")
-  cur.execute(candidate_linkage_sql)
-  cur.execute("""DROP TABLE IF EXISTS comm_to_comm;""")
-  cur.execute(comm_to_comm_sql)
-  cur.execute("""DROP TABLE IF EXISTS cand_to_comm;""")
-  cur.execute(cand_to_comm_sql)
-  cur.execute("""DROP TABLE IF EXISTS indiv_contrib;""")
-  cur.execute(individual_contrib_sql)
+  
+  if year == 1998:
+    
+    cur.execute("""DROP TABLE IF EXISTS candidate_master;""")
+    cur.execute(candidate_master_sql)
+    cur.execute("""DROP TABLE IF EXISTS committee_master;""")
+    cur.execute(commitee_master_sql)
+    cur.execute("""DROP TABLE IF EXISTS comm_to_comm;""")
+    cur.execute(comm_to_comm_sql)
+    cur.execute("""DROP TABLE IF EXISTS cand_to_comm;""")
+    cur.execute(cand_to_comm_sql)
+    cur.execute("""DROP TABLE IF EXISTS indiv_contrib;""")
+    cur.execute(individual_contrib_sql)
+    
+  else:
+    
+    cur.execute("""DROP TABLE IF EXISTS candidate_master;""")
+    cur.execute(candidate_master_sql)
+    cur.execute("""DROP TABLE IF EXISTS committee_master;""")
+    cur.execute(commitee_master_sql)
+    cur.execute("""DROP TABLE IF EXISTS candidate_linkage;""")
+    cur.execute(candidate_linkage_sql)
+    cur.execute("""DROP TABLE IF EXISTS comm_to_comm;""")
+    cur.execute(comm_to_comm_sql)
+    cur.execute("""DROP TABLE IF EXISTS cand_to_comm;""")
+    cur.execute(cand_to_comm_sql)
+    cur.execute("""DROP TABLE IF EXISTS indiv_contrib;""")
+    cur.execute(individual_contrib_sql)
+    
   conn.commit()
   
 

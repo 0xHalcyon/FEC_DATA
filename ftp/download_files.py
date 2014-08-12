@@ -23,7 +23,7 @@ files_1998 = {"/FEC/%s/cm%s.zip"    : "data/%s/cm%s.zip",   # Committee Master F
 	      "/FEC/%s/indiv%s.zip" : "data/%s/indiv%s.zip" # Contributions by individuals
              }
 
-for year in range(config.start_year, 2015, 2):
+for year in range(config.start_year, config.end_year, 2):
   year_suffix = str(year)[2:]
   
   if year == 1998:

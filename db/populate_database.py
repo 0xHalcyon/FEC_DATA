@@ -20,33 +20,68 @@ files = {"committee_master"  : ["data/%s/cm%s/cm.txt", "cm_header_file.csv"],
          "cand_to_comm"      : ["data/%s/pas2%s/itpas2.txt", "pas2_header_file.csv"],
          "indiv_contrib"     : ["data/%s/indiv%s/itcont.txt", "indiv_header_file.csv"]}
 
+files_1998 = {"committee_master"  : ["data/%s/cm%s/cm.txt", "cm_header_file.csv"],
+              "candidate_master"  : ["data/%s/cn%s/cn.txt", "cn_header_file.csv"],
+              "comm_to_comm"      : ["data/%s/oth%s/itoth.txt","oth_header_file.csv"],
+              "cand_to_comm"      : ["data/%s/pas2%s/itpas2.txt", "pas2_header_file.csv"],
+              "indiv_contrib"     : ["data/%s/indiv%s/itcont.txt", "indiv_header_file.csv"]}
+
 i = 0
-for year in range(2004, 2015, 2):
+for year in range(config.start_year, config.end_year, 2):
   year_suffix = str(year)[2:]
-  conn = psycopg2.connect(dbname="FEC_%s" %year, user="postgres")
+  conn = psycopg2.connect(dbname=config.db_prefix+year,
+			  user=config.db_user,
+			  password=config.db_password)
   cur = conn.cursor()
-  for f in sorted(files):
-    print "CURRENT YEAR: %s\nCURRENT TABLE: %s" % (year, f)
-    temp = open(files[f][0] % (year, year_suffix))
-    template = open(files[f][1]).read().strip()
-    template = str(tuple(template.split(","))).replace("'", "").lower()
-    for chunk in read_some_lines(temp):
-      for line in chunk:
-	temp1 = line.strip().replace("'", "").split("|")
-	if f in ("comm_to_comm", "cand_to_comm", "indiv_contrib"):
-	  if temp1[13]:
-	    date = temp1[13]
-	    date = datetime(month=int(date[0:2]), day=int(date[2:4]), year=int(date[4:]))
-	    temp1[13] = date.strftime("%Y%m%d")
-	  else :
-	    date = datetime(month=01, day=01, year=1900)
-	    temp1[13] = date.strftime("%Y%m%d")	   
-	temp1 = tuple(temp1)
-	query = "INSERT INTO %s %s VALUES %s;" % (f, template, temp1)
-        #print query
-        cur.execute(query)
-        i+=1
+  if year == 1998:
+    
+    for f in sorted(files_1998):
+      print "CURRENT YEAR: %s\nCURRENT TABLE: %s" % (year, f)
+      temp = open(files[f][0] % (year, year_suffix))
+      template = open(files[f][1]).read().strip()
+      template = str(tuple(template.split(","))).replace("'", "").lower()
+      for chunk in read_some_lines(temp):
+        for line in chunk:
+	  temp1 = line.strip().replace("'", "").split("|")
+	  if f in ("comm_to_comm", "cand_to_comm", "indiv_contrib"):
+	    if temp1[13]:
+	      date = temp1[13]
+	      date = datetime(month=int(date[0:2]), day=int(date[2:4]), year=int(date[4:]))
+	      temp1[13] = date.strftime("%Y%m%d")
+	    else:
+	      date = datetime(month=01, day=01, year=1900)
+	      temp1[13] = date.strftime("%Y%m%d")	   
+	  temp1 = tuple(temp1)
+	  query = "INSERT INTO %s %s VALUES %s;" % (f, template, temp1)
+          #print query
+          cur.execute(query)
+          i+=1
       conn.commit()
-    print "Total INSERTs so far %i" % i
+      
+  else:
+    
+    for f in sorted(files):
+      print "CURRENT YEAR: %s\nCURRENT TABLE: %s" % (year, f)
+      temp = open(files[f][0] % (year, year_suffix))
+      template = open(files[f][1]).read().strip()
+      template = str(tuple(template.split(","))).replace("'", "").lower()
+      for chunk in read_some_lines(temp):
+        for line in chunk:
+          temp1 = line.strip().replace("'", "").split("|")
+ 	  if f in ("comm_to_comm", "cand_to_comm", "indiv_contrib"):
+	    if temp1[13]:
+	      date = temp1[13]
+	      date = datetime(month=int(date[0:2]), day=int(date[2:4]), year=int(date[4:]))
+	      temp1[13] = date.strftime("%Y%m%d")
+	    else :
+	      date = datetime(month=01, day=01, year=1900)
+	      temp1[13] = date.strftime("%Y%m%d")	   
+	  temp1 = tuple(temp1)
+	  query = "INSERT INTO %s %s VALUES %s;" % (f, template, temp1)
+          #print query
+          cur.execute(query)
+          i+=1
+        conn.commit()
+      print "Total INSERTs so far %i" % i
 
     

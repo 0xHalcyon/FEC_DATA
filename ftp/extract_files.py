@@ -17,8 +17,10 @@ files_1998 = {"data/%s/cm%s.zip"    : "data/%s/cm%s/",    # Committee Master Fil
 	      "data/%s/pas2%s.zip"  : "data/%s/pas2%s/",  # Contributions to candidates (and other expenditures) from committees
 	      "data/%s/indiv%s.zip" : "data/%s/indiv%s/", # Contributions by individuals
 	     }
-for year in range(config.start_year, 2015, 2):
+
+for year in range(config.start_year, config.end_year, 2):
   year_suffix = str(year)[2:]
+  
   if year == 1998:
     
     for f in files:
@@ -28,6 +30,7 @@ for year in range(config.start_year, 2015, 2):
         os.mkdir(extract_to)
       zf = zipfile.ZipFile(archive)
       print "Extracting %s to %s" % (archive, extract_to)
+      
   else: 
     
     for f in files:
