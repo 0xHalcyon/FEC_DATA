@@ -149,11 +149,11 @@ for year in range(config.start_year, config.end_year, 2):
     engine = create_engine(engine_stmt)
     eng_conn = engine.connect()
     eng_conn.connection.connection.set_isolation_level(0)
-    create_db_stmt = "CREATE DATABASE %s%s" % (config.db_prefix, year)
+    create_db_stmt = "CREATE DATABASE %s%s" % (config.db_prefix.lower(), year)
     eng_conn.execute(create_db_stmt)
     eng_conn.connection.connection.set_isolation_level(1)
     
-    conn = psycopg2.connect(dbname=config.db_prefix+str(year),
+    conn = psycopg2.connect(dbname=config.db_prefix.lower()+str(year),
 			  user=config.db_user,
 			  password=config.db_password,
 			  host=config.db_host,

@@ -33,7 +33,7 @@ if not os.path.isdir("db/errors"):
 errors = open("db/errors/errors.txt", "wb")
 for year in range(config.start_year, config.end_year, 2):
   year_suffix = str(year)[2:]
-  conn = psycopg2.connect(dbname=config.db_prefix+str(year),
+  conn = psycopg2.connect(dbname=config.db_prefix.lower()+str(year),
                           user=config.db_user,
                           password=config.db_password,
 			  host=config.db_host,
