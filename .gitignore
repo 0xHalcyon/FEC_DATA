@@ -6,3 +6,4 @@ ftp/*.pyc
 ftp/*.kate-swp
 db/*.pyc
 db/*.kate-swp
+db/errors/*
