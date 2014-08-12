@@ -6,6 +6,9 @@ import os
 url = "ftp://ftp.fec.gov"
 ftp =FTP("ftp.fec.gov")
 
+if not os.path.isdir("data"):
+  os.mkdir("data")
+  
 ftp.login()
 
 files = {"/FEC/%s/cm%s.zip"    : "data/%s/cm%s.zip",   # Committee Master File
