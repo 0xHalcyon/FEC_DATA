@@ -2,6 +2,7 @@
 
 import psycopg2
 import config
+import os
 from datetime import datetime
 # files list
 #(year, year_suffix)
@@ -26,7 +27,10 @@ files_1998 = {"committee_master"  : ["data/%s/cm%s/cm.txt", "db/headers/cm_heade
               "cand_to_comm"      : ["data/%s/pas2%s/itpas2.txt", "db/headers/pas2_header_file.csv"],
               "indiv_contrib"     : ["data/%s/indiv%s/itcont.txt", "db/headers/indiv_header_file.csv"]}
 
-i = 0
+if not os.path.isdir("db/errors"):
+  os.mkdir("db/errors")
+  
+errors = open("db/errors/errors.txt", "wb")
 for year in range(config.start_year, config.end_year, 2):
   year_suffix = str(year)[2:]
   conn = psycopg2.connect(dbname=config.db_prefix+str(year),
@@ -49,7 +53,14 @@ for year in range(config.start_year, config.end_year, 2):
 	  if f in ("comm_to_comm", "cand_to_comm", "indiv_contrib"):
 	    if temp1[13]:
 	      date = temp1[13]
-	      date = datetime(month=int(date[0:2]), day=int(date[2:4]), year=int(date[4:]))
+	      try:
+	        date = datetime(month=int(date[0:2]), day=int(date[2:4]), year=int(date[4:]))
+	      except ValueError as e:
+		print e, temp1[13]
+		to_write = "%s|%s\n" % (year, str(temp1))
+		errors.write(to_write)
+		errors.flush()
+		continue
 	      temp1[13] = date.strftime("%Y%m%d")
 	    else:
 	      date = datetime(month=01, day=01, year=1900)
@@ -74,7 +85,13 @@ for year in range(config.start_year, config.end_year, 2):
  	  if f in ("comm_to_comm", "cand_to_comm", "indiv_contrib"):
 	    if temp1[13]:
 	      date = temp1[13]
-	      date = datetime(month=int(date[0:2]), day=int(date[2:4]), year=int(date[4:]))
+	      try:
+	        date = datetime(month=int(date[0:2]), day=int(date[2:4]), year=int(date[4:]))
+	      except ValueError as e:
+		print e, temp1[13]
+		errors.write("%s|%s\n" % (year, str(temp1)))
+		errors.flush()
+		continue
 	      temp1[13] = date.strftime("%Y%m%d")
 	    else :
 	      date = datetime(month=01, day=01, year=1900)

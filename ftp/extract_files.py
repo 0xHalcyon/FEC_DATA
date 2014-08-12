@@ -18,6 +18,9 @@ files_1998 = {"data/%s/cm%s.zip"    : "data/%s/cm%s/",    # Committee Master Fil
 	      "data/%s/indiv%s.zip" : "data/%s/indiv%s/", # Contributions by individuals
 	     }
 
+if not os.path.isdir("data"):
+  os.mkdir("data")
+  
 for year in range(config.start_year, config.end_year, 2):
   year_suffix = str(year)[2:]
   
