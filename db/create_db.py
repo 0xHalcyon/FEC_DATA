@@ -158,7 +158,7 @@ for year in range(config.start_year, config.end_year, 2):
     cur = conn.cursor()
     
   
-  if year == 1998:
+  if year <= 1998:
     
     cur.execute("""DROP TABLE IF EXISTS candidate_master;""")
     cur.execute(candidate_master_sql)

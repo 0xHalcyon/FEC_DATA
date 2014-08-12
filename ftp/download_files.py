@@ -26,7 +26,7 @@ files_1998 = {"/FEC/%s/cm%s.zip"    : "data/%s/cm%s.zip",   # Committee Master F
 for year in range(config.start_year, config.end_year, 2):
   year_suffix = str(year)[2:]
   
-  if year == 1998:
+  if year <= 1998:
     
     for f in sorted(files_1998):
       if not os.path.isdir("data/%s" % year):

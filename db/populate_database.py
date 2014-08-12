@@ -40,7 +40,7 @@ for year in range(config.start_year, config.end_year, 2):
 			  port=config.db_port
 			  )
   cur = conn.cursor()
-  if year == 1998:
+  if year <= 1998:
     
     for f in sorted(files_1998):
       print "CURRENT YEAR: %s\nCURRENT TABLE: %s" % (year, f)
