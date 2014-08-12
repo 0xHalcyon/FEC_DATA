@@ -7,7 +7,7 @@ from datetime import datetime
 try:
   import config
 except ImportError:
-  os.symlink("../config.py", "./config.py")
+  os.symlink("./config.py", "../config.py")
   import config
   
 

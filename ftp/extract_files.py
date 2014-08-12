@@ -5,7 +5,7 @@ import os
 try:
   import config
 except ImportError:
-  os.symlink("../config.py", "./config.py")
+  os.symlink("./config.py", "../config.py")
   import config
 
 files = {"data/%s/cm%s.zip"    : "data/%s/cm%s/",    # Committee Master File
