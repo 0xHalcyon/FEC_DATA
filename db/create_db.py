@@ -152,7 +152,7 @@ for year in range(config.start_year, config.end_year, 2):
     create_db_stmt = "CREATE DATABASE %s%s" % (config.db_prefix.lower(), year)
     eng_conn.execute(create_db_stmt)
     eng_conn.connection.connection.set_isolation_level(1)
-    
+    eng_conn.close()
     conn = psycopg2.connect(dbname=config.db_prefix.lower()+str(year),
 			  user=config.db_user,
 			  password=config.db_password,
