@@ -49,7 +49,7 @@ def wrapper(function, cwd):
   elif function == "createuser":
     print "Will now create new user in PostgresSQL"
     print "At the prompt, enter the password for the new user, as set in config.py"
-    os.system("""createuser --createdb --encrypted --pwprompt --no-createrole --host=%s --port=%s --username=postgres --password %s""" % \
+    os.system("""createuser --createdb --encrypted --pwprompt --no-superuser --no-createrole --host=%s --port=%s --username=postgres --password %s""" % \
 	       (config.db_host, config.db_port, config.db_user))
 
   elif function == "clean_uninstall":
