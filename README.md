@@ -31,7 +31,7 @@ You may see text like so:
 
 This can be ignored.
 
-Now, ```run 'make'```. This will download and extract the files from the FEC's
+Now, run ```make```. This will download and extract the files from the FEC's
 FTP website (ftp://ftp.fec.gov), then will create new databases based on the 
 information provided in your config.py file, and populate those databases with the 
 information downloaded from the FEC's website. 
