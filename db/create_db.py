@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import psycopg2
 import config
+from sqlalchemy import create_engine
 
 #http://www.fec.gov/finance/disclosure/metadata/DataDictionaryCandidateMaster.shtml
 candidate_master_sql = """CREATE TABLE candidate_master ( \
@@ -127,10 +128,35 @@ individual_contrib_sql = """CREATE TABLE indiv_contrib ( \
                                           SUB_ID BIGINT UNIQUE NOT NULL);"""
                                           
 for year in range(config.start_year, config.end_year, 2):
-  conn = psycopg2.connect(dbname=config.db_prefix+year,
+  try:
+    conn = psycopg2.connect(dbname=config.db_prefix+year,
 			  user=config.db_user,
-			  password=config.db_password)
-  cur = conn.cursor()
+			  password=config.db_password
+			  host=config.db_host
+			  port=config.db_port
+			  )
+    cur = conn.cursor()
+    
+  except psycopg2.OperationalError as e:
+    print "Database %s%s does not exist yet, creating now" % (config.db_prefix, year)
+    
+    engine_stmt = 'postgresql+psycopg2://%s:%s@%s:%s/template1' %
+                  (config.db_user, config.db_password, config.db_host, config.db_port)
+    engine = create_engine(engine_stmt)
+    eng_conn = engine.connect()
+    eng_conn.connection.connection.set_isolation_level(0)
+    create_db_stmt = "CREATE DATABASE %s%s" % (config.db_prefix, year)
+    eng_conn.execute(create_db_stmt)
+    eng_conn.connection.connection.set_isolation_level(1)
+    
+    conn = psycopg2.connect(dbname=config.db_prefix+year,
+			  user=config.db_user,
+			  password=config.db_password
+			  host=config.db_host
+			  port=config.db_port
+			  )
+    cur = conn.cursor()
+    
   
   if year == 1998:
     

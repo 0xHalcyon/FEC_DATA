@@ -18,11 +18,21 @@ end_year = 2015
 
 db_user = "postgres"
 
-# Database password, default is none
+# Database password, default is ""
 
 db_password = ""
 
 # DB Prefix, default = FEC_
+# must conform to valid identifier/keyword rules for postgresql
+# for more information, see http://www.postgresql.org/docs/current/interactive/sql-syntax-lexical.html#SQL-SYNTAX-IDENTIFIERS
 
 db_prefix = "FEC_"
+
+# DB Host, default = localhost
+
+db_host = "localhost"
+
+# DB Port, default = 5432
+
+db_port = 5432
 
