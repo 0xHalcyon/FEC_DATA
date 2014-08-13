@@ -18,13 +18,13 @@ def gengeodb(cwd, db_prefix, db_user, db_password, db_host, db_port):
     
   except psycopg2.OperationalError as e:
     try:
-      print "Database %sgeozipcodes does not exist yet, creating now" % (db_prefix.lower())
+      print "Database %sgeozipcodes does not exist yet, creating now" % db_prefix.lower()
       engine_stmt = 'postgresql+psycopg2://%s:%s@%s:%s/template1' % \
                     (db_user, db_password, db_host, db_port)
       engine = create_engine(engine_stmt)
       eng_conn = engine.connect()
       eng_conn.connection.connection.set_isolation_level(0)
-      create_db_stmt = "CREATE DATABASE %s%s" % (db_prefix.lower(), geozipcodes)
+      create_db_stmt = "CREATE DATABASE %sgeozipcodes" % db_prefix.lower()
       eng_conn.execute(create_db_stmt)
       eng_conn.connection.connection.set_isolation_level(1)
       eng_conn.close()
