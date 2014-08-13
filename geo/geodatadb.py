@@ -65,14 +65,12 @@ def gengeodb(cwd, db_prefix, db_user, db_password, db_host, db_port):
     os.sys.exit(1)
   for zipcode in zipcodes:
 	
-    stmt = "INSERT INTO zipcodes (zip, type, primary_city, acceptable_cities, unacceptable_cities, \
+    cur.execute("INSERT INTO zipcodes (zip, type, primary_city, acceptable_cities, unacceptable_cities, \
                                state, county, timezone, area_codes, latitude, longitude, \
                                world_region, country, decommissioned, estimated_population, notes) \
                                VALUES (%s, %s, %s, %s, %s, %s,\
-                               %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);" % \
-                               tuple(zipcode)
-    print stmt
-    cur.execute(stmt)
+                               %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);", \
+                               tuple(zipcode))
   conn.commit()
   cur.close()
   conn.close()
