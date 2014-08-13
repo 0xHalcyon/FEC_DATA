@@ -1,3 +1,4 @@
+postgresql-server >=9.2
 psycopg2
 sqlalchemy
 pandas
