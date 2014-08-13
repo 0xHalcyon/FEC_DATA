@@ -7,9 +7,13 @@ REQUIREMENTS
 ------------
 
 In orderd to properly run and setup FEC_DATA you must have the following:
+
 1) Postgresql 9.2 or newer
+
 2) sqlalchemy for python
-3) pygeocoder for python
+
+3) pandas for python
+
 4) psycopg2 for python
 
 SETUP
