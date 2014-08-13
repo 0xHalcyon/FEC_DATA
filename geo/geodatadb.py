@@ -61,17 +61,17 @@ def gengeodb(cwd, db_prefix, db_user, db_password, db_host, db_port):
 	           estimated_population TEXT, \
 	           notes TEXT")
     except psycopg2.Error as e:
-      print e
+      print "We could not create the table, %s" % e
       os.sys.exit(1)
     for zipcode in zipcodes:
 	
-      stmt = """INSERT INTO foo (zip, type, primary_city, acceptable_cities, \
-                                   unacceptable_cities,state, county, timezone,\                                   area_codes, \
-                                   latitude, longitude, world_region, country, \
-                                   decommissioned, estimated_population, notes) \
-                                   VALUES (%s, %s, %s, %s, %s, %s,\
-                                   %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);""" % \
-                                   tuple(zipcode)
+      stmt = """INSERT INTO foo (zip, type, primary_city, acceptable_cities, unacceptable_cities,\ 
+                                 state, county, timezone, area_codes, latitude, longitude, \
+                                 world_region, country, decommissioned, estimated_population, notes) \
+                                 VALUES (%s, %s, %s, %s, %s, %s,\
+                                 %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);""" % \
+                                 tuple(zipcode)
+      print stmt
       cur.execute(stmt)
     conn.commit()
     cur.close()
