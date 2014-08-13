@@ -27,7 +27,7 @@ def extract_files(start_year, end_year, cwd):
   
     if year <= 1998:
     
-      for f in files_1998:
+      for f in sorted(files_1998):
         archive = f % (cwd, year, year_suffix)
         extract_to = files_1998[f] % (cwd, year, year_suffix)
         if not os.path.isdir(extract_to):
@@ -38,7 +38,7 @@ def extract_files(start_year, end_year, cwd):
       
     else: 
       
-      for f in files:
+      for f in sorted(files):
         archive = f % (cwd, year, year_suffix)
         extract_to = files[f] % (cwd, year, year_suffix)
         if not os.path.isdir(extract_to):

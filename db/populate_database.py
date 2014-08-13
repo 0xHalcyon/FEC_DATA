@@ -76,8 +76,8 @@ def populate_database(start_year, end_year, cwd, db_prefix, db_user, db_password
     
       for f in sorted(files):
         print "CURRENT YEAR: %s\nCURRENT TABLE: %s" % (year, f)
-        temp = open(files[f][0] % (year, year_suffix))
-        template = open(files[f][1]).read().strip()
+        temp = open(files[f][0] % (cwd, year, year_suffix))
+        template = open(files[f][1] % cwd).read().strip()
         template = str(tuple(template.split(","))).replace("'", "").lower()
         for chunk in read_some_lines(temp):
           for line in chunk:
