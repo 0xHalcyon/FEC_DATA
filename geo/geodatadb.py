@@ -59,7 +59,7 @@ def gengeodb(cwd, db_prefix, db_user, db_password, db_host, db_port):
 	         country TEXT, \
 	         decommissioned TEXT, \
 	         estimated_population TEXT, \
-	         notes TEXT")
+	         notes TEXT)")
   except psycopg2.Error as e:
     print "We could not create the table, %s" % e
     os.sys.exit(1)
