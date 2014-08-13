@@ -1,4 +1,4 @@
-#!/usr/bin/env python -W
+#!/usr/bin/env python
 import pandas
 import sys
 from sqlalchemy import create_engine
