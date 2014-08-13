@@ -65,9 +65,13 @@ def gengeodb(cwd, db_prefix, db_user, db_password, db_host, db_port):
   except psycopg2.Error as e:
     print "We could not create the table, %s" % e
     os.sys.exit(1)
+    
+  inserts = 0
   for zipcode in zipcodes:
+    inserts += 1
+    if inserts % 100 = 0:
+      conn.commit()      
     try:
-      conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
       cur.execute("INSERT INTO zipcodes (zip, type, primary_city, acceptable_cities, unacceptable_cities, \
                                state, county, timezone, area_codes, latitude, longitude, \
                                world_region, country, decommissioned, estimated_population, notes) \
@@ -77,5 +81,6 @@ def gengeodb(cwd, db_prefix, db_user, db_password, db_host, db_port):
       
     except psycopg2.IntegrityError as e:
       print "Zipcode already exists %s" % e
+  conn.commit()
   cur.close()
   conn.close()
