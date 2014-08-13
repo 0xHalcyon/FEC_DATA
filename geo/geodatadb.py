@@ -69,7 +69,7 @@ def gengeodb(cwd, db_prefix, db_user, db_password, db_host, db_port):
   inserts = 0
   for zipcode in zipcodes:
     inserts += 1
-    if inserts % 100 = 0:
+    if inserts % 100 == 0:
       conn.commit()      
     try:
       cur.execute("INSERT INTO zipcodes (zip, type, primary_city, acceptable_cities, unacceptable_cities, \
