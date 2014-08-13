@@ -1,10 +1,10 @@
-#!/usr/bin/env python
+#!/usr/bin/env python -W
 import pandas
 import sys
 from sqlalchemy import create_engine
 
 
-def search_names(field, query, year, db_prefix, db_user, db_password, db_host, db_port):
+def search_names_geo(field, query, year, db_prefix, db_user, db_password, db_host, db_port):
   engine_stmt = 'postgresql+psycopg2://%s:%s@%s:%s/%s%s' % \
                 (db_user, db_password, db_host, db_port, db_prefix, str(year))
   engine = create_engine(engine_stmt)
