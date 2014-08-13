@@ -80,7 +80,7 @@ def gengeodb(cwd, db_prefix, db_user, db_password, db_host, db_port):
                                tuple(zipcode))
       
     except psycopg2.IntegrityError as e:
-      print "Zipcode already exists %s" % e
+      pass
   conn.commit()
   cur.close()
   conn.close()
