@@ -2,6 +2,8 @@
 
 import psycopg2
 import json
+import sqlalchemy
+from sqlalchemy import create_engine
 
 def gengeodb(cwd, db_prefix, db_user, db_password, db_host, db_port):
   zipcodes = json.load(open(cwd+"/geo/zipcodes.json"))
