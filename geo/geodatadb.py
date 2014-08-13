@@ -54,7 +54,7 @@ def gengeodb(cwd, db_prefix, db_user, db_password, db_host, db_port):
 	         timezone TEXT, \
 	         area_codes TEXT, \
 	         latitude REAL, \
-	         logitude REAL, \
+	         longitude REAL, \
 	         world_region TEXT, \
 	         country TEXT, \
 	         decommissioned TEXT, \
