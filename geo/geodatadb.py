@@ -61,6 +61,7 @@ def gengeodb(cwd, db_prefix, db_user, db_password, db_host, db_port):
 	         decommissioned TEXT, \
 	         estimated_population TEXT, \
 	         notes TEXT)")
+    conn.commit()
   except psycopg2.Error as e:
     print "We could not create the table, %s" % e
     os.sys.exit(1)
@@ -72,8 +73,9 @@ def gengeodb(cwd, db_prefix, db_user, db_password, db_host, db_port):
                                VALUES (%s, %s, %s, %s, %s, %s,\
                                %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);", \
                                tuple(zipcode))
+      conn.commit()
+      
     except psycopg2.IntegrityError as e:
       print "Zipcode already exists %s" % e
-  conn.commit()
   cur.close()
   conn.close()
