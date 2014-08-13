@@ -16,3 +16,6 @@ populatedb:
 	
 createuser:
 	./__init__.py createuser
+	
+creategeo:
+	./__init__.py creategeo

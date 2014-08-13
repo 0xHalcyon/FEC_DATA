@@ -52,6 +52,16 @@ def wrapper(function, cwd):
     os.system("""createuser --createdb --encrypted --pwprompt --no-superuser --no-createrole --host=%s --port=%s --username=postgres --password %s""" % \
 	       (config.db_host, config.db_port, config.db_user))
 
+  elif function == "creategeo":
+    from geo import geodatadb
+    print "Creating zipcode database and dumping json to database"
+    geodatadb.gengeodb(cwd, 
+		       config.db_prefix, 
+		       config.db_user, 
+		       config.db_password, 
+		       config.db_host, 
+		       config.db_port)
+
   elif function == "clean_uninstall":
     pass
   
