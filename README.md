@@ -36,7 +36,7 @@ FTP website (ftp://ftp.fec.gov), then will create new databases based on the
 information provided in your config.py file, and populate those databases with the 
 information downloaded from the FEC's website. 
 
-__This process will take several hours if maintaining the entire 1998-2014 year range.__**
+__This process will take several hours if maintaining the entire 1998-2014 year range.__
 
 Errors will be stored in ./db/errors/ if any occur. 
 
