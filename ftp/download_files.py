@@ -52,3 +52,5 @@ def download_files(start_year, end_year, cwd):
         ftp.retrbinary("RETR %s" % to_get, open(save_to, "wb").write)
         print "Saving to: %s" % save_to
         print "Done"
+        
+  ftp.close()
