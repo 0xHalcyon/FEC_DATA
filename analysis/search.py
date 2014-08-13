@@ -3,14 +3,14 @@ import pandas
 import sys
 from sqlalchemy import create_engine
 
-class Searchfuncs:  
+class Search:  
   'Provides search functions for database queries'
   def __init__(self, conn_settings):
-    self.db_prefix = conn_settings['db_prefix']
-    self.db_user = conn_settings['db_user']
-    self.db_password = conn_settings['db_password']
-    self.db_host = conn_settings['db_host']
-    self.db_port = conn_settings['db_port']
+    self.__db_prefix = conn_settings['db_prefix']
+    self.__db_user = conn_settings['db_user']
+    self.__db_password = conn_settings['db_password']
+    self.__db_host = conn_settings['db_host']
+    self.__db_port = conn_settings['db_port']
   
   def search_names_geo(self, parameters):
     location_engine_stmt = 'postgresql+psycopg2://%s:%s@%s:%s/%s_geozipcodes' % \
