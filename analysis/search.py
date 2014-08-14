@@ -59,7 +59,7 @@ class SearchLocation:
       __zipcodes.append(__zipcode[0].split(".")[0])
     #print zipcodes
     __temp = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st FROM candidate_master WHERE cand_zip in %s ORDER BY cand_name;"
-    candidates_query = s.fec_cur.mogrify(__temp, (tuple(__zipcodes),))
+    candidates_query = self.fec_cur.mogrify(__temp, (tuple(__zipcodes),))
     self.fec_cur.execute(candidates_query)
     return self.fec_cur.fetchall()
     
