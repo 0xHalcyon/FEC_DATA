@@ -1,8 +1,8 @@
 #!/usr/bin/env python
-import pandas
+#import pandas
 import sys
 import psycopg2
-from sqlalchemy import create_engine
+#from sqlalchemy import create_engine
 from geo.geolocation import GeoLocation
 
 class SearchLocation:  
@@ -31,7 +31,7 @@ class SearchLocation:
     distance = parameters['distance']
     unit = parameters['unit']
     if unit == "miles":
-      distance = 
+      distance = distance/0.62137
     zipcode_stmt = "SELECT latitude, longitude FROM zipcodes WHERE zip LIKE'%s%%';" % zipcode
     self.cur.execute(zipcode_stmt)
     location = self.cur.fetchall()
