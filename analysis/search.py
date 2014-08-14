@@ -104,7 +104,7 @@ class SearchLocation:
     
     return candidates, candidates_committees
   
-  def search_by_other(self, Connect, parameters):
+  def search_by_other(self, Connection, parameters):
     'Search by city, state, or city and state'
     try:
       search_key = parameters['search']
@@ -133,7 +133,7 @@ class SearchLocation:
       # return ([(name, cand_id, cand_pty_affiliation, cand_city, cand_st), ...], {cand_name : {cand_id: 'cand_id', comm_ids: [cmte_id]}}
     return candidates, candidates_committees    
 
-  def search_by_name(self, Connect, parameters):
+  def search_by_name(self, Connection, parameters):
     'Search by name'
     try:
       name = parameters['name'].strip()
