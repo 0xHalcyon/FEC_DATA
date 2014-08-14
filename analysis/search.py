@@ -53,7 +53,7 @@ class SearchLocation:
     zipcodes_stmt = "SELECT zip FROM zipcodes WHERE latitude BETWEEN '%s' AND '%s' AND longitude BETWEEN '%s' AND '%s' and state='%s';" % \
                      (SW_loc.deg_lat, NE_loc.deg_lat, SW_loc.deg_lon, NE_loc.deg_lon, state)
     self.geo_cur.execute(zipcodes_stmt)
-    zipcodes = self.cur.fetchall()
+    zipcodes = self.geo_cur.fetchall()
     __zipcodes = []
     for __zipcode in zipcodes:
       __zipcodes.append(_zipcode[0].split(".")[0])
