@@ -44,7 +44,7 @@ class SearchLocation:
     self.fec_conn.close()
     self.geo_conn.close()
     
-  def get_candidate_committees(cands):
+  def self.__get_candidate_committees(cands):
     
     if self.__year <= 1998:
       cand_comms = {}
@@ -98,7 +98,7 @@ class SearchLocation:
     self.fec_cur.execute(candidates_query)
     candidates = self.fec_cur.fetchall()
     
-    candidates_committees = get_candidate_committees(candidates)
+    candidates_committees = self.__get_candidate_committees(candidates)
     
     return candidates, candidates_committees
   
@@ -127,7 +127,7 @@ class SearchLocation:
     self.fec_cur.execute(query_stmt)
     candidates = self.fec_cur.fetchall()
     
-    candidates_committees= get_candidate_committees(candidates)
+    candidates_committees= self.__get_candidate_committees(candidates)
       # return ([(name, cand_id, cand_pty_affiliation, cand_city, cand_st), ...], {cand_name : {cand_id: 'cand_id', comm_ids: [cmte_id]}}
     return candidates, candidates_committees    
 
