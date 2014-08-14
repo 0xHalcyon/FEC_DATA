@@ -14,7 +14,7 @@ class SearchLocation:
     self.__db_password = conn_settings['db_password']
     self.__db_host = conn_settings['db_host']
     self.__db_port = conn_settings['db_port']
-    self.__year = conn_settings['year']
+    self.__year = str(conn_settings['year'])
     
     self.geo_conn = psycopg2.connect(dbname=self.__db_prefix+self.__geodb, \
                                  user=self.__db_user,
