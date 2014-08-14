@@ -3,6 +3,7 @@
 import sys
 import psycopg2
 #from sqlalchemy import create_engine
+from geo import states
 from geo.geolocation import GeoLocation
 
 class SearchLocation:  
@@ -107,9 +108,15 @@ class SearchLocation:
       st_key = 'cand_st'
       city = search_query.split(', ')[0]
       st = search_query.split(', ')[1]
+      for state in states.states_titles:
+	if state['name'] == st:
+	  st = state['abbreviation']
       query_stmt = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st FROM candidate_master WHERE %s LIKE UPPER('%%%s%%') and %s LIKE UPPER('%%%s%%');" % \
 	            (city_key, city, st_key, st)
     else:
+      for state in states.states_titles:
+	if state['name'] == search_query:
+	  search_query = state['abbreviation']
       query_stmt = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st FROM candidate_master WHERE %s LIKE UPPER('%%%s%%');" % (search_key, search_query)
     self.fec_cur.execute(query_stmt)
     candidates = self.fec_cur.fetchall()
