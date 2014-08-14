@@ -134,7 +134,7 @@ class SearchLocation:
   def search_by_name(self, parameters):
     'Search by name'
     try:
-      name = parameters['name']
+      name = parameters['name'].strip()
     except KeyError:
       raise KeyError("Please define name")
     if " " or "," in name:
