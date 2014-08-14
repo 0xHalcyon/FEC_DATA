@@ -138,6 +138,7 @@ def create_db(start_year, end_year, cwd, db_prefix, db_user, db_password, db_hos
 			      host=db_host,
 			      port=db_port
 			     )
+      conn.set_client_encoding("UTF8")
       cur = conn.cursor()
     
     except psycopg2.OperationalError as e:
@@ -163,6 +164,7 @@ def create_db(start_year, end_year, cwd, db_prefix, db_user, db_password, db_hos
 			      host=db_host,
 			      port=db_port
 			      )
+      conn.set_client_encoding("UTF8")
       cur = conn.cursor()
       
     
