@@ -35,6 +35,12 @@ class SearchLocation:
     self.fec_conn.set_client_encoding("UTF8")
     self.fec_cur = self.fec_conn.cursor()
     
+  def __del__(self):
+    self.fec_cur.close()
+    self.geo_cur.close()
+    self.fec_conn.close()
+    self.geo_conn.close()
+    
   def search_names_by_zip(self, parameters):
 
     zipcode = parameters['zipcode']
@@ -57,7 +63,7 @@ class SearchLocation:
     
     for __zipcode in zipcodes:
       __zipcodes.append(__zipcode[0].split(".")[0])
-    __temp = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st FROM candidate_master WHERE cand_zip in %s ORDER BY cand_name;"
+    __temp = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st FROM candidate_master WHERE cand_zip in %s ORDER BY cand_name;"
     candidates_query = self.fec_cur.mogrify(__temp, (tuple(__zipcodes),))
     self.fec_cur.execute(candidates_query)
     candidates = self.fec_cur.fetchall()
@@ -70,7 +76,7 @@ class SearchLocation:
       committee_ids = self.fec_cur.fetchall()
       for committee_id in committee_ids:
 	candidates_committees[candidate[0]]["comm_ids"].append(committee_id[0])
-    
+    # return ([(name, cand_id, cand_pty_affiliation, cand_city, cand_st), ...], {cand_name : {cand_id: 'cand_id', comm_ids: [cmte_id]}}
     return candidates, candidates_committees
       
     
