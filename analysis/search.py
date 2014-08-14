@@ -136,6 +136,10 @@ class SearchLocation:
       name = parameters['name']
     except KeyError:
       raise KeyError("Please define name")
-    pass
-
+    
+    query_by_name = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st FROM candidate_master WHERE cand_name LIKE UPPER('%%%s%%');" % name
+    self.fec_cur.execute(query_by_name)
+    candidates = self.fec_cur.fetchall()
+    candidates_committees = self.__get_candidate_committees__(candidates)
+    return candidates, candidates_committees
   
