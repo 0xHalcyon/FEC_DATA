@@ -138,7 +138,7 @@ class SearchLocation:
       print name
     except KeyError:
       raise KeyError("Please define name")
-    if len(name.split(" ") > 1) or "," in name:
+    if len(name.split(" ")) > 1 or "," in name:
       __temp__ = name.split(" ")
       if len(__temp__) > 0:
         query_by_name = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st FROM candidate_master WHERE cand_name LIKE UPPER('%%%s%%') AND cand_name LIKE UPPER('%%%s%%');" % tuple(__temp__)
