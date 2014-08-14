@@ -99,7 +99,7 @@ class SearchLocation:
     return candidates, candidates_committees    
 
   def search_by_name(self, parameters):
-    Search by name'
+    'Search by name'
     try:
       name = parameters['name'].strip()
     except KeyError:
