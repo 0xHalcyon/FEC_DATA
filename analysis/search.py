@@ -68,10 +68,18 @@ class SearchLocation:
     self.fec_cur.execute(candidates_query)
     candidates = self.fec_cur.fetchall()
     
-    if year <= 1998:
-      return candidates, False
+    if self.__year <= 1998:
+      candidates_committees = {}
+      for candidate in candidates:
+	linkage_query = "SELECT cmte_id FROM committee_master WHERE cand_id='%s'" % candidate[1]
+        candidates_committees[candidate[0]] = {"cand_id": candidate[1], "comm_ids":[]}
+        self.fec_cur.execute(linkage_query)
+        committee_ids = self.fec_cur.fetchall()
+        for committee_id in committee_ids:
+	  candidates_committees[candidate[0]]["comm_ids"].append(committee_id[0])
+      return candidates, candidates_committees
     
-    if year > 1998:
+    if self.__year > 1998:
       
       candidates_committees = {}    
       for candidate in candidates:
