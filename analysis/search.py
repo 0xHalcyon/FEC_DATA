@@ -23,7 +23,7 @@ class SearchLocation:
 			         port=self.__db_port
 			         )
     
-    self.zip_conn.set_client_encoding("UTF8")
+    self.geo_conn.set_client_encoding("UTF8")
     self.geo_cur = self.geo_conn.cursor()
     
     self.fec_conn = psycopg2.connect(dbname=self.__db_prefix+self.__year, \
