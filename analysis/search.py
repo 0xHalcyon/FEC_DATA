@@ -13,7 +13,7 @@ class SearchLocation:
     
   def __get_candidate_committees__(self, cands):
     
-    if self.__year <= 1998:
+    if self.Connection.year <= 1998:
       cand_comms = {}
       for candidate in cands:
 	linkage_query = "SELECT cmte_id FROM committee_master WHERE cand_id='%s'" % candidate[1]
@@ -24,7 +24,7 @@ class SearchLocation:
 	  cand_comms[candidate[0]]["comm_ids"].append(committee_id[0])
       return cand_comms
     
-    if self.__year > 1998:
+    if self.Connection.year > 1998:
       cand_comms = {}    
       for candidate in cands:
         linkage_query = "SELECT cmte_id FROM candidate_linkage WHERE cand_id='%s'" % candidate[1]
