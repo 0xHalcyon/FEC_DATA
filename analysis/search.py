@@ -98,7 +98,7 @@ class SearchLocation:
     self.fec_cur.execute(candidates_query)
     candidates = self.fec_cur.fetchall()
     
-    candidates_committees = __get_candidate_committees__(candidates)
+    candidates_committees = self.__get_candidate_committees__(candidates)
     
     return candidates, candidates_committees
   
@@ -127,7 +127,7 @@ class SearchLocation:
     self.fec_cur.execute(query_stmt)
     candidates = self.fec_cur.fetchall()
     
-    candidates_committees= __get_candidate_committees__(candidates)
+    candidates_committees= self.__get_candidate_committees__(candidates)
       # return ([(name, cand_id, cand_pty_affiliation, cand_city, cand_st), ...], {cand_name : {cand_id: 'cand_id', comm_ids: [cmte_id]}}
     return candidates, candidates_committees    
 
