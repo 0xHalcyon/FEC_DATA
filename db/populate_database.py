@@ -105,7 +105,14 @@ def populate_database(start_year, end_year, cwd, db_prefix, db_user, db_password
 	        date = datetime(month=01, day=01, year=1900)
 	        temp1[13] = date.strftime("%Y%m%d")	   
 	    temp1 = tuple(temp1)
-	    query = "INSERT INTO %s %s VALUES %s;" % (f, template, temp1)
-            cur.execute(query)
+	    try:
+	      query = "INSERT INTO %s %s VALUES %s;" % (f, template, temp1)
+              cur.execute(query)
+            except psycopg2.DataError as e:
+              print "Error: %s %s\nContinuing" % (e, temp1[13])
+              to_write = "%s|%s\n" % (year, str(temp1))
+	      errors.write(to_write)
+	      errors.flush()
+	      continue
           conn.commit()
     conn.close()

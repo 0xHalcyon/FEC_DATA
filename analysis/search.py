@@ -48,7 +48,7 @@ class SearchLocation:
     self.geo_cur.execute(zipcode_stmt)
     state, lat, lon = self.geo_cur.fetchone()
     loc = GeoLocation.from_degrees(lat, lon)
-    print loc
+    #print loc
     SW_loc, NE_loc = loc.bounding_locations(distance)
     zipcodes_stmt = "SELECT zip FROM zipcodes WHERE latitude BETWEEN '%s' AND '%s' AND longitude BETWEEN '%s' AND '%s' and state='%s';" % \
                      (SW_loc.deg_lat, NE_loc.deg_lat, SW_loc.deg_lon, NE_loc.deg_lon, state)
