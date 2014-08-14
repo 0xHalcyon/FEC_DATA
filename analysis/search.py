@@ -32,16 +32,19 @@ class SearchLocation:
     unit = parameters['unit']
     if unit == "miles":
       distance = distance/0.62137
-    zipcode_stmt = "SELECT latitude, longitude FROM zipcodes WHERE zip LIKE'%s%%';" % zipcode
+    zipcode_stmt = "SELECT state, latitude, longitude FROM zipcodes WHERE zip LIKE'%s%%';" % zipcode
     self.cur.execute(zipcode_stmt)
-    lat, lon = self.cur.fetchone()
+    state, lat, lon = self.cur.fetchone()
     loc = GeoLocation.from_degrees(lat, lon)
     print loc
     SW_loc, NE_loc = loc.bounding_locations(distance)
-    zipcodes_stmt = "SELECT zip FROM zipcodes WHERE latitude BETWEEN '%s' AND '%s' AND longitude BETWEEN '%s' AND '%s';" % \
-                     (SW_loc.deg_lat, NE_loc.deg_lat, SW_loc.deg_lon, NE_loc.deg_lon)
+    zipcodes_stmt = "SELECT zip FROM zipcodes WHERE latitude BETWEEN '%s' AND '%s' AND longitude BETWEEN '%s' AND '%s' and state='%s';" % \
+                     (SW_loc.deg_lat, NE_loc.deg_lat, SW_loc.deg_lon, NE_loc.deg_lon, state)
     self.cur.execute(zipcodes_stmt)
-    zipcodes = self.cur.fetchall()
+    zipcodes = self.cur.fetchall()[0]
+    __zipcodes = []
+    for __zipcode in zipcodes:
+      __zipcodes.append
     print zipcodes
     
 
