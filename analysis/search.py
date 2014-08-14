@@ -102,8 +102,15 @@ class SearchLocation:
       search_query = parameters['query']
     except KeyError:
       raise KeyError("Please define search parameter")
-    
-    query_stmt = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st FROM candidate_master WHERE %s LIKE UPPER('%%%s%%')" % (search_key, search_query)
+    if ',' in search_query:
+      city_key = 'cand_city'
+      st_key = 'cand_st'
+      city = search_query.split(',')[0]
+      st = search_query.split(',')[1]
+      query_stmt = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st FROM candidate_master WHERE %s LIKE UPPER('%%%s%%') and %s LIKE UPPER('%%%s%%');" % \
+	            (city_key, st_key, city, st)
+    else:
+      query_stmt = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st FROM candidate_master WHERE %s LIKE UPPER('%%%s%%');" % (search_key, search_query)
     self.fec_cur.execute(query_stmt)
     candidates = self.fec_cur.fetchall()
     
