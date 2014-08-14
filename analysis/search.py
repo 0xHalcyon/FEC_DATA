@@ -134,6 +134,8 @@ class SearchLocation:
   def search_by_name(self, parameters):
     try:
       name = parameters['name']
+    except KeyError:
+      raise KeyError("Please define name")
     pass
 
   
