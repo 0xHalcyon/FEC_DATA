@@ -51,8 +51,8 @@ class SearchLocation:
       for candidate in cands:
 	linkage_query = "SELECT cmte_id FROM committee_master WHERE cand_id='%s'" % candidate[1]
         cand_comms[candidate[0]] = {"cand_id": candidate[1], "comm_ids":[]}
-        self.__fec_cur.execute(linkage_query)
-        committee_ids = self.__fec_cur.fetchall()
+        Connect.__fec_cur.execute(linkage_query)
+        committee_ids = Connect.__fec_cur.fetchall()
         for committee_id in committee_ids:
 	  cand_comms[candidate[0]]["comm_ids"].append(committee_id[0])
       return cand_comms
@@ -62,13 +62,13 @@ class SearchLocation:
       for candidate in cands:
         linkage_query = "SELECT cmte_id FROM candidate_linkage WHERE cand_id='%s'" % candidate[1]
         cand_comms[candidate[0]] = {"cand_id": candidate[1], "comm_ids":[]}
-        self.__fec_cur.execute(linkage_query)
-        committee_ids = self.__fec_cur.fetchall()
+        Connect.__fec_cur.execute(linkage_query)
+        committee_ids = Connect.__fec_cur.fetchall()
         for committee_id in committee_ids:
 	  cand_comms[candidate[0]]["comm_ids"].append(committee_id[0])
       return cand_comms
 	  
-  def search_names_by_zip(self, parameters):
+  def search_names_by_zip(self, Connect, parameters):
     'Search by zipcode'
     try:
       zipcode = parameters['zipcode']
@@ -81,22 +81,22 @@ class SearchLocation:
       distance = distance/0.62137
       
     zipcode_stmt = "SELECT state, latitude, longitude FROM zipcodes WHERE zip LIKE'%s%%';" % zipcode
-    self.__geo_cur.execute(zipcode_stmt)
-    state, lat, lon = self.__geo_cur.fetchone()
+    Connect.__geo_cur.execute(zipcode_stmt)
+    state, lat, lon = Connect.__geo_cur.fetchone()
     loc = GeoLocation.from_degrees(lat, lon)
     SW_loc, NE_loc = loc.bounding_locations(distance)
     zipcodes_stmt = "SELECT zip FROM zipcodes WHERE latitude BETWEEN '%s' AND '%s' AND longitude BETWEEN '%s' AND '%s' and state='%s';" % \
                      (SW_loc.deg_lat, NE_loc.deg_lat, SW_loc.deg_lon, NE_loc.deg_lon, state)
-    self.__geo_cur.execute(zipcodes_stmt)
-    zipcodes = self.__geo_cur.fetchall()
+    Connect.__geo_cur.execute(zipcodes_stmt)
+    zipcodes = Connect.__geo_cur.fetchall()
     __zipcodes = []
     
     for __zipcode in zipcodes:
       __zipcodes.append(__zipcode[0].split(".")[0])
     __temp = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st FROM candidate_master WHERE cand_zip in %s ORDER BY cand_name;"
-    candidates_query = self.__fec_cur.mogrify(__temp, (tuple(__zipcodes),))
-    self.__fec_cur.execute(candidates_query)
-    candidates = self.__fec_cur.fetchall()
+    candidates_query = Connect.__fec_cur.mogrify(__temp, (tuple(__zipcodes),))
+    Connect.__fec_cur.execute(candidates_query)
+    candidates = Connect.__fec_cur.fetchall()
     
     candidates_committees = self.__get_candidate_committees__(candidates)
     
@@ -124,8 +124,8 @@ class SearchLocation:
 	if state['name'] == search_query:
 	  search_query = state['abbreviation']
       query_stmt = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st FROM candidate_master WHERE %s LIKE UPPER('%%%s%%');" % (search_key, search_query)
-    self.__fec_cur.execute(query_stmt)
-    candidates = self.__fec_cur.fetchall()
+    Connect.__fec_cur.execute(query_stmt)
+    candidates = Connect.__fec_cur.fetchall()
     
     candidates_committees= self.__get_candidate_committees__(candidates)
       # return ([(name, cand_id, cand_pty_affiliation, cand_city, cand_st), ...], {cand_name : {cand_id: 'cand_id', comm_ids: [cmte_id]}}
@@ -141,16 +141,16 @@ class SearchLocation:
       __temp__ = name.split(" ")
       if len(__temp__) > 0:
         query_by_name = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st FROM candidate_master WHERE cand_name LIKE UPPER('%%%s%%') AND cand_name LIKE UPPER('%%%s%%');" % tuple(__temp__)
-        self.__fec_cur.execute(query_by_name)
-        candidates = self.__fec_cur.fetchall()
+        Connect.__fec_cur.execute(query_by_name)
+        candidates = Connect.__fec_cur.fetchall()
         if len(candidates) < 1:
 	  query_by_name = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st FROM candidate_master WHERE cand_name LIKE UPPER('%%%s%%');" % __temp__[1].strip(',')
-	  self.__fec_cur.execute(query_by_name)
-	  candidates = self.__fec_cur.fetchall()
+	  Connect.__fec_cur.execute(query_by_name)
+	  candidates = Connect.__fec_cur.fetchall()
     else:
       query_by_name = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st FROM candidate_master WHERE cand_name LIKE UPPER('%%%s%%');" % name
-      self.__fec_cur.execute(query_by_name)
-      candidates = self.__fec_cur.fetchall()
+      Connect.__fec_cur.execute(query_by_name)
+      candidates = Connect.__fec_cur.fetchall()
     candidates_committees = self.__get_candidate_committees__(candidates)
     return candidates, candidates_committees
   
