@@ -14,14 +14,26 @@ class SearchLocation:
     self.__db_password = conn_settings['db_password']
     self.__db_host = conn_settings['db_host']
     self.__db_port = conn_settings['db_port']
-    self.conn = psycopg2.connect(dbname=self.__db_prefix+self.__geodb, \
+    self.__year = conn_settings['year']
+    
+    self.geo_conn = psycopg2.connect(dbname=self.__db_prefix+self.__geodb, \
                                  user=self.__db_user,
                                  password=self.__db_password,
 	                         host=self.__db_host,
 			         port=self.__db_port
 			         )
-    self.conn.set_client_encoding("UTF8")
-    self.cur = self.conn.cursor()
+    
+    self.zip_conn.set_client_encoding("UTF8")
+    self.geo_cur = self.geo_conn.cursor()
+    
+    self.fec_conn = psycopg2.connect(dbname=self.__db_prefix+self.__year, \
+                                 user=self.__db_user,
+                                 password=self.__db_password,
+	                         host=self.__db_host,
+			         port=self.__db_port
+			         )
+    self.fec_conn.set_client_encoding("UTF8")
+    self.fec_cur = self.fec_conn.cursor()
     
   def search_names_by_zip(self, parameters):
     #location_engine_stmt = 'postgresql+psycopg2://%s:%s@%s:%s/%s_geozipcodes' % \
@@ -33,20 +45,23 @@ class SearchLocation:
     if unit == "miles":
       distance = distance/0.62137
     zipcode_stmt = "SELECT state, latitude, longitude FROM zipcodes WHERE zip LIKE'%s%%';" % zipcode
-    self.cur.execute(zipcode_stmt)
+    self.geo_cur.execute(zipcode_stmt)
     state, lat, lon = self.cur.fetchone()
     loc = GeoLocation.from_degrees(lat, lon)
     print loc
     SW_loc, NE_loc = loc.bounding_locations(distance)
     zipcodes_stmt = "SELECT zip FROM zipcodes WHERE latitude BETWEEN '%s' AND '%s' AND longitude BETWEEN '%s' AND '%s' and state='%s';" % \
                      (SW_loc.deg_lat, NE_loc.deg_lat, SW_loc.deg_lon, NE_loc.deg_lon, state)
-    self.cur.execute(zipcodes_stmt)
+    self.geo_cur.execute(zipcodes_stmt)
     zipcodes = self.cur.fetchall()
     __zipcodes = []
-    #for __zipcode in zipcodes:
-    #  __zipcodes.append
+    for __zipcode in zipcodes:
+      __zipcodes.append(_zipcode[0].split(".")[0])
     #print zipcodes
-    return zipcodes
+    __temp = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st FROM candidate_master WHERE cand_zip in %s ORDER BY cand_name;"
+    candidates_query = s.cur.mogrify(__temp, (tuple(__zipcodes),))
+    self.fec_cur.execute(candidates_query)
+    return self.fec_cur.fetchall()
     
 
   
