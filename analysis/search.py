@@ -14,7 +14,7 @@ class SearchLocation:
     self.__db_password = conn_settings['db_password']
     self.__db_host = conn_settings['db_host']
     self.__db_port = conn_settings['db_port']
-    self.__year = str(conn_settings['year'])
+    self.__year = conn_settings['year']
     
     self.geo_conn = psycopg2.connect(dbname=self.__db_prefix+self.__geodb, \
                                  user=self.__db_user,
@@ -26,7 +26,7 @@ class SearchLocation:
     self.geo_conn.set_client_encoding("UTF8")
     self.geo_cur = self.geo_conn.cursor()
     
-    self.fec_conn = psycopg2.connect(dbname=self.__db_prefix+self.__year, \
+    self.fec_conn = psycopg2.connect(dbname=self.__db_prefix+str(self.__year), \
                                  user=self.__db_user,
                                  password=self.__db_password,
 	                         host=self.__db_host,
@@ -67,17 +67,22 @@ class SearchLocation:
     candidates_query = self.fec_cur.mogrify(__temp, (tuple(__zipcodes),))
     self.fec_cur.execute(candidates_query)
     candidates = self.fec_cur.fetchall()
-    candidates_committees = {}
     
-    for candidate in candidates:
-      linkage_query = "SELECT cmte_id FROM candidate_linkage WHERE cand_id='%s'" % candidate[1]
-      candidates_committees[candidate[0]] = {"cand_id": candidate[1], "comm_ids":[]}
-      self.fec_cur.execute(linkage_query)
-      committee_ids = self.fec_cur.fetchall()
-      for committee_id in committee_ids:
-	candidates_committees[candidate[0]]["comm_ids"].append(committee_id[0])
-    # return ([(name, cand_id, cand_pty_affiliation, cand_city, cand_st), ...], {cand_name : {cand_id: 'cand_id', comm_ids: [cmte_id]}}
-    return candidates, candidates_committees
+    if year <= 1998:
+      return candidates, False
+    
+    if year > 1998:
+      
+      candidates_committees = {}    
+      for candidate in candidates:
+        linkage_query = "SELECT cmte_id FROM candidate_linkage WHERE cand_id='%s'" % candidate[1]
+        candidates_committees[candidate[0]] = {"cand_id": candidate[1], "comm_ids":[]}
+        self.fec_cur.execute(linkage_query)
+        committee_ids = self.fec_cur.fetchall()
+        for committee_id in committee_ids:
+	  candidates_committees[candidate[0]]["comm_ids"].append(committee_id[0])
+      # return ([(name, cand_id, cand_pty_affiliation, cand_city, cand_st), ...], {cand_name : {cand_id: 'cand_id', comm_ids: [cmte_id]}}
+      return candidates, candidates_committees
       
     
 
