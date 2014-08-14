@@ -45,7 +45,8 @@ class SearchLocation:
     __zipcodes = []
     #for __zipcode in zipcodes:
     #  __zipcodes.append
-    print zipcodes
+    #print zipcodes
+    return zipcodes
     
 
   
