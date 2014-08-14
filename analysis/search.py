@@ -36,32 +36,43 @@ class SearchLocation:
     self.fec_cur = self.fec_conn.cursor()
     
   def search_names_by_zip(self, parameters):
-    #location_engine_stmt = 'postgresql+psycopg2://%s:%s@%s:%s/%s_geozipcodes' % \
-    #              (db_user, db_password, db_host, db_port, db_prefix.lower(), str(year))
-    #location_engine = create_engine(engine_stmt)
+
     zipcode = parameters['zipcode']
     distance = parameters['distance']
     unit = parameters['unit']
+    
     if unit == "miles":
       distance = distance/0.62137
+      
     zipcode_stmt = "SELECT state, latitude, longitude FROM zipcodes WHERE zip LIKE'%s%%';" % zipcode
     self.geo_cur.execute(zipcode_stmt)
     state, lat, lon = self.geo_cur.fetchone()
     loc = GeoLocation.from_degrees(lat, lon)
-    #print loc
     SW_loc, NE_loc = loc.bounding_locations(distance)
     zipcodes_stmt = "SELECT zip FROM zipcodes WHERE latitude BETWEEN '%s' AND '%s' AND longitude BETWEEN '%s' AND '%s' and state='%s';" % \
                      (SW_loc.deg_lat, NE_loc.deg_lat, SW_loc.deg_lon, NE_loc.deg_lon, state)
     self.geo_cur.execute(zipcodes_stmt)
     zipcodes = self.geo_cur.fetchall()
     __zipcodes = []
+    
     for __zipcode in zipcodes:
       __zipcodes.append(__zipcode[0].split(".")[0])
-    #print zipcodes
     __temp = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st FROM candidate_master WHERE cand_zip in %s ORDER BY cand_name;"
     candidates_query = self.fec_cur.mogrify(__temp, (tuple(__zipcodes),))
     self.fec_cur.execute(candidates_query)
-    return self.fec_cur.fetchall()
+    candidates = self.fec_cur.fetchall()
+    candidates_committees = {}
+    
+    for candidate in candidates:
+      linkage_query = "SELECT cmte_id FROM candidate_linkage WHERE cand_id='%s'" % candidate[1]
+      candidates_committees[candidate[0]] = {"cand_id": candidate[1], "comm_ids":[]}
+      self.fec_cur.execute(linkage_query)
+      committee_ids = self.fec_cur.fetchall()
+      for committee_id in committee_ids:
+	candidates_committees[candidate[0]]["comm_ids"].append(committee_id[0])
+    
+    return candidates, candidates_committees
+      
     
 
   
