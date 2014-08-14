@@ -46,7 +46,7 @@ class SearchLocation:
       distance = distance/0.62137
     zipcode_stmt = "SELECT state, latitude, longitude FROM zipcodes WHERE zip LIKE'%s%%';" % zipcode
     self.geo_cur.execute(zipcode_stmt)
-    state, lat, lon = self.cur.fetchone()
+    state, lat, lon = self.geo_cur.fetchone()
     loc = GeoLocation.from_degrees(lat, lon)
     print loc
     SW_loc, NE_loc = loc.bounding_locations(distance)
@@ -59,7 +59,7 @@ class SearchLocation:
       __zipcodes.append(_zipcode[0].split(".")[0])
     #print zipcodes
     __temp = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st FROM candidate_master WHERE cand_zip in %s ORDER BY cand_name;"
-    candidates_query = s.cur.mogrify(__temp, (tuple(__zipcodes),))
+    candidates_query = s.fec_cur.mogrify(__temp, (tuple(__zipcodes),))
     self.fec_cur.execute(candidates_query)
     return self.fec_cur.fetchall()
     
