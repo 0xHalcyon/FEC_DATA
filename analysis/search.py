@@ -44,7 +44,7 @@ class SearchLocation:
     self.fec_conn.close()
     self.geo_conn.close()
     
-  def __get_candidate_committees__(cands):
+  def __get_candidate_committees__(self, cands):
     
     if self.__year <= 1998:
       cand_comms = {}
