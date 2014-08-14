@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import psycopg2
 
-class Connect:
+class Connection:
   def __init__(self, conn_settings):
     self.__geodb = "geozipcodes"
     self.__db_prefix = conn_settings['db_prefix']
