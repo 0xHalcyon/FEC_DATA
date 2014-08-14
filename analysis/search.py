@@ -103,7 +103,7 @@ class SearchLocation:
     except KeyError:
       raise KeyError("Please define search parameter")
     
-    query_stmt = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st FROM candidate_master WHERE %s LIKE '%%%s%%'" % (search_key, search_query)
+    query_stmt = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st FROM candidate_master WHERE %s LIKE UPPER('%%%s%%')" % (search_key, search_query)
     self.fec_cur.execute(query_stmt)
     candidates = self.fec_cur.fetchall()
     
