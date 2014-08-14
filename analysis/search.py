@@ -44,7 +44,32 @@ class SearchLocation:
     self.fec_conn.close()
     self.geo_conn.close()
     
+  def get_candidate_committees(cands):
+    
+    if self.__year <= 1998:
+      cand_comms = {}
+      for candidate in cands:
+	linkage_query = "SELECT cmte_id FROM committee_master WHERE cand_id='%s'" % candidate[1]
+        cand_comms[candidate[0]] = {"cand_id": candidate[1], "comm_ids":[]}
+        self.fec_cur.execute(linkage_query)
+        committee_ids = self.fec_cur.fetchall()
+        for committee_id in committee_ids:
+	  cand_comms[candidate[0]]["comm_ids"].append(committee_id[0])
+      return cand_comms
+    
+    if self.__year > 1998:
+      cand_comms = {}    
+      for candidate in candidates:
+        linkage_query = "SELECT cmte_id FROM candidate_linkage WHERE cand_id='%s'" % candidate[1]
+        cand_comms[candidate[0]] = {"cand_id": candidate[1], "comm_ids":[]}
+        self.fec_cur.execute(linkage_query)
+        committee_ids = self.fec_cur.fetchall()
+        for committee_id in committee_ids:
+	  cand_comms[candidate[0]]["comm_ids"].append(committee_id[0])
+      return cand_comms
+	  
   def search_names_by_zip(self, parameters):
+    'Search by zipcode'
     try:
       zipcode = parameters['zipcode']
       distance = parameters['distance']
@@ -73,31 +98,12 @@ class SearchLocation:
     self.fec_cur.execute(candidates_query)
     candidates = self.fec_cur.fetchall()
     
-    if self.__year <= 1998:
-      candidates_committees = {}
-      for candidate in candidates:
-	linkage_query = "SELECT cmte_id FROM committee_master WHERE cand_id='%s'" % candidate[1]
-        candidates_committees[candidate[0]] = {"cand_id": candidate[1], "comm_ids":[]}
-        self.fec_cur.execute(linkage_query)
-        committee_ids = self.fec_cur.fetchall()
-        for committee_id in committee_ids:
-	  candidates_committees[candidate[0]]["comm_ids"].append(committee_id[0])
-      return candidates, candidates_committees
+    candidates_committees = get_candidate_committees(candidates)
     
-    if self.__year > 1998:
-      
-      candidates_committees = {}    
-      for candidate in candidates:
-        linkage_query = "SELECT cmte_id FROM candidate_linkage WHERE cand_id='%s'" % candidate[1]
-        candidates_committees[candidate[0]] = {"cand_id": candidate[1], "comm_ids":[]}
-        self.fec_cur.execute(linkage_query)
-        committee_ids = self.fec_cur.fetchall()
-        for committee_id in committee_ids:
-	  candidates_committees[candidate[0]]["comm_ids"].append(committee_id[0])
-      # return ([(name, cand_id, cand_pty_affiliation, cand_city, cand_st), ...], {cand_name : {cand_id: 'cand_id', comm_ids: [cmte_id]}}
-      return candidates, candidates_committees
+    return candidates, candidates_committees
   
   def search_by_other(self, parameters):
+    'Search by city, state, or city and state'
     try:
       search_key = parameters['search']
       search_query = parameters['query']
@@ -121,31 +127,13 @@ class SearchLocation:
     self.fec_cur.execute(query_stmt)
     candidates = self.fec_cur.fetchall()
     
-    if self.__year <= 1998:
-      candidates_committees = {}
-      for candidate in candidates:
-	linkage_query = "SELECT cmte_id FROM committee_master WHERE cand_id='%s'" % candidate[1]
-        candidates_committees[candidate[0]] = {"cand_id": candidate[1], "comm_ids":[]}
-        self.fec_cur.execute(linkage_query)
-        committee_ids = self.fec_cur.fetchall()
-        for committee_id in committee_ids:
-	  candidates_committees[candidate[0]]["comm_ids"].append(committee_id[0])
-      return candidates, candidates_committees
-    
-    if self.__year > 1998:
-      
-      candidates_committees = {}    
-      for candidate in candidates:
-        linkage_query = "SELECT cmte_id FROM candidate_linkage WHERE cand_id='%s'" % candidate[1]
-        candidates_committees[candidate[0]] = {"cand_id": candidate[1], "comm_ids":[]}
-        self.fec_cur.execute(linkage_query)
-        committee_ids = self.fec_cur.fetchall()
-        for committee_id in committee_ids:
-	  candidates_committees[candidate[0]]["comm_ids"].append(committee_id[0])
+    candidates_committees= get_candidate_committees(candidates)
       # return ([(name, cand_id, cand_pty_affiliation, cand_city, cand_st), ...], {cand_name : {cand_id: 'cand_id', comm_ids: [cmte_id]}}
-      return candidates, candidates_committees    
+    return candidates, candidates_committees    
 
-  def search_by_city(self, parameters):
+  def search_by_name(self, parameters):
+    try:
+      name = parameters['name']
     pass
 
   
