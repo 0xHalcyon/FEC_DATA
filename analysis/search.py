@@ -9,7 +9,7 @@ from geo.geolocation import GeoLocation
 class SearchLocation:  
   'Provides search functions for database queries'
   def __init__(self, Connection):
-    self.Connection = Connection
+    self.__Connection = Connection
     self.__1998_linkage_query = "SELECT cmte_id FROM committee_master WHERE cand_id='%s'"
     self.__oth_linkage_query = "SELECT cmte_id FROM candidate_linkage WHERE cand_id='%s'"
     self.__zipcode_query = "SELECT state, latitude, longitude FROM zipcodes WHERE zip LIKE'%s%%';"
@@ -21,28 +21,18 @@ class SearchLocation:
     self.__name_query = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st FROM candidate_master WHERE cand_name LIKE UPPER('%%%s%%');"
     
   def __get_candidate_committees__(self, cands):
-    
-    if self.Connection.year <= 1998:
-      cand_comms = {}
-      for candidate in cands:
-	linkage_query = self.__1998_linkage_query % candidate[1] 
-        cand_comms[candidate[0]] = {"cand_id": candidate[1], "comm_ids":[]}
-        self.Connection.fec_cur.execute(linkage_query)
-        committee_ids = self.Connection.fec_cur.fetchall()
-        for committee_id in committee_ids:
-	  cand_comms[candidate[0]]["comm_ids"].append(committee_id[0])
-      return cand_comms
-    
-    if self.Connection.year > 1998:
-      cand_comms = {}    
-      for candidate in cands:
-        linkage_query =  self.__oth_linkage_query % candidate[1]
-        cand_comms[candidate[0]] = {"cand_id": candidate[1], "comm_ids":[]}
-        self.Connection.fec_cur.execute(linkage_query)
-        committee_ids = self.Connection.fec_cur.fetchall()
-        for committee_id in committee_ids:
-	  cand_comms[candidate[0]]["comm_ids"].append(committee_id[0])
-      return cand_comms
+    cand_comms = {}
+    for candidate in cands:
+      if self.__Connection.year <= 1998:
+	__linkage_query = self.__1998_linkage_query % candidate[1] 
+      else:
+	__linkage_query =  self.__oth_linkage_query % candidate[1]
+      cand_comms[candidate[0]] = {"cand_id": candidate[1], "comm_ids":[]}
+      self.__Connection.fec_cur.execute(__linkage_query)
+      committee_ids = self.__Connection.fec_cur.fetchall()
+    for committee_id in committee_ids:
+      cand_comms[candidate[0]]["comm_ids"].append(committee_id[0])
+    return cand_comms   
 	  
   def search_names_by_zip(self, parameters):
     'Search by zipcode'
@@ -57,20 +47,20 @@ class SearchLocation:
       distance = distance/0.62137
       
     zipcode_stmt = self.__zipcode_query % zipcode
-    self.Connection.geo_cur.execute(zipcode_stmt)
-    state, lat, lon = self.Connection.geo_cur.fetchone()
+    self.__Connection.geo_cur.execute(zipcode_stmt)
+    state, lat, lon = self.__Connection.geo_cur.fetchone()
     loc = GeoLocation.from_degrees(lat, lon)
     SW_loc, NE_loc = loc.bounding_locations(distance)
-    zipcodes_stmt = self.__zipcodes_query = %  (SW_loc.deg_lat, NE_loc.deg_lat, SW_loc.deg_lon, NE_loc.deg_lon, state)
-    self.Connection.geo_cur.execute(zipcodes_stmt)
-    zipcodes = self.Connection.geo_cur.fetchall()
+    __zipcodes_stmt = self.__zipcodes_query % (SW_loc.deg_lat, NE_loc.deg_lat, SW_loc.deg_lon, NE_loc.deg_lon, state)
+    self.__Connection.geo_cur.execute(__zipcodes_stmt)
+    zipcodes = self.__Connection.geo_cur.fetchall()
     __zipcodes = []
     
     for __zipcode in zipcodes:
       __zipcodes.append(__zipcode[0].split(".")[0])
-    candidates_query = self.Connection.fec_cur.mogrify(self.__cand_zipcodes_query, (tuple(__zipcodes),))
-    self.Connection.fec_cur.execute(candidates_query)
-    candidates = self.Connection.fec_cur.fetchall()
+    __candidates_query = self.__Connection.fec_cur.mogrify(self.__cand_zipcodes_query, (tuple(__zipcodes),))
+    self.__Connection.fec_cur.execute(__candidates_query)
+    candidates = self.__Connection.fec_cur.fetchall()
     
     candidates_committees = self.get_candidate_committees__(candidates)
     
@@ -97,8 +87,8 @@ class SearchLocation:
 	if state['name'] == search_query:
 	  search_query = state['abbreviation']
       __state_query_stmt = self.__state_abbr_query % (search_key, search_query)
-    self.Connection.fec_cur.execute(__state_query_stmt)
-    candidates = self.Connection.fec_cur.fetchall()
+    self.__Connection.fec_cur.execute(__state_query_stmt)
+    candidates = self.__Connection.fec_cur.fetchall()
     
     candidates_committees= self.__get_candidate_committees__(candidates)
       # return ([(name, cand_id, cand_pty_affiliation, cand_city, cand_st), ...], {cand_name : {cand_id: 'cand_id', comm_ids: [cmte_id]}}
@@ -114,16 +104,16 @@ class SearchLocation:
       __temp__ = name.split(" ")
       if len(__temp__) > 0:
         __query_by_name = self.__first_last_name_query % tuple(__temp__)
-        self.Connection.__fec_cur.execute(__query_by_name)
-        candidates = self.Connection.fec_cur.fetchall()
+        self.__Connection.__fec_cur.execute(__query_by_name)
+        candidates = self.__Connection.fec_cur.fetchall()
         if len(candidates) < 1:
 	  __query_by_name = self.__name_query % __temp__[1].strip(',')
-	  self.Connection.__fec_cur.execute(__query_by_name)
-	  candidates = self.Connection.fec_cur.fetchall()
+	  self.__Connection.__fec_cur.execute(__query_by_name)
+	  candidates = self.__Connection.fec_cur.fetchall()
     else:
       query_by_name = self.__name_query % name
-      self.Connection.fec_cur.execute(query_by_name)
-      candidates = self.Connection.fec_cur.fetchall()
+      self.__Connection.fec_cur.execute(query_by_name)
+      candidates = self.__Connection.fec_cur.fetchall()
     candidates_committees = self.__get_candidate_committees__(candidates)
     return candidates, candidates_committees
   
