@@ -59,7 +59,7 @@ class SearchLocation:
     
     if self.__year > 1998:
       cand_comms = {}    
-      for candidate in candidates:
+      for candidate in cands:
         linkage_query = "SELECT cmte_id FROM candidate_linkage WHERE cand_id='%s'" % candidate[1]
         cand_comms[candidate[0]] = {"cand_id": candidate[1], "comm_ids":[]}
         self.fec_cur.execute(linkage_query)
