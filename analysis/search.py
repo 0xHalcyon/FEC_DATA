@@ -98,8 +98,8 @@ class SearchLocation:
       # return ([(name, cand_id, cand_pty_affiliation, cand_city, cand_st), ...], {cand_name : {cand_id: 'cand_id', comm_ids: [cmte_id]}}
     return candidates, candidates_committees    
 
-  #def search_by_name(self, parameters):
-    'Search by name'
+  def search_by_name(self, parameters):
+    Search by name'
     try:
       name = parameters['name'].strip()
     except KeyError:
