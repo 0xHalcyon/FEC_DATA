@@ -139,14 +139,14 @@ class SearchLocation:
       raise KeyError("Please define name")
     if " " or "," in name:
       __temp__ = name.split(" ")
-    if len(__temp__) > 0:
-      query_by_name = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st FROM candidate_master WHERE cand_name LIKE UPPER('%%%s%%') AND cand_name LIKE UPPER('%%%s%%');" % tuple(__temp__)
-      self.fec_cur.execute(query_by_name)
-      candidates = self.fec_cur.fetchall()
-      if len(candidates) < 1:
-	query_by_name = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st FROM candidate_master WHERE cand_name LIKE UPPER('%%%s%%');" % __temp__[1].strip(',')
-	self.fec_cur.execute(query_by_name)
-	candidates = self.fec_cur.fetchall()
+      if len(__temp__) > 0:
+        query_by_name = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st FROM candidate_master WHERE cand_name LIKE UPPER('%%%s%%') AND cand_name LIKE UPPER('%%%s%%');" % tuple(__temp__)
+        self.fec_cur.execute(query_by_name)
+        candidates = self.fec_cur.fetchall()
+        if len(candidates) < 1:
+	  query_by_name = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st FROM candidate_master WHERE cand_name LIKE UPPER('%%%s%%');" % __temp__[1].strip(',')
+	  self.fec_cur.execute(query_by_name)
+	  candidates = self.fec_cur.fetchall()
     else:
       query_by_name = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st FROM candidate_master WHERE cand_name LIKE UPPER('%%%s%%');" % __temp__[0]
       self.fec_cur.execute(query_by_name)
