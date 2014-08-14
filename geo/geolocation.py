@@ -135,9 +135,10 @@ if __name__ == '__main__':
     
     # Test bounding box
     loc = GeoLocation.from_degrees(30.26, -97.74)
-    distance = 50  # 1 kilometer
+    distance = 50  # 50 kilometers
     SW_loc, NE_loc = loc.bounding_locations(distance)
-    print SW_loc
-    print NE_loc
-    print loc.distance_to(SW_loc)
-    print loc.distance_to(NE_loc)
+    #print dir(SW_loc)
+    print SW_loc.deg_lat, SW_loc.deg_lon
+    print NE_loc.deg_lat, NE_loc.deg_lon
+    #print loc.distance_to(SW_loc)
+    #print loc.distance_to(NE_loc)
