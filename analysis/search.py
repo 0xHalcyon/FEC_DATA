@@ -41,10 +41,10 @@ class SearchLocation:
     zipcodes_stmt = "SELECT zip FROM zipcodes WHERE latitude BETWEEN '%s' AND '%s' AND longitude BETWEEN '%s' AND '%s' and state='%s';" % \
                      (SW_loc.deg_lat, NE_loc.deg_lat, SW_loc.deg_lon, NE_loc.deg_lon, state)
     self.cur.execute(zipcodes_stmt)
-    zipcodes = self.cur.fetchall()[0]
+    zipcodes = self.cur.fetchall()
     __zipcodes = []
-    for __zipcode in zipcodes:
-      __zipcodes.append
+    #for __zipcode in zipcodes:
+    #  __zipcodes.append
     print zipcodes
     
 
