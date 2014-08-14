@@ -140,7 +140,7 @@ class SearchLocation:
     if " " or "," in name:
       __temp__ = name.split(" ")
     if len(__temp__) > 0:
-      query_by_name = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st FROM candidate_master WHERE cand_name LIKE UPPER('%%%s%%');" % __temp__[0].strip(',')
+      query_by_name = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st FROM candidate_master WHERE cand_name LIKE UPPER('%%%s%%') AND cand_name LIKE UPPER('%%%s%%');" % tuple(__temp__)
       self.fec_cur.execute(query_by_name)
       candidates = self.fec_cur.fetchall()
       if len(candidates) < 1:
