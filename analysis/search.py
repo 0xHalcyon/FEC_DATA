@@ -30,8 +30,8 @@ class SearchLocation:
       cand_comms[candidate[0]] = {"cand_id": candidate[1], "comm_ids":[]}
       self.__Connection.fec_cur.execute(__linkage_query)
       committee_ids = self.__Connection.fec_cur.fetchall()
-    for committee_id in committee_ids:
-      cand_comms[candidate[0]]["comm_ids"].append(committee_id[0])
+      for committee_id in committee_ids:
+        cand_comms[candidate[0]]["comm_ids"].append(committee_id[0])
     return cand_comms   
 	  
   def search_names_by_zip(self, parameters):
