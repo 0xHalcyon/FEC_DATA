@@ -21,7 +21,7 @@ class Connection:
       self.geo_conn.set_client_encoding("UTF8")
       self.geo_cur = self.geo_conn.cursor()
     
-      self.fec_conn = psycopg2.connect(dbname=self.__db_prefix+str(self.__year), \
+      self.fec_conn = psycopg2.connect(dbname=self.__db_prefix+str(self.year), \
                                        user=self.__db_user,
                                        password=self.__db_password,
 	                               host=self.__db_host,
