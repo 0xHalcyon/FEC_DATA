@@ -35,6 +35,7 @@ class SearchLocation:
     zipcode_stmt = "SELECT latitude, longitude FROM zipcodes WHERE zip LIKE'%s%%';" % zipcode
     self.cur.execute(zipcode_stmt)
     location = self.cur.fetchone()
+    print location
     lat, lon = location[0]
     loc = GeoLocation.from_degrees(lat, lon)
     print loc
