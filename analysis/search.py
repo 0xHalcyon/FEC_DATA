@@ -13,11 +13,19 @@ class SearchLocation:
     self.__1998_linkage_query = "SELECT cmte_id FROM committee_master WHERE cand_id='%s'"
     self.__oth_linkage_query = "SELECT cmte_id FROM candidate_linkage WHERE cand_id='%s'"
     self.__zipcode_query = "SELECT state, latitude, longitude FROM zipcodes WHERE zip LIKE'%s%%';"
-    self.__zipcodes_query = "SELECT zip FROM zipcodes WHERE latitude BETWEEN '%s' AND '%s' AND longitude BETWEEN '%s' AND '%s' and state='%s';"
-    self.__cand_zipcodes_query = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st FROM candidate_master WHERE cand_zip in %s ORDER BY cand_name;"
-    self.__state_title_query = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st FROM candidate_master WHERE %s LIKE UPPER('%%%s%%') and %s LIKE UPPER('%%%s%%');"
-    self.__state_abbr_query = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st FROM candidate_master WHERE %s LIKE UPPER('%%%s%%');"
-    self.__first_last_name_query = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st FROM candidate_master WHERE cand_name LIKE UPPER('%%%s%%') AND cand_name LIKE UPPER('%%%s%%');"
+    self.__zipcodes_query = "SELECT zip FROM zipcodes WHERE latitude BETWEEN '%s' AND '%s'" + \
+                            "AND longitude BETWEEN '%s' AND '%s' and state='%s';"
+    self.__cand_zipcodes_query = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation," + \
+                                 "cand_city, cand_st FROM candidate_master WHERE cand_zip in %s" + \
+				 "ORDER BY cand_name OR cand_id LIKE '__%s%%';"
+    self.__state_title_query = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city," + \
+                               "cand_st FROM candidate_master WHERE %s LIKE UPPER('%%%s%%')" + \
+			       "and %s LIKE UPPER('%%%s%%') OR cand_id LIKE '__%s%%';"
+    self.__state_abbr_query = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation, cand_city," +\
+                              "cand_st FROM candidate_master WHERE %s LIKE UPPER('%%%s%%') or cand_id LIKE '__%s%%';"
+    self.__first_last_name_query = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city," + \
+                                   "cand_st FROM candidate_master WHERE cand_name LIKE UPPER('%%%s%%')" + \
+				   "AND cand_name LIKE UPPER('%%%s%%');"
     self.__name_query = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st FROM candidate_master WHERE cand_name LIKE UPPER('%%%s%%');"
     
   def __get_candidate_committees__(self, cands):
@@ -58,7 +66,7 @@ class SearchLocation:
     
     for __zipcode in zipcodes:
       __zipcodes.append(__zipcode[0].split(".")[0])
-    __candidates_query = self.__Connection.fec_cur.mogrify(self.__cand_zipcodes_query, (tuple(__zipcodes),))
+    __candidates_query = self.__Connection.fec_cur.mogrify(self.__cand_zipcodes_query, (tuple(__zipcodes), state,))
     self.__Connection.fec_cur.execute(__candidates_query)
     candidates = self.__Connection.fec_cur.fetchall()
     
@@ -81,12 +89,12 @@ class SearchLocation:
       for state in states.states_titles:
 	if state['name'] == st:
 	  st = state['abbreviation']
-      __state_query_stmt = __state_title_query % (city_key, city, st_key, st)
+      __state_query_stmt = __state_title_query % (city_key, city, st_key, st, st)
     else:
       for state in states.states_titles:
 	if state['name'] == search_query:
-	  search_query = state['abbreviation']
-      __state_query_stmt = self.__state_abbr_query % (search_key, search_query)
+	  st = state['abbreviation']
+      __state_query_stmt = self.__state_abbr_query % (search_key, st, st)
     self.__Connection.fec_cur.execute(__state_query_stmt)
     candidates = self.__Connection.fec_cur.fetchall()
     
