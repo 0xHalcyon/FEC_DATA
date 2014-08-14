@@ -19,7 +19,7 @@ class Connection:
 			               )
     
       self.geo_conn.set_client_encoding("UTF8")
-      self.geo_cur = self.__geo_conn.cursor()
+      self.geo_cur = self.geo_conn.cursor()
     
       self.fec_conn = psycopg2.connect(dbname=self.__db_prefix+str(self.__year), \
                                        user=self.__db_user,
@@ -28,7 +28,7 @@ class Connection:
 			               port=self.__db_port
 			               )
       self.fec_conn.set_client_encoding("UTF8")
-      self.fec_cur = self.__fec_conn.cursor()
+      self.fec_cur = self.fec_conn.cursor()
     except psycopg2.Error:
       raise Exception("Did you define database parameters in config?")
     
