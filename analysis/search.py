@@ -88,13 +88,13 @@ class SearchLocation:
     
     if st_query and city_query:
       for state in states.states_titles:
-	if state['name'] == st_query:
+	if state['name'].lower() == st_query.lower():
 	  st_query = state['abbreviation'].upper()
       __state_query_stmt = __state_title_query % (city_key, city_query, st_key, st_query, st_query)
       
     elif st_query and not city_query:
       for state in states.states_titles:
-	if state['name'] == st_query:
+	if state['name'].lower() == st_query.lower():
 	  st_query = state['abbreviation'].upper()
       __state_query_stmt = self.__city_state_abbr_query % (st_key, st_query, st_query)
       
