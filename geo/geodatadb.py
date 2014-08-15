@@ -9,7 +9,7 @@ from sqlalchemy import create_engine
 def gengeodb(cwd, db_prefix, db_user, db_password, db_host, db_port):
   zipcodes = json.load(open(cwd+"/geo/zipcodes.json"))
   try:
-    conn = psycopg2.connect(dbname=db_prefix.lower()+"geozipcodes",
+    conn = psycopg2.connect(database=db_prefix.lower()+"geozipcodes",
 			    user=db_user,
 			    password=db_password,
 			    host=db_host,

@@ -158,7 +158,7 @@ def create_db(start_year, end_year, cwd, db_prefix, db_user, db_password, db_hos
       except sqlalchemy.exc.ProgrammingError as e:
 	print "Error:%s\nDid you modify your configuration file and run make createuser?" % e
 	os.sys.exit(1)
-      conn = psycopg2.connect(dbname=db_prefix.lower()+str(year),
+      conn = psycopg2.connect(database=db_prefix.lower()+str(year),
 	  	              user=db_user,
 			      password=db_password,
 			      host=db_host,
