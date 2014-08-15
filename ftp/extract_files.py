@@ -48,4 +48,4 @@ def extract_files(start_year, end_year, cwd):
           zf.extractall(extract_to)
   except OSError:
     print "Have you run 'make download' yet?"
-    os.system.exit(1)
+    os.sys.exit(1)
