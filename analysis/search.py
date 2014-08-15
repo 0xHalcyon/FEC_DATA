@@ -94,7 +94,7 @@ class SearchLocation:
       
     elif st_query and not city_query:
       for state in states.states_titles:
-	if state['name'] == search_query:
+	if state['name'] == st_query:
 	  st_query = state['abbreviation'].upper()
       __state_query_stmt = self.__city_state_abbr_query % (st_key, st_query, st_query)
       
