@@ -35,14 +35,18 @@ def populate_database(start_year, end_year, cwd, db_prefix, db_user, db_password
   errors = open("%s/db/errors/errors.txt" % cwd, "wb")
   for year in range(start_year, end_year, 2):
     year_suffix = str(year)[2:]
-    conn = psycopg2.connect(database=db_prefix.lower()+str(year),
-                            user=db_user,
-                            password=db_password,
-	                    host=db_host,
-			    port=db_port
-			    )
-    conn.set_client_encoding("UTF8")
-    cur = conn.cursor()
+    try:
+      conn = psycopg2.connect(database=db_prefix.lower()+str(year),
+                              user=db_user,
+                              password=db_password,
+	                      host=db_host,
+			      port=db_port
+			      )
+      conn.set_client_encoding("UTF8")
+      cur = conn.cursor()
+    except:
+      print "Have you run 'make createdb' yet?"
+      os.sys.exit(1)
     if year <= 1998:
      
       for f in sorted(files_1998):

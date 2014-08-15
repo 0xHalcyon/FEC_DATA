@@ -21,29 +21,31 @@ def extract_files(start_year, end_year, cwd):
 
   if not os.path.isdir("data"):
     os.mkdir("data")
+  try:
+    for year in range(start_year, end_year, 2):
+      year_suffix = str(year)[2:]
   
-  for year in range(start_year, end_year, 2):
-    year_suffix = str(year)[2:]
-  
-    if year <= 1998:
-    
-      for f in sorted(files_1998):
-        archive = f % (cwd, year, year_suffix)
-        extract_to = files_1998[f] % (cwd, year, year_suffix)
-        if not os.path.isdir(extract_to):
-          os.mkdir(extract_to)
-        zf = zipfile.ZipFile(archive)
-        print "Extracting %s to:\n   %s" % (archive, extract_to+zf.namelist()[0])
-        zf.extractall(extract_to)
+      if year <= 1998:
+     
+        for f in sorted(files_1998):
+          archive = f % (cwd, year, year_suffix)
+          extract_to = files_1998[f] % (cwd, year, year_suffix)
+          if not os.path.isdir(extract_to):
+            os.mkdir(extract_to)
+          zf = zipfile.ZipFile(archive)
+          print "Extracting %s to:\n   %s" % (archive, extract_to+zf.namelist()[0])
+          zf.extractall(extract_to)
       
-    else: 
+      else: 
       
-      for f in sorted(files):
-        archive = f % (cwd, year, year_suffix)
-        extract_to = files[f] % (cwd, year, year_suffix)
-        if not os.path.isdir(extract_to):
-          os.mkdir(extract_to)
-        zf = zipfile.ZipFile(archive)
-        print "Extracting %s to:\n   %s" % (archive, extract_to+zf.namelist()[0])
-        zf.extractall(extract_to)
-    
+        for f in sorted(files):
+          archive = f % (cwd, year, year_suffix)
+          extract_to = files[f] % (cwd, year, year_suffix)
+          if not os.path.isdir(extract_to):
+            os.mkdir(extract_to)
+          zf = zipfile.ZipFile(archive)
+          print "Extracting %s to:\n   %s" % (archive, extract_to+zf.namelist()[0])
+          zf.extractall(extract_to)
+  except OSError:
+    print "Have you run 'make download' yet?"
+    os.system.exit(1)

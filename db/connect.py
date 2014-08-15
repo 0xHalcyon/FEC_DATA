@@ -30,7 +30,7 @@ class Connection:
       self.fec_conn.set_client_encoding("UTF8")
       self.fec_cur = self.fec_conn.cursor()
     except psycopg2.Error:
-      raise Exception("Did you define database parameters in config?")
+      raise Exception("Did you define database parameters in config and run make?")
     
   def __del__(self):
     self.fec_cur.close()
