@@ -132,7 +132,7 @@ def create_db(start_year, end_year, cwd, db_prefix, db_user, db_password, db_hos
   """Creates databases and populates those databases with the templates provided by config.py"""
   for year in range(start_year, end_year, 2):
     try:
-      conn = psycopg2.connect(dbname=db_prefix.lower()+str(year),
+      conn = psycopg2.connect(database=db_prefix.lower()+str(year),
 			      user=db_user,
 			      password=db_password,
 			      host=db_host,

@@ -34,7 +34,7 @@ def gengeodb(cwd, db_prefix, db_user, db_password, db_host, db_port):
     except sqlalchemy.exc.ProgrammingError as e:
       print "Error:%s\nDid you modify your configuration file and run make createuser?" % e
       os.sys.exit(1)
-  conn = psycopg2.connect(dbname=db_prefix.lower()+"geozipcodes",
+  conn = psycopg2.connect(database=db_prefix.lower()+"geozipcodes",
  	                  user=db_user,
 			  password=db_password,
 			  host=db_host,

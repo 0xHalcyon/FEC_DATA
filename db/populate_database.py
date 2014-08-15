@@ -35,7 +35,7 @@ def populate_database(start_year, end_year, cwd, db_prefix, db_user, db_password
   errors = open("%s/db/errors/errors.txt" % cwd, "wb")
   for year in range(start_year, end_year, 2):
     year_suffix = str(year)[2:]
-    conn = psycopg2.connect(dbname=db_prefix.lower()+str(year),
+    conn = psycopg2.connect(database=db_prefix.lower()+str(year),
                             user=db_user,
                             password=db_password,
 	                    host=db_host,
