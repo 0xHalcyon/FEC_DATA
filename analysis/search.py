@@ -92,19 +92,19 @@ class SearchLocation:
 	  st_query = state['abbreviation'].upper()
       __state_query_stmt = __state_title_query % (city_key, city_query, st_key, st_query, st_query)
       
-    elif state_query and not city_query:
+    elif st_query and not city_query:
       for state in states.states_titles:
 	if state['name'] == search_query:
 	  st_query = state['abbreviation'].upper()
       __state_query_stmt = self.__city_state_abbr_query % (st_key, st_query, st_query)
       
-    elif not state_query and city_query:
+    elif not st_query and city_query:
       __city_state_query = self.__city_state_query % city_query
       self.__Connection.geo_cur.execute(__city_state_query)
       state = self.__Connection.geo_cur.fetchone()
       __state_query_stmt = self.__city_state_abbr_query % (city_key, city_query, state) 
       
-    elif not state_query and not city_query:
+    elif not st_query and not city_query:
       return False, False
       
     self.__Connection.fec_cur.execute(__state_query_stmt)
