@@ -76,7 +76,7 @@ class SearchLocation:
     return candidates, candidates_committees
   
   def search_by_city_state(self, parameters):
-   'Search by city, state, or city and state'
+    'Search by city, state, or city and state'
     st_key = 'cand_st'
     city_key = 'cand_city'
     
