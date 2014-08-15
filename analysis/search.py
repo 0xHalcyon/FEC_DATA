@@ -27,7 +27,8 @@ class SearchLocation:
     self.__first_last_name_query = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city," + \
                                    "cand_st FROM candidate_master WHERE cand_name LIKE UPPER('%%%s%%')" + \
 				   "AND cand_name LIKE UPPER('%%%s%%');"
-    self.__name_query = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st FROM candidate_master WHERE cand_name LIKE UPPER('%%%s%%');"
+    self.__name_query = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st " + \
+                        "FROM candidate_master WHERE cand_name LIKE UPPER('%%%s%%');"
     
   def __get_candidate_committees__(self, cands):
     cand_comms = {}
@@ -90,7 +91,7 @@ class SearchLocation:
       for state in states.states_titles:
 	if state['name'].lower() == st_query.lower():
 	  st_query = state['abbreviation'].upper()
-      __state_query_stmt = __state_title_query % (city_key, city_query, st_key, st_query, st_query)
+      __state_query_stmt = self.__state_title_query % (city_key, city_query, st_key, st_query, st_query)
       
     elif st_query and not city_query:
       for state in states.states_titles:
