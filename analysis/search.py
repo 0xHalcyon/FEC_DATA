@@ -13,6 +13,7 @@ class SearchLocation:
     self.__1998_linkage_query = "SELECT cmte_id FROM committee_master WHERE cand_id='%s'"
     self.__oth_linkage_query = "SELECT cmte_id FROM candidate_linkage WHERE cand_id='%s'"
     self.__zipcode_query = "SELECT state, latitude, longitude FROM zipcodes WHERE zip LIKE'%s%%';"
+    self.__city_state_query = "SELECT state FROM zipcodes WHERE LOWER(primary_city) LIKE LOWER('%%%s%%');"
     self.__zipcodes_query = "SELECT zip FROM zipcodes WHERE latitude BETWEEN '%s' AND '%s'" + \
                             "AND longitude BETWEEN '%s' AND '%s' and state='%s';"
     self.__cand_zipcodes_query = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation," + \
@@ -21,8 +22,8 @@ class SearchLocation:
     self.__state_title_query = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city," + \
                                "cand_st FROM candidate_master WHERE %s LIKE UPPER('%%%s%%')" + \
 			       "and %s LIKE UPPER('%%%s%%') OR cand_id LIKE '__%s%%';"
-    self.__state_abbr_query = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation, cand_city," +\
-                              "cand_st FROM candidate_master WHERE %s LIKE UPPER('%%%s%%') or cand_id LIKE '__%s%%';"
+    self.__city_state_abbr_query = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation, cand_city," +\
+                              "cand_st FROM candidate_master WHERE %s LIKE UPPER('%%%s%%') OR cand_id LIKE '__%s%%';"
     self.__first_last_name_query = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city," + \
                                    "cand_st FROM candidate_master WHERE cand_name LIKE UPPER('%%%s%%')" + \
 				   "AND cand_name LIKE UPPER('%%%s%%');"
@@ -74,27 +75,38 @@ class SearchLocation:
     
     return candidates, candidates_committees
   
-  def search_by_other(self, parameters):
-    'Search by city, state, or city and state'
+  def search_by_city_state(self, parameters):
+   'Search by city, state, or city and state'
+    st_key = 'cand_st'
+    city_key = 'cand_city'
+    
     try:
-      search_key = parameters['search']
-      search_query = parameters['query']
+      st_query = parameters[st_key].upper()
+      city_query = parameters[city_key].upper()
     except KeyError:
       raise KeyError("Please define search parameter")
-    if ',' in search_query:
-      city_key = 'cand_city'
-      st_key = 'cand_st'
-      city = search_query.split(', ')[0]
-      st = search_query.split(', ')[1]
+    
+    if st_query and city_query:
       for state in states.states_titles:
-	if state['name'] == st:
-	  st = state['abbreviation']
-      __state_query_stmt = __state_title_query % (city_key, city, st_key, st, st)
-    else:
+	if state['name'] == st_query:
+	  st_query = state['abbreviation'].upper()
+      __state_query_stmt = __state_title_query % (city_key, city_query, st_key, st_query, st_query)
+      
+    elif state_query and not city_query:
       for state in states.states_titles:
 	if state['name'] == search_query:
-	  st = state['abbreviation']
-      __state_query_stmt = self.__state_abbr_query % (search_key, st, st)
+	  st_query = state['abbreviation'].upper()
+      __state_query_stmt = self.__city_state_abbr_query % (st_key, st_query, st_query)
+      
+    elif not state_query and city_query:
+      __city_state_query = self.__city_state_query % city_query
+      self.__Connection.geo_cur.execute(__city_state_query)
+      state = self.__Connection.geo_cur.fetchone()
+      __state_query_stmt = self.__city_state_abbr_query % (city_key, city_query, state) 
+      
+    elif not state_query and not city_query:
+      return False, False
+      
     self.__Connection.fec_cur.execute(__state_query_stmt)
     candidates = self.__Connection.fec_cur.fetchall()
     
