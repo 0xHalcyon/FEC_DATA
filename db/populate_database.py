@@ -89,6 +89,9 @@ def populate_database(start_year, end_year, cwd, db_prefix, db_user, db_password
 	    errors.write(to_write)
 	    errors.flush()
 	    continue
+	  except psycopg2.IntegrityError as e:
+	    print "Database already populated! Exiting NOW!"
+	    os.sys.exit(1)
       conn.commit()
       
     conn.close()
