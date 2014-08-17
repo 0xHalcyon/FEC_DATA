@@ -63,7 +63,7 @@ def populate_database(start_year, end_year, cwd, db_prefix, db_user, db_password
       for chunk in read_some_lines(temp):
         for line in chunk:
 	  temp1 = line.replace("\x92", "")	    
-	  temp1 = line.strip().replace("'", "").split("|")
+	  temp1 = temp1.strip().replace("'", "").split("|")
 	  if f in ("comm_to_comm", "cand_to_comm", "indiv_contrib"):
 	    if temp1[13]:
 	      date = temp1[13]
