@@ -62,7 +62,9 @@ def populate_database(start_year, end_year, cwd, db_prefix, db_user, db_password
       template = str(tuple(template.split(","))).replace("'", "").lower()
       for chunk in read_some_lines(temp):
         for line in chunk:
-	  temp1 = line.replace("\x92", "")	    
+	  temp1 = line.replace("\x92", "")
+	  temp1 = temp1.replace("\xa0", " ")
+	  temp1 = temp1.replace("\x85", "...")
 	  temp1 = temp1.strip().replace("'", "").split("|")
 	  if f in ("comm_to_comm", "cand_to_comm", "indiv_contrib"):
 	    if temp1[13]:
