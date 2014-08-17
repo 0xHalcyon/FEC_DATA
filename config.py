@@ -37,3 +37,8 @@ db_host = "localhost"
 
 db_port = 5432
 
+## DO NOT MODIFY BELOW THIS LINE
+import os
+
+cwd = os.getcwd()
+

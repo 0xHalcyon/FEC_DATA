@@ -49,9 +49,11 @@ def populate_database(start_year, end_year, cwd, db_prefix, db_user, db_password
       os.sys.exit(1)
       
     if year <= 1998:
-      files = files_1998
+      tempfiles = files_1998
+    else:
+      tempfiles = files
       
-    for f in sorted(files):
+    for f in sorted(tempfiles):
       print "CURRENT YEAR: %s\nCURRENT TABLE: %s" % (year, f)
       try:
         temp = open(files[f][0] % (cwd, year, year_suffix))
