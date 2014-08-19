@@ -6,10 +6,10 @@ import sqlalchemy
 from time import sleep
 from sqlalchemy import create_engine
 
-def gengeodb(cwd, db_prefix, db_user, db_password, db_host, db_port):
+def gengeodb(cwd, db_name, db_user, db_password, db_host, db_port):
   zipcodes = json.load(open(cwd+"/geo/zipcodes.json"))
   try:
-    conn = psycopg2.connect(database=db_prefix.lower()+"geozipcodes",
+    conn = psycopg2.connect(database=db_name,
 			    user=db_user,
 			    password=db_password,
 			    host=db_host,
@@ -19,13 +19,13 @@ def gengeodb(cwd, db_prefix, db_user, db_password, db_host, db_port):
     
   except psycopg2.OperationalError as e:
     try:
-      print "Database %sgeozipcodes does not exist yet, creating now" % db_prefix.lower()
+      print "Database %s does not exist yet, creating now" % db_name.lower()
       engine_stmt = 'postgresql+psycopg2://%s:%s@%s:%s/template1' % \
                     (db_user, db_password, db_host, db_port)
       engine = create_engine(engine_stmt)
       eng_conn = engine.connect()
       eng_conn.connection.connection.set_isolation_level(0)
-      create_db_stmt = "CREATE DATABASE %sgeozipcodes" % db_prefix.lower()
+      create_db_stmt = "CREATE DATABASE %s" % db_name.lower()
       eng_conn.execute(create_db_stmt)
       eng_conn.connection.connection.set_isolation_level(1)
       eng_conn.close()
@@ -34,7 +34,7 @@ def gengeodb(cwd, db_prefix, db_user, db_password, db_host, db_port):
     except sqlalchemy.exc.ProgrammingError as e:
       print "Error:%s\nDid you modify your configuration file and run make createuser?" % e
       os.sys.exit(1)
-  conn = psycopg2.connect(database=db_prefix.lower()+"geozipcodes",
+  conn = psycopg2.connect(database=db_name.lower(),
  	                  user=db_user,
 			  password=db_password,
 			  host=db_host,

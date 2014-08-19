@@ -129,7 +129,7 @@ individual_contrib_sql = """CREATE TABLE %s_indiv_contrib ( \
                                           MEMO_CD VARCHAR(5), \
                                           MEMO_TEXT VARCHAR(100), \
                                           SUB_ID BIGINT UNIQUE NOT NULL);"""
-def create_db(start_year, end_year, cwd, db_prefix, db_user, db_password, db_host, db_port):       
+def create_db(start_year, end_year, cwd, db_name, db_user, db_password, db_host, db_port):       
   """Creates databases and populates those databases with the templates provided by config.py"""
   try:
     conn = psycopg2.connect(database=db_name.lower(),

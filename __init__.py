@@ -29,7 +29,7 @@ def wrapper(function, cwd):
     create_db.create_db(config.start_year, 
 			config.end_year,
 			cwd,
-			config.db_prefix,
+			config.db_name,
 			config.db_user, 
 			config.db_password,
 		        config.db_host, 
@@ -41,7 +41,7 @@ def wrapper(function, cwd):
     populate_database.populate_database(config.start_year,
 					config.end_year,
 					cwd,
-					config.db_prefix,
+					config.db_name,
 					config.db_user,
 					config.db_password,
 				        config.db_host,
@@ -56,7 +56,7 @@ def wrapper(function, cwd):
     from geo import geodatadb
     print "Creating zipcode database and dumping json to database"
     geodatadb.gengeodb(cwd, 
-		       config.db_prefix, 
+		       config.db_name, 
 		       config.db_user, 
 		       config.db_password, 
 		       config.db_host, 
