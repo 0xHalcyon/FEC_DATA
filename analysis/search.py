@@ -72,7 +72,8 @@ class SearchLocation:
     for __zipcode in zipcodes:
       __zipcodes.append(__zipcode[0].split(".")[0])
     for year in range(self.start_year, self.end_year, 2):
-      __candidates_query = self.__Connection.cur.mogrify(self.__cand_zipcodes_query, (year, tuple(__zipcodes), state,))
+      print state
+      __candidates_query = self.__Connection.cur.mogrify(self.__cand_zipcodes_query, (year, tuple(__zipcodes), state.strip("'"),))
       self.__Connection.cur.execute(__candidates_query)
       candidates += self.__Connection.cur.fetchall()
     
