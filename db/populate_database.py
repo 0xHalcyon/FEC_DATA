@@ -33,11 +33,17 @@ class PopulateDatabase():
   
     self.errors = open("%s/db/errors/errors.txt" % self.cwd, "wb")
     
+  def log_error(self, year, string):
+    to_write = "%s::%s\n" % (year, string)
+    self.errors.write(to_write)
+    self.errors.flush()
+    
   def populate_database(self, start_year, end_year):
     """Populates FEC databases based on parameters listed in the config.py file in the root of this package"""
     
 
     for year in range(start_year, end_year, 2):
+      print "CURRENT YEAR: %s" % year
       year_suffix = str(year)[2:]
       
       if year <= 1998:
@@ -47,7 +53,7 @@ class PopulateDatabase():
       
       for table in sorted(temp_files):
         f = table % year
-        print "CURRENT YEAR: %s\nCURRENT TABLE: %s" % (year, f)
+        print "CURRENT TABLE: %s" % f
         try:
           temp = open(temp_files[table][0] % (self.cwd, year, year_suffix))
           template = open(temp_files[table][1] % self.cwd).read().strip()
@@ -67,17 +73,13 @@ class PopulateDatabase():
 	        try:
 	          date = datetime(month=int(date[0:2]), day=int(date[2:4]), year=int(date[4:]))
 	        except ValueError as e:
-		  #print "Error: %s %s\nContinuing" % (e, temp1[13])
 		  temp1[13] = datetime(month=1, day=1, year=year).strftime("%Y%m%d")
-		  to_write = "%s|%s\n" % (year, str(temp1))
-		  self.errors.write(to_write)
-		  self.errors.flush()
+		  log_error(year, line)
 		  continue
 	        temp1[13] = date.strftime("%Y%m%d")
 	      else:
 	        date = datetime(month=01, day=01, year=1900)
-	        self.errors.write("%s|%s\n" % (year, str(temp1)))
-	        self.errors.flush()
+	        log_error(year, line)
 	        temp1[13] = date.strftime("%Y%m%d")	   
 	    temp1 = tuple(temp1)
 	    try:
@@ -86,20 +88,14 @@ class PopulateDatabase():
 	      self.__Connection.cur.execute("SAVEPOINT save_point;")
               self.__Connection.cur.execute(query)
             except (psycopg2.DataError, psycopg2.InternalError) as e:
-              print "Error: %s %s\nContinuing" % (e, temp1[13])
-              to_write = "%s|%s\n" % (year, str(temp1))
-	      self.errors.write(to_write)
-	      self.errors.flush()
+              log_error(year, line)
 	      self.__Connection.cur.execute("ROLLBACK TO SAVEPOINT save_point;")
 	      continue
 	    except psycopg2.IntegrityError as e:
-	      #print "Failed to integrate due to constraints %s" % query
-	      #print "Database already populated! Exiting NOW!"
 	      Connection.cur.execute("ROLLBACK TO SAVEPOINT save_point;")
 	      continue
 	    else:
 	      self.__Connection.cur.execute("RELEASE SAVEPOINT save_point;")
-	      #os.sys.exit(1)
         self.__Connection.conn.commit()
       
     self.__Connection.conn.close()
