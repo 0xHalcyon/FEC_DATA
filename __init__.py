@@ -9,26 +9,26 @@ import sys
 #ftp.extract_files.extract_files(start_year, end_year, cwd)
 
 
-def wrapper(function, cwd):
+def wrapper(function):
   
   if function == "download":  
     
     from ftp import download_files
     download_files.download_files(config.start_year,
-				  config.end_year, cwd)
+				  config.end_year, config.cwd)
     
   elif function == "extract":
     
     from ftp import extract_files
     extract_files.extract_files(config.start_year,
-				config.end_year, cwd)
+				config.end_year, config.cwd)
     
   elif function == "createdb":
     
     from db import create_db
     create_db.create_db(config.start_year, 
 			config.end_year,
-			cwd,
+			config.cwd,
 			config.db_name,
 			config.db_user, 
 			config.db_password,
@@ -61,7 +61,7 @@ def wrapper(function, cwd):
   elif function == "creategeo":
     from geo import geodatadb
     print "Creating zipcode database and dumping json to database"
-    geodatadb.gengeodb(cwd, 
+    geodatadb.gengeodb(config.cwd, 
 		       config.db_name, 
 		       config.db_user, 
 		       config.db_password, 
@@ -75,12 +75,11 @@ def wrapper(function, cwd):
     print "Invalid function: %s" % function
   
 if __name__ == "__main__":
-  workDir = os.getcwd()
   try:
     toDo = sys.argv[1]
   except IndexError:
     print "Usage: %s <function>" % sys.argv[0]
     sys.exit(1)
-  wrapper(toDo, workDir)
+  wrapper(toDo)
   
   
