@@ -6,7 +6,7 @@ from sqlalchemy import create_engine
 from time import sleep
 
 #http://www.fec.gov/finance/disclosure/metadata/DataDictionaryCandidateMaster.shtml
-candidate_master_sql = """CREATE TABLE %s_candidate_master ( \
+candidate_master_sql = """CREATE TABLE candidate_master_%s ( \
                                            ID SERIAL NOT NULL, \
                                            CAND_ID VARCHAR(14) UNIQUE NOT NULL, \
                                            CAND_NAME VARCHAR(250), \
@@ -25,7 +25,7 @@ candidate_master_sql = """CREATE TABLE %s_candidate_master ( \
                                            CAND_ZIP VARCHAR(14));"""
 
 #http://www.fec.gov/finance/disclosure/metadata/DataDictionaryCommitteeMaster.shtml
-commitee_master_sql = """CREATE TABLE %s_committee_master ( \
+commitee_master_sql = """CREATE TABLE committee_master_%s ( \
                                            ID SERIAL NOT NULL, \
                                            CMTE_ID VARCHAR(14) UNIQUE NOT NULL,\
                                            CMTE_NM VARCHAR(250), \
@@ -44,7 +44,7 @@ commitee_master_sql = """CREATE TABLE %s_committee_master ( \
                                            CAND_ID VARCHAR(14));"""
 
 #http://www.fec.gov/finance/disclosure/metadata/DataDictionaryCandCmteLinkage.shtml                        
-candidate_linkage_sql = """CREATE TABLE %s_candidate_linkage ( \
+candidate_linkage_sql = """CREATE TABLE candidate_linkage_%s ( \
                                            ID SERIAL NOT NULL, \
                                            CAND_ID VARCHAR(14) NOT NULL, \
                                            CAND_ELECTION_YR SMALLINT, \
@@ -55,7 +55,7 @@ candidate_linkage_sql = """CREATE TABLE %s_candidate_linkage ( \
                                            LINKAGE_ID BIGINT);"""
                                            
 #http://www.fec.gov/finance/disclosure/metadata/DataDictionaryCommitteetoCommittee.shtml
-comm_to_comm_sql = """CREATE TABLE %s_comm_to_comm ( \
+comm_to_comm_sql = """CREATE TABLE comm_to_comm_%s ( \
                                         ID SERIAL NOT NULL, \
                                         CMTE_ID VARCHAR(14), \
                                         AMNDT_IND VARCHAR(4), \
@@ -80,7 +80,7 @@ comm_to_comm_sql = """CREATE TABLE %s_comm_to_comm ( \
                                         SUB_ID BIGINT UNIQUE NOT NULL);"""
                                         
 # http://www.fec.gov/finance/disclosure/metadata/DataDictionaryContributionstoCandidates.shtml
-cand_to_comm_sql = """CREATE TABLE %s_cand_to_comm ( \
+cand_to_comm_sql = """CREATE TABLE cand_to_comm_%s ( \
                                       ID SERIAL NOT NULL, \
                                       CMTE_ID VARCHAR(14) NOT NULL, \
                                       AMNDT_IND VARCHAR(5), \
@@ -106,7 +106,7 @@ cand_to_comm_sql = """CREATE TABLE %s_cand_to_comm ( \
                                       SUB_ID BIGINT UNIQUE NOT NULL);"""
 
 #http://www.fec.gov/finance/disclosure/metadata/DataDictionaryContributionsbyIndividuals.shtml
-individual_contrib_sql = """CREATE TABLE %s_indiv_contrib ( \
+individual_contrib_sql = """CREATE TABLE indiv_contrib_%s ( \
                                           ID SERIAL NOT NULL, \
                                           CMTE_ID VARCHAR(14) NOT NULL, \
                                           AMNDT_IND VARCHAR(5), \
@@ -182,7 +182,7 @@ def create_db(start_year, end_year, cwd, db_name, db_user, db_password, db_host,
       cur.execute("""DROP TABLE IF EXISTS cand_to_comm;""")
       cur.execute(cand_to_comm_sql % year)
       cur.execute("""DROP TABLE IF EXISTS indiv_contrib;""")
-      cur.execute(individual_contrib_sql)
+      cur.execute(individual_contrib_sql % year)
     
     else:
     

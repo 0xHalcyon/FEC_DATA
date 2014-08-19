@@ -11,22 +11,22 @@ def read_some_lines(file_object, chunk_size=1024):
       break
     yield data
 
-def populate_database(start_year, end_year, cwd, db_prefix, db_user, db_password, db_host, db_port):
+def populate_database(Connection):
   """Populates FEC databases based on parameters listed in the config.py file in the root of this package"""
-  
-  files = {"committee_master"  : ["%s/data/%s/cm%s/cm.txt", "%s/db/headers/cm_header_file.csv"],
-           "candidate_master"  : ["%s/data/%s/cn%s/cn.txt", "%s/db/headers/cn_header_file.csv"],
-           "candidate_linkage" : ["%s/data/%s/ccl%s/ccl.txt", "%s/db/headers/ccl_header_file.csv"],
-           "comm_to_comm"      : ["%s/data/%s/oth%s/itoth.txt","%s/db/headers/oth_header_file.csv"],
-           "cand_to_comm"      : ["%s/data/%s/pas2%s/itpas2.txt", "%s/db/headers/pas2_header_file.csv"],
-           "indiv_contrib"     : ["%s/data/%s/indiv%s/itcont.txt", "%s/db/headers/indiv_header_file.csv"]
+    
+  files = {"committee_master_%s"  : ["%s/data/%s/cm%s/cm.txt", "%s/db/headers/cm_header_file.csv"],
+           "candidate_master_%s"  : ["%s/data/%s/cn%s/cn.txt", "%s/db/headers/cn_header_file.csv"],
+           "candidate_linkage_%s" : ["%s/data/%s/ccl%s/ccl.txt", "%s/db/headers/ccl_header_file.csv"],
+           "comm_to_comm_%s"      : ["%s/data/%s/oth%s/itoth.txt","%s/db/headers/oth_header_file.csv"],
+           "cand_to_comm_%s"      : ["%s/data/%s/pas2%s/itpas2.txt", "%s/db/headers/pas2_header_file.csv"],
+           "indiv_contrib_%s"     : ["%s/data/%s/indiv%s/itcont.txt", "%s/db/headers/indiv_header_file.csv"]
            }
 
-  files_1998 = {"committee_master"  : ["%s/data/%s/cm%s/cm.txt", "%s/db/headers/cm_header_file.csv"],
-                "candidate_master"  : ["%s/data/%s/cn%s/cn.txt", "%s/db/headers/cn_header_file.csv"],
-                "comm_to_comm"      : ["%s/data/%s/oth%s/itoth.txt","%s/db/headers/oth_header_file.csv"],
-                "cand_to_comm"      : ["%s/data/%s/pas2%s/itpas2.txt", "%s/db/headers/pas2_header_file.csv"],
-                "indiv_contrib"     : ["%s/data/%s/indiv%s/itcont.txt", "%s/db/headers/indiv_header_file.csv"]
+  files_1998 = {"committee_master_%s"  : ["%s/data/%s/cm%s/cm.txt", "%s/db/headers/cm_header_file.csv"],
+                "candidate_master_%s"  : ["%s/data/%s/cn%s/cn.txt", "%s/db/headers/cn_header_file.csv"],
+                "comm_to_comm_%s"      : ["%s/data/%s/oth%s/itoth.txt","%s/db/headers/oth_header_file.csv"],
+                "cand_to_comm_%s"      : ["%s/data/%s/pas2%s/itpas2.txt", "%s/db/headers/pas2_header_file.csv"],
+                "indiv_contrib_%s"     : ["%s/data/%s/indiv%s/itcont.txt", "%s/db/headers/indiv_header_file.csv"]
                 }
 
   if not os.path.isdir("%s/db/errors" % cwd):
@@ -36,25 +36,14 @@ def populate_database(start_year, end_year, cwd, db_prefix, db_user, db_password
   
   for year in range(start_year, end_year, 2):
     year_suffix = str(year)[2:]
-    try:
-      conn = psycopg2.connect(database=db_prefix.lower()+str(year),
-                              user=db_user,
-                              password=db_password,
-	                      host=db_host,
-			      port=db_port
-			      )
-      conn.set_client_encoding("UTF8")
-      cur = conn.cursor()
-    except:
-      print "Have you run 'make createdb' yet?"
-      os.sys.exit(1)
       
     if year <= 1998:
       tempfiles = files_1998
     else:
       tempfiles = files
       
-    for f in sorted(tempfiles):
+    for table in sorted(tempfiles):
+      f = table % year
       print "CURRENT YEAR: %s\nCURRENT TABLE: %s" % (year, f)
       try:
         temp = open(files[f][0] % (cwd, year, year_suffix))
@@ -87,13 +76,13 @@ def populate_database(start_year, end_year, cwd, db_prefix, db_user, db_password
 	  temp1 = tuple(temp1)
 	  try:
 	    query = "INSERT INTO %s %s VALUES %s;" % (f, template, temp1)
-            cur.execute(query)
+            Connection.fec_cur.execute(query)
           except (psycopg2.DataError, psycopg2.InternalError) as e:
             print "Error: %s %s\nContinuing" % (e, temp1[13])
             to_write = "%s|%s\n" % (year, str(temp1))
 	    errors.write(to_write)
 	    errors.flush()
-	    conn.rollback()
+	    Connection.fec_conn.rollback()
 	    continue
 	  except psycopg2.IntegrityError as e:
 	    print "Database already populated! Exiting NOW!"
