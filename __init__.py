@@ -41,6 +41,8 @@ def wrapper(function, cwd):
 	             'db_host': config.db_host,
 	             'db_port': config.db_port,
 	             'db_name': config.db_name,
+	             'start_year': config.start_year,
+	             'end_year': config.end_year
 	            }
     from db.connect import Connection
     connection = Connection(conn_settings)
