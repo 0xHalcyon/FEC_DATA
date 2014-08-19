@@ -10,25 +10,25 @@ class SearchLocation:
   'Provides search functions for database queries'
   def __init__(self, Connection):
     self.__Connection = Connection
-    self.__1998_linkage_query = "SELECT cmte_id FROM committee_master WHERE cand_id='%s'"
-    self.__oth_linkage_query = "SELECT cmte_id FROM candidate_linkage WHERE cand_id='%s'"
-    self.__zipcode_query = "SELECT state, latitude, longitude FROM zipcodes WHERE zip LIKE'%s%%';"
+    self.__1998_linkage_query = "SELECT cmte_id FROM committee_master_%s WHERE cand_id='%s'"
+    self.__oth_linkage_query = "SELECT cmte_id FROM candidate_linkage_%s WHERE cand_id='%s'"
+    self.__zipcode_query = "SELECT state, latitude, longitude FROM zipcodes_%s WHERE zip LIKE'%s%%';"
     self.__city_state_query = "SELECT state FROM zipcodes WHERE LOWER(primary_city) LIKE LOWER('%%%s%%');"
     self.__zipcodes_query = "SELECT zip FROM zipcodes WHERE latitude BETWEEN '%s' AND '%s'" + \
                             "AND longitude BETWEEN '%s' AND '%s' and state='%s';"
     self.__cand_zipcodes_query = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation," + \
-                                 "cand_city, cand_st FROM candidate_master WHERE cand_zip in %s" + \
+                                 "cand_city, cand_st FROM candidate_master_%s WHERE cand_zip in %s" + \
 				 "ORDER BY cand_name OR cand_id LIKE '__%s%%';"
     self.__state_title_query = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city," + \
-                               "cand_st FROM candidate_master WHERE %s LIKE UPPER('%%%s%%')" + \
+                               "cand_st FROM candidate_master_%s WHERE %s LIKE UPPER('%%%s%%')" + \
 			       "and %s LIKE UPPER('%%%s%%') OR cand_id LIKE '__%s%%';"
     self.__city_state_abbr_query = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation, cand_city," +\
-                              "cand_st FROM candidate_master WHERE %s LIKE UPPER('%%%s%%') OR cand_id LIKE '__%s%%';"
+                              "cand_st FROM candidate_master_%s WHERE %s LIKE UPPER('%%%s%%') OR cand_id LIKE '__%s%%';"
     self.__first_last_name_query = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city," + \
-                                   "cand_st FROM candidate_master WHERE cand_name LIKE UPPER('%%%s%%')" + \
+                                   "cand_st FROM candidate_master_%s WHERE cand_name LIKE UPPER('%%%s%%')" + \
 				   "AND cand_name LIKE UPPER('%%%s%%');"
     self.__name_query = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st " + \
-                        "FROM candidate_master WHERE cand_name LIKE UPPER('%%%s%%');"
+                        "FROM candidate_master_%s WHERE cand_name LIKE UPPER('%%%s%%');"
     
   def __get_candidate_committees__(self, cands):
     cand_comms = {}
