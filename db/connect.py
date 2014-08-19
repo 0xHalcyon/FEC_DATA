@@ -17,7 +17,7 @@ class Connection:
 			               port=self.__db_port
 			               )
       self.conn.set_client_encoding("UTF8")
-      self.cur = self.fec_conn.cursor()
+      self.cur = self.conn.cursor()
     except psycopg2.Error:
       raise Exception("Did you define database parameters in config and run make?")
     
