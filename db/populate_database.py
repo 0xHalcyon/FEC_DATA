@@ -33,8 +33,8 @@ class PopulateDatabase():
   
     self.errors = open("%s/db/errors/errors.txt" % self.cwd, "wb")
     
-  def log_error(self, year, string):
-    to_write = "%s::%s\n" % (year, string)
+  def log_error(self, table, string):
+    to_write = "%s::%s\n" % (table, string)
     self.errors.write(to_write)
     self.errors.flush()
     
@@ -74,12 +74,12 @@ class PopulateDatabase():
 	          date = datetime(month=int(date[0:2]), day=int(date[2:4]), year=int(date[4:]))
 	        except ValueError as e:
 		  temp1[13] = datetime(month=1, day=1, year=year).strftime("%Y%m%d")
-		  self.log_error(year, line)
+		  self.log_error(f, line)
 		  continue
 	        temp1[13] = date.strftime("%Y%m%d")
 	      else:
 	        date = datetime(month=01, day=01, year=1900)
-	        self.log_error(year, line)
+	        self.log_error(f, line)
 	        temp1[13] = date.strftime("%Y%m%d")	   
 	    temp1 = tuple(temp1)
 	    try:
@@ -88,7 +88,7 @@ class PopulateDatabase():
 	      self.__Connection.cur.execute("SAVEPOINT save_point;")
               self.__Connection.cur.execute(query)
             except (psycopg2.DataError, psycopg2.InternalError) as e:
-              self.log_error(year, line)
+              self.log_error(f, line)
 	      self.__Connection.cur.execute("ROLLBACK TO SAVEPOINT save_point;")
 	      continue
 	    except psycopg2.IntegrityError as e:
