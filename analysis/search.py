@@ -8,8 +8,9 @@ from geo.geolocation import GeoLocation
 
 class SearchLocation:  
   'Provides search functions for database queries'
-  def __init__(self, Connection):
+  def __init__(self, Connection, year):
     self.__Connection = Connection
+    self__query_year = year
     self.__1998_linkage_query = "SELECT cmte_id FROM committee_master_%s WHERE cand_id='%s'"
     self.__oth_linkage_query = "SELECT cmte_id FROM candidate_linkage_%s WHERE cand_id='%s'"
     self.__zipcode_query = "SELECT state, latitude, longitude FROM zipcodes_%s WHERE zip LIKE'%s%%';"
@@ -33,13 +34,13 @@ class SearchLocation:
   def __get_candidate_committees__(self, cands):
     cand_comms = {}
     for candidate in cands:
-      if self.__Connection.year <= 1998:
-	__linkage_query = self.__1998_linkage_query % candidate[1] 
+      if self.__query_year <= 1998:
+	__linkage_query = self.__1998_linkage_query % (self.__query_year, candidate[1])
       else:
-	__linkage_query =  self.__oth_linkage_query % candidate[1]
+	__linkage_query =  self.__oth_linkage_query % (self.__query_year, candidate[1])
       cand_comms[candidate[0]] = {"cand_id": candidate[1], "comm_ids":[]}
-      self.__Connection.fec_cur.execute(__linkage_query)
-      committee_ids = self.__Connection.fec_cur.fetchall()
+      self.__Connection.cur.execute(__linkage_query)
+      committee_ids = self.__Connection.cur.fetchall()
       for committee_id in committee_ids:
         cand_comms[candidate[0]]["comm_ids"].append(committee_id[0])
     return cand_comms   
@@ -57,18 +58,18 @@ class SearchLocation:
       distance = distance/0.62137
       
     zipcode_stmt = self.__zipcode_query % zipcode
-    self.__Connection.geo_cur.execute(zipcode_stmt)
-    state, lat, lon = self.__Connection.geo_cur.fetchone()
+    self.__Connection.cur.execute(zipcode_stmt)
+    state, lat, lon = self.__Connection.cur.fetchone()
     loc = GeoLocation.from_degrees(lat, lon)
     SW_loc, NE_loc = loc.bounding_locations(distance)
     __zipcodes_stmt = self.__zipcodes_query % (SW_loc.deg_lat, NE_loc.deg_lat, SW_loc.deg_lon, NE_loc.deg_lon, state)
-    self.__Connection.geo_cur.execute(__zipcodes_stmt)
-    zipcodes = self.__Connection.geo_cur.fetchall()
+    self.__Connection.cur.execute(__zipcodes_stmt)
+    zipcodes = self.__Connection.cur.fetchall()
     __zipcodes = []
     
     for __zipcode in zipcodes:
       __zipcodes.append(__zipcode[0].split(".")[0])
-    __candidates_query = self.__Connection.fec_cur.mogrify(self.__cand_zipcodes_query, (tuple(__zipcodes), state,))
+    __candidates_query = self.__Connection.fec_cur.mogrify(self.__cand_zipcodes_query, self.__query_year, (tuple(__zipcodes), state,))
     self.__Connection.fec_cur.execute(__candidates_query)
     candidates = self.__Connection.fec_cur.fetchall()
     
@@ -91,19 +92,19 @@ class SearchLocation:
       for state in states.states_titles:
 	if state['name'].lower() == st_query.lower():
 	  st_query = state['abbreviation'].upper()
-      __state_query_stmt = self.__state_title_query % (city_key, city_query, st_key, st_query, st_query)
+      __state_query_stmt = self.__state_title_query % (self.__query_year, city_key, city_query, st_key, st_query, st_query)
       
     elif st_query and not city_query:
       for state in states.states_titles:
 	if state['name'].lower() == st_query.lower():
 	  st_query = state['abbreviation'].upper()
-      __state_query_stmt = self.__city_state_abbr_query % (st_key, st_query, st_query)
+      __state_query_stmt = self.__city_state_abbr_query % (self.__query_year, st_key, st_query, st_query)
       
     elif not st_query and city_query:
-      __city_state_query = self.__city_state_query % city_query
+      __city_state_query = self.__city_state_query % (self.__query_year, city_query)
       self.__Connection.geo_cur.execute(__city_state_query)
       state = self.__Connection.geo_cur.fetchone()
-      __state_query_stmt = self.__city_state_abbr_query % (city_key, city_query, state) 
+      __state_query_stmt = self.__city_state_abbr_query % (self.__query_year, city_key, city_query, state) 
       
     elif not st_query and not city_query:
       return False, False
@@ -124,15 +125,15 @@ class SearchLocation:
     if len(name.split(" ")) > 1 or "," in name:
       __temp__ = name.split(" ")
       if len(__temp__) > 0:
-        __query_by_name = self.__first_last_name_query % tuple(__temp__)
+        __query_by_name = self.__first_last_name_query % (self.__query_year, tuple(__temp__))
         self.__Connection.__fec_cur.execute(__query_by_name)
         candidates = self.__Connection.fec_cur.fetchall()
         if len(candidates) < 1:
-	  __query_by_name = self.__name_query % __temp__[1].strip(',')
+	  __query_by_name = self.__name_query % (self.__query_year, __temp__[1].strip(','))
 	  self.__Connection.__fec_cur.execute(__query_by_name)
 	  candidates = self.__Connection.fec_cur.fetchall()
     else:
-      query_by_name = self.__name_query % name
+      query_by_name = self.__name_query % (self.__query_year, name)
       self.__Connection.fec_cur.execute(query_by_name)
       candidates = self.__Connection.fec_cur.fetchall()
     candidates_committees = self.__get_candidate_committees__(candidates)

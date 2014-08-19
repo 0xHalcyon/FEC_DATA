@@ -85,6 +85,7 @@ def populate_database(start_year, end_year, cwd, Connection):
 	    Connection.conn.rollback()
 	    continue
 	  except psycopg2.IntegrityError as e:
+	    print "Failed to integrate %s" % query
 	    print "Database already populated! Exiting NOW!"
 	    os.sys.exit(1)
       Connection.conn.commit()
