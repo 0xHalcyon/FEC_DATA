@@ -40,7 +40,7 @@ def wrapper(function, cwd):
 	             'db_user': config.db_user,
 	             'db_host': config.db_host,
 	             'db_port': config.db_port,
-	             'db_prefix': config.db_name,
+	             'db_name': config.db_name,
 	            }
     from db.connect import Connection
     connection = Connection(conn_settings)

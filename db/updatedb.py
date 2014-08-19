@@ -30,7 +30,7 @@ class UpdateDB():
     
     self.update_stmt = "UPDATE %s SET %s='%s' WHERE %s='%s';"
     self.insert_stmt = "INSERT INTO %s %s VALUES %s;"
-    self.select_stmt = "SELECT %s FROM %s WHERE %s='%s';"
+    self.select_stmt = "SELECT %s, %s FROM %s WHERE %s='%s';"
     self.download_files = download_files
     self.extract_files = extract_files
     self.cwd = config.cwd
@@ -40,7 +40,7 @@ class UpdateDB():
 			    'db_user': config.db_user,
 			    'db_host': config.db_host,
 			    'db_port': config.db_port,
-			    'db_prefix': config.db_prefix,
+			    'db_name': config.db_name,
 			    'year': 0
 			    }
   def read_some_lines(self, file_object, chunk_size=1024):
@@ -68,8 +68,8 @@ class UpdateDB():
     return date
   
   def update(self):
-    self.download_files(self.start_year, self.end_year, self.cwd)
-    self.extract_files(self.start_year, self.end_year, self.cwd)
+    #self.download_files(self.start_year, self.end_year, self.cwd)
+    #self.extract_files(self.start_year, self.end_year, self.cwd)
     
     for year in range(self.start_year, self.end_year, 2):
       temp_files = self.files
@@ -117,6 +117,8 @@ class UpdateDB():
 	        except psycopg2.IntegrityError as e:
 	          print "Database already populated! Exiting NOW!"
 	          os.sys.exit(1)
+	          
+	    elif f == "candidate_linkage", 
 
       
     

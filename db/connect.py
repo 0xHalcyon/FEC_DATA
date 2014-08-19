@@ -4,7 +4,7 @@ import psycopg2
 class Connection:
   def __init__(self, conn_settings):
     self.__geodb = "geozipcodes"
-    self.__db_name = conn_settings['db_prefix']
+    self.__db_name = conn_settings['db_name']
     self.__db_user = conn_settings['db_user']
     self.__db_password = conn_settings['db_password']
     self.__db_host = conn_settings['db_host']
