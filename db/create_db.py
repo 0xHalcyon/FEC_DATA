@@ -199,10 +199,10 @@ def create_db(start_year, end_year, cwd, db_name, db_user, db_password, db_host,
       cur.execute("""DROP TABLE IF EXISTS indiv_contrib;""")
       cur.execute(individual_contrib_sql % year)
     
-    conn.commit()
-    cur.close()
-    conn.close()
-    sleep(1)
+  conn.commit()
+  cur.close()
+  conn.close()
+  sleep(1)
   
 
 
