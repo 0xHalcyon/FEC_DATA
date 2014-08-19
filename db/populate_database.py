@@ -33,7 +33,7 @@ class PopulateDatabase():
   
     self.errors = open("%s/db/errors/errors.txt" % self.cwd, "wb")
     
-  def log_error(self, year, string):
+  def log_error(year, string):
     to_write = "%s::%s\n" % (year, string)
     self.errors.write(to_write)
     self.errors.flush()
@@ -99,3 +99,4 @@ class PopulateDatabase():
         self.__Connection.conn.commit()
       
     self.__Connection.conn.close()
+    self.errors.close()
