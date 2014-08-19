@@ -173,30 +173,30 @@ def create_db(start_year, end_year, cwd, db_name, db_user, db_password, db_host,
   
     if year <= 1998:
     
-      cur.execute("""DROP TABLE IF EXISTS candidate_master;""")
+      cur.execute("""DROP TABLE IF EXISTS candidate_master_%s;""" % year)
       cur.execute(candidate_master_sql % year)
-      cur.execute("""DROP TABLE IF EXISTS committee_master;""")
+      cur.execute("""DROP TABLE IF EXISTS committee_master_%s;""" % year)
       cur.execute(commitee_master_sql % year)
-      cur.execute("""DROP TABLE IF EXISTS comm_to_comm;""")
+      cur.execute("""DROP TABLE IF EXISTS comm_to_comm_%s;""" % year)
       cur.execute(comm_to_comm_sql % year)
-      cur.execute("""DROP TABLE IF EXISTS cand_to_comm;""")
+      cur.execute("""DROP TABLE IF EXISTS cand_to_comm_%s;""" % year)
       cur.execute(cand_to_comm_sql % year)
-      cur.execute("""DROP TABLE IF EXISTS indiv_contrib;""")
+      cur.execute("""DROP TABLE IF EXISTS indiv_contrib_%s;""" % year)
       cur.execute(individual_contrib_sql % year)
     
     else:
     
-      cur.execute("""DROP TABLE IF EXISTS candidate_master;""")
+      cur.execute("""DROP TABLE IF EXISTS candidate_master_%s;""" % year)
       cur.execute(candidate_master_sql % year)
-      cur.execute("""DROP TABLE IF EXISTS committee_master;""")
+      cur.execute("""DROP TABLE IF EXISTS committee_master_%s;""" % year)
       cur.execute(commitee_master_sql % year)
-      cur.execute("""DROP TABLE IF EXISTS candidate_linkage;""")
+      cur.execute("""DROP TABLE IF EXISTS candidate_linkage_%s;""" % year)
       cur.execute(candidate_linkage_sql % year)
-      cur.execute("""DROP TABLE IF EXISTS comm_to_comm;""")
+      cur.execute("""DROP TABLE IF EXISTS comm_to_comm_%s;""" % year)
       cur.execute(comm_to_comm_sql % year)
-      cur.execute("""DROP TABLE IF EXISTS cand_to_comm;""")
+      cur.execute("""DROP TABLE IF EXISTS cand_to_comm_%s;""" % year)
       cur.execute(cand_to_comm_sql % year)
-      cur.execute("""DROP TABLE IF EXISTS indiv_contrib;""")
+      cur.execute("""DROP TABLE IF EXISTS indiv_contrib_%s;""" % year)
       cur.execute(individual_contrib_sql % year)
     
   conn.commit()
