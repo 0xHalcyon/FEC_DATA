@@ -11,7 +11,7 @@ def read_some_lines(file_object, chunk_size=1024):
       break
     yield data
 
-def populate_database(Connection):
+def populate_database(start_year, end_year, cwd, Connection):
   """Populates FEC databases based on parameters listed in the config.py file in the root of this package"""
     
   files = {"committee_master_%s"  : ["%s/data/%s/cm%s/cm.txt", "%s/db/headers/cm_header_file.csv"],

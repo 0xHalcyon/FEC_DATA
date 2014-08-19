@@ -36,16 +36,19 @@ def wrapper(function, cwd):
 		        config.db_port)
     
   elif function == "populatedb":
-    
+    conn_settings = {'db_password': config.db_password, 
+	             'db_user': config.db_user,
+	             'db_host': config.db_host,
+	             'db_port': config.db_port,
+	             'db_prefix': config.db_prefix,
+	            }
+    from db.connect import Connection
+    connection = Connection(conn_settings)
     from db import populate_database
     populate_database.populate_database(config.start_year,
 					config.end_year,
 					cwd,
-					config.db_name,
-					config.db_user,
-					config.db_password,
-				        config.db_host,
-				        config.db_port)
+					connection)
   elif function == "createuser":
     print "Will now create new user in PostgresSQL"
     print "At the prompt, enter the password for the new user, as set in config.py"
