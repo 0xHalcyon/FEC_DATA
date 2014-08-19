@@ -68,7 +68,7 @@ class PopulateDatabase():
 	          date = datetime(month=int(date[0:2]), day=int(date[2:4]), year=int(date[4:]))
 	        except ValueError as e:
 		  #print "Error: %s %s\nContinuing" % (e, temp1[13])
-		  temp1 = datetime(month=1, day=1, year=year).strftime("%Y%m%d")
+		  temp1[13] = datetime(month=1, day=1, year=year).strftime("%Y%m%d")
 		  to_write = "%s|%s\n" % (year, str(temp1))
 		  errors.write(to_write)
 		  errors.flush()
@@ -76,7 +76,8 @@ class PopulateDatabase():
 	        temp1[13] = date.strftime("%Y%m%d")
 	      else:
 	        date = datetime(month=01, day=01, year=1900)
-	        errors.write("%s|%s\n" % (year, str(temp1))
+	        errors.write("%s|%s\n" % (year, str(temp1)))
+	        errors.flush()
 	        temp1[13] = date.strftime("%Y%m%d")	   
 	    temp1 = tuple(temp1)
 	    try:
