@@ -19,8 +19,8 @@ class SearchLocation:
     self.__zipcodes_query = "SELECT zip FROM zipcodes WHERE latitude BETWEEN '%s' AND '%s'" + \
                             "AND longitude BETWEEN '%s' AND '%s' and state='%s';"
     self.__cand_zipcodes_query = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation," + \
-                                 "cand_city, cand_st FROM candidate_master_%s WHERE cand_zip in %s" + \
-				 "ORDER BY cand_name OR cand_id LIKE '__%s%%';"
+                                 "cand_city, cand_st FROM candidate_master_{0} WHERE cand_zip in %s" + \
+				 "OR cand_id LIKE '__{1}%%' ORDER BY cand_name;"
     self.__state_title_query = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city," + \
                                "cand_st FROM candidate_master_{0} WHERE %s LIKE UPPER('%%%s%%')" + \
 			       "and %s LIKE UPPER('%%%s%%') OR cand_id LIKE '__%s%%';"
@@ -73,7 +73,10 @@ class SearchLocation:
       __zipcodes.append(__zipcode[0].split(".")[0])
     for year in range(self.start_year, self.end_year, 2):
       print state
-      __candidates_query = self.__Connection.cur.mogrify(self.__cand_zipcodes_query, (year, tuple(__zipcodes), state.strip("'"),))
+      __candidates_query = self.__cand_zipcodes_query.format(year, state)
+      print __candidates_query
+      __candidates_query = self.__Connection.cur.mogrify(self.__cand_zipcodes_query, (tuple(__zipcodes),))
+      print __candidates_query
       self.__Connection.cur.execute(__candidates_query)
       candidates += self.__Connection.cur.fetchall()
     
