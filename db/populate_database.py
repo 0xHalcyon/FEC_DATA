@@ -91,7 +91,7 @@ def populate_database(start_year, end_year, cwd, Connection):
 	    Connection.cur.execute("ROLLBACK TO SAVEPOINT save_point;")
 	    continue
 	  else:
-	    continue
+	    Connection.cur.execute("RELEASE SAVEPOINT save_point;")
 	    #os.sys.exit(1)
       Connection.conn.commit()
       
