@@ -70,14 +70,14 @@ class PopulateDatabase():
 		  #print "Error: %s %s\nContinuing" % (e, temp1[13])
 		  temp1[13] = datetime(month=1, day=1, year=year).strftime("%Y%m%d")
 		  to_write = "%s|%s\n" % (year, str(temp1))
-		  errors.write(to_write)
-		  errors.flush()
+		  self.errors.write(to_write)
+		  self.errors.flush()
 		  continue
 	        temp1[13] = date.strftime("%Y%m%d")
 	      else:
 	        date = datetime(month=01, day=01, year=1900)
-	        errors.write("%s|%s\n" % (year, str(temp1)))
-	        errors.flush()
+	        self.errors.write("%s|%s\n" % (year, str(temp1)))
+	        self.errors.flush()
 	        temp1[13] = date.strftime("%Y%m%d")	   
 	    temp1 = tuple(temp1)
 	    try:
