@@ -146,26 +146,26 @@ def create_db(start_year, end_year, cwd, db_prefix, db_user, db_password, db_hos
       print "Database %s%s does not exist yet, creating now" % db_name
       engine_stmt = 'postgresql+psycopg2://%s:%s@%s:%s/template1' % \
                    (db_user, db_password, db_host, db_port)
-        engine = create_engine(engine_stmt)
-        eng_conn = engine.connect()
-        eng_conn.connection.connection.set_isolation_level(0)
-        create_db_stmt = "CREATE DATABASE %s" % db_name.lower()
-        eng_conn.execute(create_db_stmt)
-        eng_conn.connection.connection.set_isolation_level(1)
-        eng_conn.close()
-        engine.dispose()
-        sleep(1)
-      except sqlalchemy.exc.ProgrammingError as e:
-	print "Error:%s\nDid you modify your configuration file and run make createuser?" % e
-	os.sys.exit(1)
-      conn = psycopg2.connect(database=db_name.lower(),
-	  	              user=db_user,
-			      password=db_password,
-			      host=db_host,
-			      port=db_port
-			      )
-      conn.set_client_encoding("UTF8")
-      cur = conn.cursor()
+      engine = create_engine(engine_stmt)
+      eng_conn = engine.connect()
+      eng_conn.connection.connection.set_isolation_level(0)
+      create_db_stmt = "CREATE DATABASE %s" % db_name.lower()
+      eng_conn.execute(create_db_stmt)
+      eng_conn.connection.connection.set_isolation_level(1)
+      eng_conn.close()
+      engine.dispose()
+      sleep(1)
+    except sqlalchemy.exc.ProgrammingError as e:
+      print "Error:%s\nDid you modify your configuration file and run make createuser?" % e
+      os.sys.exit(1)
+    conn = psycopg2.connect(database=db_name.lower(),
+	  	            user=db_user,
+			    password=db_password,
+			    host=db_host,
+			    port=db_port
+			    )
+    conn.set_client_encoding("UTF8")
+    cur = conn.cursor()
   for year in range(start_year, end_year, 2):
 
       
