@@ -75,7 +75,7 @@ class SearchLocation:
       print state
       __candidates_query = self.__cand_zipcodes_query.format(year, state)
       print __candidates_query
-      __candidates_query = self.__Connection.cur.mogrify(__cand_zipcodes_query, (tuple(__zipcodes),))
+      __candidates_query = self.__Connection.cur.mogrify(__candidates_query, (tuple(__zipcodes),))
       print __candidates_query
       self.__Connection.cur.execute(__candidates_query)
       candidates += self.__Connection.cur.fetchall()
