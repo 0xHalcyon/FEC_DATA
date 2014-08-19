@@ -36,7 +36,7 @@ class SearchLocation:
     cand_comms = {}
     for candidate in cands:
       for year in range(self.start_year, self.end_year, 2):
-        if self.__query_year <= 1998:
+        if year <= 1998:
 	  __linkage_query = self.__1998_linkage_query % (year, candidate[1])
         else:
 	  __linkage_query =  self.__oth_linkage_query % (year, candidate[1])
