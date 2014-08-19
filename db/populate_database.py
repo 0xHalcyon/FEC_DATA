@@ -41,16 +41,16 @@ class PopulateDatabase():
       year_suffix = str(year)[2:]
       
       if year <= 1998:
-        tempfiles = self.files_1998
+        temp_files = self.files_1998
       else:
-        tempfiles = self.files
+        temp_files = self.files
       
-      for table in sorted(tempfiles):
+      for table in sorted(temp_files):
         f = table % year
         print "CURRENT YEAR: %s\nCURRENT TABLE: %s" % (year, f)
         try:
-          temp = open(files[table][0] % (self.cwd, year, year_suffix))
-          template = open(files[table][1] % self.cwd).read().strip()
+          temp = open(temp_files[table][0] % (self.cwd, year, year_suffix))
+          template = open(temp_files[table][1] % self.cwd).read().strip()
         except IOError:
 	  print "Have you run 'make download && make extract yet'?"
 	  os.sys.exit(1)
