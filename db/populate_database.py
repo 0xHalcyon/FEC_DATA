@@ -41,9 +41,9 @@ class PopulateDatabase():
       year_suffix = str(year)[2:]
       
       if year <= 1998:
-        tempfiles = files_1998
+        tempfiles = self.files_1998
       else:
-        tempfiles = files
+        tempfiles = self.files
       
       for table in sorted(tempfiles):
         f = table % year
