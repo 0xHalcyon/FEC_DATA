@@ -25,7 +25,7 @@ candidate_master_sql = """CREATE TABLE candidate_master_%s ( \
                                            CAND_ZIP VARCHAR(14));"""
 
 #http://www.fec.gov/finance/disclosure/metadata/DataDictionaryCommitteeMaster.shtml
-commitee_master_sql = """CREATE TABLE committee_master_%s ( \
+committee_master_sql = """CREATE TABLE committee_master_%s ( \
                                            ID SERIAL NOT NULL, \
                                            CMTE_ID VARCHAR(14) UNIQUE NOT NULL,\
                                            CMTE_NM VARCHAR(250), \
@@ -49,10 +49,10 @@ candidate_linkage_sql = """CREATE TABLE candidate_linkage_%s ( \
                                            CAND_ID VARCHAR(14) NOT NULL, \
                                            CAND_ELECTION_YR SMALLINT, \
                                            FEC_ELECTION_YR SMALLINT, \
-                                           CMTE_ID VARCHAR(14) UNIQUE, \
+                                           CMTE_ID VARCHAR(14), \
                                            CMTE_TP VARCHAR(4), \
                                            CMTE_DSGN VARCHAR(4), \
-                                           LINKAGE_ID BIGINT);"""
+                                           LINKAGE_ID BIGINT UNIQUE);"""
                                            
 #http://www.fec.gov/finance/disclosure/metadata/DataDictionaryCommitteetoCommittee.shtml
 comm_to_comm_sql = """CREATE TABLE comm_to_comm_%s ( \
@@ -176,7 +176,7 @@ def create_db(start_year, end_year, cwd, db_name, db_user, db_password, db_host,
       cur.execute("""DROP TABLE IF EXISTS candidate_master_%s;""" % year)
       cur.execute(candidate_master_sql % year)
       cur.execute("""DROP TABLE IF EXISTS committee_master_%s;""" % year)
-      cur.execute(commitee_master_sql % year)
+      cur.execute(committee_master_sql % year)
       cur.execute("""DROP TABLE IF EXISTS comm_to_comm_%s;""" % year)
       cur.execute(comm_to_comm_sql % year)
       cur.execute("""DROP TABLE IF EXISTS cand_to_comm_%s;""" % year)
@@ -189,7 +189,7 @@ def create_db(start_year, end_year, cwd, db_name, db_user, db_password, db_host,
       cur.execute("""DROP TABLE IF EXISTS candidate_master_%s;""" % year)
       cur.execute(candidate_master_sql % year)
       cur.execute("""DROP TABLE IF EXISTS committee_master_%s;""" % year)
-      cur.execute(commitee_master_sql % year)
+      cur.execute(committee_master_sql % year)
       cur.execute("""DROP TABLE IF EXISTS candidate_linkage_%s;""" % year)
       cur.execute(candidate_linkage_sql % year)
       cur.execute("""DROP TABLE IF EXISTS comm_to_comm_%s;""" % year)
