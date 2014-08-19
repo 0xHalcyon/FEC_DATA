@@ -46,8 +46,8 @@ def populate_database(start_year, end_year, cwd, Connection):
       f = table % year
       print "CURRENT YEAR: %s\nCURRENT TABLE: %s" % (year, f)
       try:
-        temp = open(files[f][0] % (cwd, year, year_suffix))
-        template = open(files[f][1] % cwd).read().strip()
+        temp = open(files[table][0] % (cwd, year, year_suffix))
+        template = open(files[table][1] % cwd).read().strip()
       except IOError:
 	print "Have you run 'make download && make extract yet'?"
 	os.sys.exit(1)
