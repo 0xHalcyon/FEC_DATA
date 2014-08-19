@@ -77,6 +77,7 @@ def populate_database(start_year, end_year, cwd, Connection):
 	  try:
 	    query = "INSERT INTO %s %s VALUES %s;" % (f, template, temp1)
             Connection.cur.execute(query)
+            Connection.conn.commit()
           except (psycopg2.DataError, psycopg2.InternalError) as e:
             print "Error: %s %s\nContinuing" % (e, temp1[13])
             to_write = "%s|%s\n" % (year, str(temp1))
@@ -85,9 +86,11 @@ def populate_database(start_year, end_year, cwd, Connection):
 	    Connection.conn.rollback()
 	    continue
 	  except psycopg2.IntegrityError as e:
-	    print "Failed to integrate %s" % query
+	    print "Failed to integrate due to constraints %s" % query
 	    print "Database already populated! Exiting NOW!"
-	    os.sys.exit(1)
+	    Connection.conn.rollback()
+	    continue
+	    #os.sys.exit(1)
       Connection.conn.commit()
       
   Connection.conn.close()
