@@ -58,7 +58,7 @@ def populate_database(start_year, end_year, cwd, Connection):
 	  temp1 = temp1.replace("\xa0", " ")
 	  temp1 = temp1.replace("\x85", "...")
 	  temp1 = temp1.strip().replace("'", "").split("|")
-	  if f in ("comm_to_comm", "cand_to_comm", "indiv_contrib"):
+	  if f in ("comm_to_comm_%s" % year, "cand_to_comm_%s" % year, "indiv_contrib_%s" % year):
 	    if temp1[13]:
 	      date = temp1[13]
 	      try:
