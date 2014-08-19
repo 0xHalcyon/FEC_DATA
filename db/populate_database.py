@@ -76,13 +76,13 @@ def populate_database(start_year, end_year, cwd, Connection):
 	  temp1 = tuple(temp1)
 	  try:
 	    query = "INSERT INTO %s %s VALUES %s;" % (f, template, temp1)
-            Connection.fec_cur.execute(query)
+            Connection.cur.execute(query)
           except (psycopg2.DataError, psycopg2.InternalError) as e:
             print "Error: %s %s\nContinuing" % (e, temp1[13])
             to_write = "%s|%s\n" % (year, str(temp1))
 	    errors.write(to_write)
 	    errors.flush()
-	    Connection.fec_conn.rollback()
+	    Connection.conn.rollback()
 	    continue
 	  except psycopg2.IntegrityError as e:
 	    print "Database already populated! Exiting NOW!"
