@@ -33,6 +33,7 @@ def populate_database(start_year, end_year, cwd, db_prefix, db_user, db_password
     os.mkdir("%s/db/errors" % cwd)
   
   errors = open("%s/db/errors/errors.txt" % cwd, "wb")
+  
   for year in range(start_year, end_year, 2):
     year_suffix = str(year)[2:]
     try:
