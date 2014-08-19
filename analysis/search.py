@@ -80,7 +80,7 @@ class SearchLocation:
       self.__Connection.cur.execute(__candidates_query)
       candidates += self.__Connection.cur.fetchall()
     
-    candidates_committees = self.get_candidate_committees__(candidates)
+    candidates_committees = self.__get_candidate_committees__(candidates)
     
     return candidates, candidates_committees
   
