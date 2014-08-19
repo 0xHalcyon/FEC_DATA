@@ -129,7 +129,12 @@ individual_contrib_sql = """CREATE TABLE indiv_contrib_%s ( \
                                           MEMO_CD VARCHAR(5), \
                                           MEMO_TEXT VARCHAR(100), \
                                           SUB_ID BIGINT UNIQUE NOT NULL);"""
-def create_db(start_year, end_year, cwd, db_name, db_user, db_password, db_host, db_port):       
+def create_db(start_year, end_year, cwd, db_name, db_user, db_password, db_host, db_port):
+  ans = raw_input("THIS WILL IRREVOCABLY ERASE ANY DATA STORED IN THE EXISTING DATABASE\n
+                   ARE YOU SURE YOU WANT TO CONTINUE? Y/n")
+  if ans.strip().upper() not "Y":
+    print "EXITING NOW"
+    os.sys.exit(1)
   """Creates databases and populates those databases with the templates provided by config.py"""
   try:
     conn = psycopg2.connect(database=db_name.lower(),
