@@ -1,12 +1,15 @@
 #!/usr/bin/env python
 import psycopg2
 import os
+import config
+from connect import Connection
 from datetime import datetime
-from ftp import download_files
-from ftp import extract_files
+from ftp.download_files import download_files
+from ftp.extract_files import extract_files
+
 class UpdateDB():
   '''Updates database entries from last update check'''
-  def __init__(self, Connection):
+  def __init__(self):
     self.__Connection = Connection
     self.files = {
                     "committee_master"  : ["%s/data/%s/cm%s/cm.txt", "%s/db/headers/cm_header_file.csv"],
@@ -25,10 +28,15 @@ class UpdateDB():
                          "indiv_contrib"     : ["%s/data/%s/indiv%s/itcont.txt", "%s/db/headers/indiv_header_file.csv"]
                       }
     
+    self.update_stmt = "UPDATE %s SET %s='%s' WHERE %s='%s';"
+    self.insert_stmt = "INSERT INTO %s %s VALUES %s;"
+    self.select_stmt = "SELECT %s FROM %s WHERE %s='%s';"
     self.download_files = download_files
     self.extract_files = extract_files
-    self.cwd = os.getcwd()
+    self.cwd = config.cwd
+    self.start_year = config.start_year
+    self.end_year = config.end_year
   
-  def updatedb(self, start_year, end_year):
-    
-    pass
+  def update(self):
+    self.download_files(self.start_year, self.end_year, self.cwd)
+    self.extract_files(self.start_year, self.end_year, self.cwd)
