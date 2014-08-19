@@ -143,7 +143,7 @@ def create_db(start_year, end_year, cwd, db_name, db_user, db_password, db_host,
     
   except psycopg2.OperationalError as e:
     try:
-      print "Database %s%s does not exist yet, creating now" % db_name
+      print "Database %s does not exist yet, creating now" % db_name.lower()
       engine_stmt = 'postgresql+psycopg2://%s:%s@%s:%s/template1' % \
                    (db_user, db_password, db_host, db_port)
       engine = create_engine(engine_stmt)
