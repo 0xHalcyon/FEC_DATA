@@ -37,6 +37,9 @@ db_host = "localhost"
 
 db_port = 5432
 
+# If you plan to host this data on a website, you will have to modify this field to your google maps API key
+google_api_key = ""
+
 ## DO NOT MODIFY BELOW THIS LINE
 import os
 

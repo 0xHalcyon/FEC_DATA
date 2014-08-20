@@ -18,7 +18,7 @@ class Root():
 <head>
 </head>
 <body>
-<iframe width="600" height="450" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/place?q=United%20States&key=AIzaSyDWgL3zs2CJN970M8VvP4gseHkym1Tc-qs"></iframe>
+<iframe width="100%" height="100%" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/place?q=United%20States&key=AIzaSyDWgL3zs2CJN970M8VvP4gseHkym1Tc-qs"></iframe>
 </body>
 </html>
 """
