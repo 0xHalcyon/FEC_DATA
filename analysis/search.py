@@ -48,7 +48,12 @@ class SearchLocation:
     return cand_comms   
 	  
   def search_names_by_zip(self, parameters):
-    'Search by zipcode'
+    """Search by zipcode
+    parameters = {'zipcode':zip, 'distance':distance, 'unit':measure_unit}
+    'unit' must be miles or kilometers
+    'distance' is any arbitrary integer value
+    'zipcode' is integer or string
+    """
     try:
       zipcode = parameters['zipcode']
       distance = parameters['distance']
@@ -88,7 +93,9 @@ class SearchLocation:
     return candidates, candidates_committees
   
   def search_by_city_state(self, parameters):
-    'Search by city, state, or city and state'
+    """Search by city, state, or city and state
+    parameters = {'cand_st':state, 'cand_city': city}
+    """
     st_key = 'cand_st'
     city_key = 'cand_city'
     
@@ -128,7 +135,9 @@ class SearchLocation:
     return candidates, candidates_committees    
 
   def search_by_name(self, parameters):
-    'Search by name'
+    """Search by name
+    parameters = {'name':name}
+    """
     try:
       name = parameters['name'].strip()
     except KeyError:
