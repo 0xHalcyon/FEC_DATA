@@ -34,5 +34,5 @@ class Root():
                 }
     c = Connection(conn_settings)
     s = SearchLocation(c)
-    cherrpy.quickstart(Root(c, s), '/')
+    cherrypy.quickstart(Root(c, s), '/')
     
