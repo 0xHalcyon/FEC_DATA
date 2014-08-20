@@ -11,7 +11,7 @@ class Root():
     self.__Connection = Connection
     self.__SearchLocation = SearchLocation
     
-  @cherrpy.expose
+  @cherrypy.expose
   def index(self):
     page = """<!DOCTYPE html>
 <html>
