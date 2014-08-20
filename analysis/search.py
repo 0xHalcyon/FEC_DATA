@@ -61,7 +61,10 @@ class SearchLocation:
       
     zipcode_stmt = self.__zipcode_query % zipcode
     self.__Connection.cur.execute(zipcode_stmt)
-    state, lat, lon = self.__Connection.cur.fetchone()
+    results = self.__Connection.cur.fetchone()
+    if not results:
+      return False, False
+    state, lat, lon = results
     loc = GeoLocation.from_degrees(lat, lon)
     SW_loc, NE_loc = loc.bounding_locations(distance)
     __zipcodes_stmt = self.__zipcodes_query % (SW_loc.deg_lat, NE_loc.deg_lat, SW_loc.deg_lon, NE_loc.deg_lon, state)
