@@ -48,7 +48,7 @@ class Root():
                                '<input type="text" name="SearchByCity" id="searchByCity" placeholder="...Search by City/State..." required>' +
                                '<input type="submit" value="Go!" id="submitCity">' +
                                '</form>' +
-                               '<form class="form-wrapper" action="searchByZip" method="post">' +
+                               '<form class="form-wrapper" action="searchByZipcode" method="post">' +
                                '<input type="text" name="searchByZip" id="searchByZip" placeholder="...Or Search by Zipcode..." required>' +
                                '<select name="distanceRadius" id="searchDistance">' +
                                '<option value="50">50</option>' +
@@ -86,10 +86,18 @@ class Root():
     return page
   
   @cherrypy.expose
-  def searchByZip(self, searchByZip="", distanceRadius=50, distanceUnit="kilometers"):
+  def searchByZipcode(self, searchByZip="", distanceRadius=50, distanceUnit="kilometers"):
     if not searchByZip:
       return "Please enter a valid Zipcode"
-    parameters = {'zipcode':searchByZip, 'distance':distanceRadius, 'unit':distanceUnit}
+    try:
+      zipcode = int(searchByZip)
+    except TypeError:
+      return "Please enter a valid Zipcode"
+    try:
+      distance = int(distanceRadius)
+    except TypeError:
+      return "Please enter a valid search radius"
+    parameters = {'zipcode':zipcode, 'distance':distance, 'unit':distanceUnit}
     return self.__SearchLocation.search_names_by_zip(parameters)
 
   if __name__ == '__main__':
