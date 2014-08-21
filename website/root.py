@@ -157,8 +157,8 @@ class Root():
   def searchByCityState(self, searchByCity="", searchByState=""):
     if not searchByCity or not searchByState:
       return "Please enter a valid city/state"
-    cand_st = searchByCity
-    cand_city = searchByState
+    cand_st = searchByState
+    cand_city = searchByCity
     parameters = {'cand_st': cand_st, 'cand_city': cand_city}
     return str(self.__SearchLocation.search_by_city_state(parameters))
     
