@@ -137,7 +137,7 @@ class Root():
 """.format(self.__api_key)
     return page
   
-  @cherrypy.tools.response_headers(['Content-Type', 'application/json'])
+  @cherrypy.tools.response_headers([('Content-Type', 'application/json')])
   @cherrypy.expose
   def searchByZipcode(self, searchByZip="", distanceRadius=50, distanceUnit="kilometers"):
     if not searchByZip:
@@ -153,7 +153,7 @@ class Root():
     parameters = {'zipcode':zipcode, 'distance':distance, 'unit':distanceUnit}
     return json.dumps(self.__SearchLocation.search_names_by_zip(parameters), indent=2)
   
-  @cherrypy.tools.response_headers(['Content-Type', 'application/json'])
+  @cherrypy.tools.response_headers([('Content-Type', 'application/json')])
   @cherrypy.expose
   def searchByCityState(self, searchByCity="", searchByState=""):
     if not searchByState:
@@ -163,7 +163,7 @@ class Root():
     parameters = {'cand_st': cand_st, 'cand_city': cand_city}
     return json.dumps(self.__SearchLocation.search_by_city_state(parameters), indent=2)
   
-  @cherrypy.tools.response_headers(['Content-Type', 'application/json'])
+  @cherrypy.tools.response_headers([('Content-Type', 'application/json')])
   @cherrypy.expose
   def searchByName(self, searchByName=""):
     if not searchByName:
