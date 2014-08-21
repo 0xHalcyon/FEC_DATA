@@ -143,7 +143,7 @@ class SearchLocation:
 	__state_query_stmt =  self.__cand_wo_state_query % (city_key, city_query)
 	for _state in _states:
 	  __state_query_stmt += self.__cand_wo_state_query_suffix % _state 
-        __state_query_stmt += "; ORDER BY CITY;"
+        __state_query_stmt += "; ORDER BY cand_city;"
     elif not st_query and not city_query:
       print "Not sure what's up here"
       print st_query, city_query
