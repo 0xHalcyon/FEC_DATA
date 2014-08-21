@@ -98,7 +98,7 @@ class Root():
     except TypeError:
       return "Please enter a valid search radius"
     parameters = {'zipcode':zipcode, 'distance':distance, 'unit':distanceUnit}
-    return self.__SearchLocation.search_names_by_zip(parameters)
+    return str(self.__SearchLocation.search_names_by_zip(parameters))
 
   if __name__ == '__main__':
     conn_settings = {'db_password': config.db_password, 
