@@ -137,7 +137,6 @@ class Root():
 """.format(self.__api_key)
     return page
   
-  @cherrypy.tools.response_headers([('Content-Type', 'application/json')])
   @cherrypy.expose
   def searchByZipcode(self, searchByZip="", distanceRadius=50, distanceUnit="kilometers"):
     if not searchByZip:
@@ -151,9 +150,9 @@ class Root():
     except TypeError:
       return "Please enter a valid search radius"
     parameters = {'zipcode':zipcode, 'distance':distance, 'unit':distanceUnit}
+    cherrypy.response.headers['Content-Type'] = 'application/json'
     return json.dumps(self.__SearchLocation.search_names_by_zip(parameters), indent=2)
   
-  @cherrypy.tools.response_headers([('Content-Type', 'application/json')])
   @cherrypy.expose
   def searchByCityState(self, searchByCity="", searchByState=""):
     if not searchByState:
@@ -161,14 +160,15 @@ class Root():
     cand_st = searchByState
     cand_city = searchByCity
     parameters = {'cand_st': cand_st, 'cand_city': cand_city}
+    cherrypy.response.headers['Content-Type'] = 'application/json'
     return json.dumps(self.__SearchLocation.search_by_city_state(parameters), indent=2)
   
-  @cherrypy.tools.response_headers([('Content-Type', 'application/json')])
   @cherrypy.expose
   def searchByName(self, searchByName=""):
     if not searchByName:
       return "Please enter a valid name"
     parameters = {'name':searchByName}
+    cherrypy.response.headers['Content-Type'] = 'application/json'
     return json.dumps(self.__SearchLocation.search_by_name(parameters), indent=2)
   
   if __name__ == '__main__':
