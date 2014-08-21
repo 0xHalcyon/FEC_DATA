@@ -24,7 +24,7 @@ class SearchLocation:
     self.__state_query = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation, cand_city," +\
                               "cand_st FROM candidate_master_{0} WHERE %s LIKE UPPER('%%%s%%') OR cand_id LIKE '__%s%%' ESCAPE ' ';"
     self.__city_state_query = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation, cand_city," +\
-                              "cand_st FROM candidate_master_{0} WHERE %s LIKE UPPER('%%%s%%') ESCAPE ' ' AND %s LIKE UPPER('%%%s%%');"    
+                              "cand_st FROM candidate_master_{0} WHERE %s LIKE UPPER('%%%s%%') AND %s LIKE UPPER('%%%s%%');"    
     self.__first_last_name_query = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city," + \
                                    "cand_st FROM candidate_master_{0} WHERE cand_name LIKE UPPER('%%%s%%')" + \
 				   "AND cand_name LIKE UPPER('%%%s%%');"
