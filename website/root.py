@@ -20,9 +20,9 @@ class Root():
     <link rel="stylesheet" href="/main/form.css">
     <style type="text/css">
       html {{ height: 100% }}
-      body {{ height: 100%; margin: 0; padding: 0; position: relative }}
+      body {{ height: 100%; margin: 0; padding: 0; }}
       .overlay {{ position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; background-color: rgba(0,0,0,0.5);}}
-      #map-canvas {{ height: 100%; margin: 0;}}
+      #map-canvas {{ height: 100%; margin: 0; position: relative}}
     </style>
     <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key={0}">
