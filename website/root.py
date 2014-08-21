@@ -106,7 +106,7 @@ class Root():
       return "Please enter a valid city/state"
     cand_st = searchByCity.split(",")[1]
     cand_city = searchByCity.split(",")[0]
-    parameters = {'cand_st': cand_st, 'cand_city': cand_city})
+    parameters = {'cand_st': cand_st, 'cand_city': cand_city}
     return str(self.__SearchLocation.search_by_city_state(parameters))
     
   @cherrypy.expose
