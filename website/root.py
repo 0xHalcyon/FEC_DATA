@@ -85,12 +85,12 @@ class Root():
 """.format(self.__api_key)
     return page
   
+  @cherrypy.expose
   def searchByZip(self, searchByZip="", distanceRadius=50, distanceUnit="kilometers"):
     if not searchByZip:
       return "Please enter a valid Zipcode"
     parameters = {'zipcode':searchByZip, 'distance':distanceRadius, 'unit':distanceUnit}
     return self.__SearchLocation.search_names_by_zip(parameters)
-    pass
 
   if __name__ == '__main__':
     conn_settings = {'db_password': config.db_password, 
