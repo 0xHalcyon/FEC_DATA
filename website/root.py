@@ -104,8 +104,17 @@ class Root():
   def searchByCityState(self, searchByCity=""):
     if not searchByCity:
       return "Please enter a valid city/state"
-    cand_st = searchByCity.split(",")[1]
-    cand_city = searchByCity.split(",")[0]
+    cand_st = ""
+    cand_city = ""
+    try:
+      cand_city = searchByCity.split(",")[0]
+    except IndexError:
+      pass
+    try:
+      cand_st = searchByCity.split(",")[1]
+    except IndexError:
+      print cand_city, cand_st
+      pass
     parameters = {'cand_st': cand_st, 'cand_city': cand_city}
     return str(self.__SearchLocation.search_by_city_state(parameters))
     

@@ -108,7 +108,7 @@ class SearchLocation:
       city_query = parameters[city_key].upper()
     except KeyError:
       raise KeyError("Please define search parameter")
-    
+    print st_query, city_query
     if st_query and city_query:
       for state in states.states_titles:
 	if state['name'].lower() == st_query.lower():
