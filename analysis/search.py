@@ -27,8 +27,11 @@ class SearchLocation:
     self.__city_state_abbr_query = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation, cand_city," +\
                               "cand_st FROM candidate_master_{0} WHERE %s LIKE UPPER('%%%s%%') OR cand_id LIKE '__%s%%';"
     self.__first_last_name_query = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city," + \
-                                   "cand_st FROM candidate_master_%s WHERE cand_name LIKE UPPER('%%%s%%')" + \
+                                   "cand_st FROM candidate_master_{0} WHERE cand_name LIKE UPPER('%%%s%%')" + \
 				   "AND cand_name LIKE UPPER('%%%s%%');"
+    self.__cand_wo_state_query =  "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city, " + \
+                                  "cand_st FROM candidate_master_{0} WHERE %s LIKE UPPER('%%%s%%') "
+    self.__cand_wo_state_query_suffix = "OR cand_id LIKE '__%s%%';"
     self.__name_query = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st " + \
                         "FROM candidate_master_%s WHERE cand_name LIKE UPPER('%%%s%%');"
   def __remove_duplicates__(self, seq):
@@ -130,15 +133,24 @@ class SearchLocation:
       print st_query, city_query
       __city_state_query = self.__city_state_query % (city_query)
       self.__Connection.cur.execute(__city_state_query)
-      state = self.__Connection.cur.fetchone()
-      __state_query_stmt = self.__city_state_abbr_query % (city_key, city_query, state[0]) 
+      _states = self.__Connection.cur.fetchall()
+      if not states:
+	for _state in states.states_titles:
+	  if _state['name'].lower() == city_query.lower():
+	    st_query = _state['abbreviation'].upper()
+        __state_query_stmt = self.__city_state_abbr_query % (st_key, st_query, st_query)
+      else:
+	__state_query_stmt = self.__city_state_abbr_query % (city_key, city_query)
+	for _state in _states:
+	  _state_query_stmt += self.__cand_wo_state_query_suffix % _state 
       
     elif not st_query and not city_query:
       print "Not sure what's up here"
       print st_query, city_query
       return False, False
     candidates = []
-    for year in range(self.start_year, self.end_year, 2):      
+    for year in range(self.start_year, self.end_year, 2):   
+      print __state_query_stmt
       self.__Connection.cur.execute(__state_query_stmt.format(str(year)))
       candidates += self.__Connection.cur.fetchall()
       
@@ -160,7 +172,7 @@ class SearchLocation:
       if len(name.split(" ")) > 1 or "," in name:
         __temp__ = name.split(" ")
         if len(__temp__) > 0:
-          query_by_name = self.__first_last_name_query % (year, tuple(__temp__))
+          query_by_name = self.__first_last_name_query % (year, __temp__[0], __temp__[1])
           self.__Connection.cur.execute(__query_by_name)
           candidates = self.__Connection.cur.fetchall()
           if len(candidates) < 1:
