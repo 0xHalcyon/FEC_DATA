@@ -4,7 +4,6 @@ import json
 import config
 from db.connect import Connection
 from analysis.search import SearchLocation
-
 class Root():
   '''Define Root webpages'''
   def __init__(self, Connection, SearchLocation, api_key):
@@ -138,6 +137,7 @@ class Root():
 """.format(self.__api_key)
     return page
   
+  @cherrypy.tools.response_headers(['Content-Type', 'application/json'])
   @cherrypy.expose
   def searchByZipcode(self, searchByZip="", distanceRadius=50, distanceUnit="kilometers"):
     if not searchByZip:
@@ -151,8 +151,9 @@ class Root():
     except TypeError:
       return "Please enter a valid search radius"
     parameters = {'zipcode':zipcode, 'distance':distance, 'unit':distanceUnit}
-    return str(self.__SearchLocation.search_names_by_zip(parameters))
+    return json.dumps(self.__SearchLocation.search_names_by_zip(parameters), indent=2)
   
+  @cherrypy.tools.response_headers(['Content-Type', 'application/json'])
   @cherrypy.expose
   def searchByCityState(self, searchByCity="", searchByState=""):
     if not searchByState:
@@ -160,14 +161,15 @@ class Root():
     cand_st = searchByState
     cand_city = searchByCity
     parameters = {'cand_st': cand_st, 'cand_city': cand_city}
-    return str(self.__SearchLocation.search_by_city_state(parameters))
-    
+    return json.dumps(self.__SearchLocation.search_by_city_state(parameters), indent=2)
+  
+  @cherrypy.tools.response_headers(['Content-Type', 'application/json'])
   @cherrypy.expose
   def searchByName(self, searchByName=""):
     if not searchByName:
       return "Please enter a valid name"
     parameters = {'name':searchByName}
-    return str(self.__SearchLocation.search_by_name(parameters))
+    return json.dumps(self.__SearchLocation.search_by_name(parameters), indent=2)
   
   if __name__ == '__main__':
     conn_settings = {'db_password': config.db_password, 
