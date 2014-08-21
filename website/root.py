@@ -17,10 +17,12 @@ class Root():
 <html>
   <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="/main/form.css">
     <style type="text/css">
       html {{ height: 100% }}
       body {{ height: 100%; margin: 0; padding: 0 }}
-      #map-canvas {{ height: 100%; margin-top: 10%;}}
+      #map-canvas {{ height: 90%; margin-top: 10%;}}
+      #search-bar {{ height: 10%; margin: 0; padding: 0}}
     </style>
     <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key={0}">
@@ -38,6 +40,11 @@ class Root():
     </script>
   </head>
   <body>
+    <div id="search-bar">
+      <form class="form-wrapper">
+        <input type="text" id="search" placeholder="Search for CSS3, HTML5, jQuery ..." required>
+        <input type="submit" value="go" id="submit">
+      </form>
     <div id="map-canvas"/>
   </body>
 </html>
