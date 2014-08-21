@@ -72,7 +72,7 @@ class Root():
 					      title: 'FEC WATCHDOGS'
 					    }});
 	
-	google.maps.event.addListener(marker, 'load', function() {{ searchbox.open(map, marker);}});
+	google.maps.event.addListener(marker, 'click', function() {{ searchbox.open(map, marker);}});
       }}
       google.maps.event.addDomListener(window, 'load', initialize);
     </script>
