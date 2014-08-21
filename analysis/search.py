@@ -22,8 +22,8 @@ class SearchLocation:
                                  "cand_city, cand_st FROM candidate_master_{0} WHERE cand_zip IN %s " + \
 				 "OR cand_id LIKE '__{1}%%' ORDER BY cand_name;"
     self.__state_title_query = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city," + \
-                               "cand_st FROM candidate_master_{0} WHERE %s LIKE UPPER('%%%s%%')" + \
-			       "and %s LIKE UPPER('%%%s%%') OR cand_id LIKE '__%s%%';"
+                               "cand_st FROM candidate_master_{0} WHERE %s LIKE UPPER('%%%s%%') " + \
+			       "AND %s LIKE UPPER('%%%s%%') OR cand_id LIKE '__%s%%' ESCAPE ' ';"
     self.__city_state_abbr_query = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation, cand_city," +\
                               "cand_st FROM candidate_master_{0} WHERE %s LIKE UPPER('%%%s%%') OR cand_id LIKE '__%s%%' ESCAPE ' ';"
     self.__first_last_name_query = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city," + \
