@@ -31,7 +31,7 @@ class SearchLocation:
 				   "AND cand_name LIKE UPPER('%%%s%%');"
     self.__cand_wo_state_query =  "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city, " + \
                                   "cand_st FROM candidate_master_{0} WHERE %s LIKE UPPER('%%%s%%') "
-    self.__cand_wo_state_query_suffix = "OR cand_id LIKE '__%s%%';"
+    self.__cand_wo_state_query_suffix = "OR cand_id LIKE '__%s%%'"
     self.__name_query = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st " + \
                         "FROM candidate_master_%s WHERE cand_name LIKE UPPER('%%%s%%');"
   def __remove_duplicates__(self, seq):
@@ -143,7 +143,7 @@ class SearchLocation:
 	__state_query_stmt =  self.__cand_wo_state_query % (city_key, city_query)
 	for _state in _states:
 	  __state_query_stmt += self.__cand_wo_state_query_suffix % _state 
-      
+        __state_query_stmt += "; ORDER BY CITY;"
     elif not st_query and not city_query:
       print "Not sure what's up here"
       print st_query, city_query
