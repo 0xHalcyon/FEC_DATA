@@ -21,8 +21,7 @@ class Root():
     <style type="text/css">
       html {{ height: 100% }}
       body {{ height: 100%; margin: 0; padding: 0; }}
-      .overlay {{ position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; background-color: rgba(0,0,0,0.5);}}
-      #map-canvas {{ height: 100%; margin: 0; position: relative; z-index:1}}
+      #map-canvas {{ height: 100%; margin: 0;}}
     </style>
     <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key={0}">
@@ -34,7 +33,7 @@ class Root():
         var mapOptions = {{
           center: positionMap,
           disableDefaultUI: true,
-          zoom: 4
+          zoom: 5
         }};
 	
         var map = new google.maps.Map(document.getElementById("map-canvas"),
@@ -42,8 +41,26 @@ class Root():
             
 	var searchBoxString = '<div id="search-bar">' +
                                '<form class="form-wrapper">' +
-                               '<input type="text" id="search" placeholder="Search by Name, City, State, or Zipcode ..." required>' +
-                               '<input type="submit" value="go" id="submit">' +
+                               '<input type="text" id="searchByName" placeholder="Search by Name..." required>' +
+                               '<input type="submit" value="Go!" id="submitName">' +
+                               '</form>' +
+                               '<form class="form-wrapper">' +
+                               '<input type="text" id="searchByCity" placeholder="...Search by City/State..." required>' +
+                               '<input type="submit" value="Go!" id="submitCity">' +
+                               '</form>' +
+                               '<form class="form-wrapper">' +
+                               '<input type="text" id="searchByZip" placeholder="...Or Search by Zipcode..." required>' +
+                               '<select name="distanceDropdown" id="searchDistance">' +
+                               '<option value="50">50</option>' +
+                               '<option value="25">25</option>' +
+                               '<option value="10">10</option>' +
+                               '<option value="5">5</option>' +
+                               '</select>' +
+                               '<select name="unitDropdown" id="searchUnit">' +
+                               '<option value="miles">Miles</option>' +
+                               '<option value="kilometers">Kilometers</option>' +
+                               '</select>' +
+                               '<input type="submit" value="Go!" id="submitZipcode">'+
                                '</form>' +
                                '</div>';
                                
@@ -54,7 +71,8 @@ class Root():
 					      map: map,
 					      title: 'FEC WATCHDOGS'
 					    }});
-	google.maps.event.addListener(marker, 'click', function() {{ searchbox.open(map, marker);}});
+	
+	google.maps.event.addListener(marker, 'load', function() {{ searchbox.open(map, marker);}});
       }}
       google.maps.event.addDomListener(window, 'load', initialize);
     </script>
