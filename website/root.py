@@ -7,10 +7,10 @@ from analysis.search import SearchLocation
 
 class Root():
   '''Define Root webpages'''
-  def __init__(self, Connection, SearchLocation):
+  def __init__(self, Connection, SearchLocation, api_key):
     self.__Connection = Connection
     self.__SearchLocation = SearchLocation
-    
+    self.__api_key = api_key
   @cherrypy.expose
   def index(self):
     page = """<!DOCTYPE html>
@@ -18,10 +18,10 @@ class Root():
 <head>
 </head>
 <body>
-<iframe width="100%" height="100%" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/place?q=United%20States&key=AIzaSyDWgL3zs2CJN970M8VvP4gseHkym1Tc-qs"></iframe>
+<iframe width="100%" height="100%" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/place?q=United%20States&key={0}"></iframe>
 </body>
 </html>
-"""
+""".format(self.__api_key)
     return page
   if __name__ == '__main__':
     conn_settings = {'db_password': config.db_password, 
