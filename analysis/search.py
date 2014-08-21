@@ -108,26 +108,30 @@ class SearchLocation:
       city_query = parameters[city_key].upper()
     except KeyError:
       raise KeyError("Please define search parameter")
-    print st_query, city_query
     if st_query and city_query:
+      print "State and city search"
+      print st_query, city_query
       for state in states.states_titles:
 	if state['name'].lower() == st_query.lower():
 	  st_query = state['abbreviation'].upper()
       __state_query_stmt = self.__state_title_query % (city_key, city_query, st_key, st_query, st_query)
       
     elif st_query and not city_query:
+      print "State NOT city search"
       for state in states.states_titles:
 	if state['name'].lower() == st_query.lower():
 	  st_query = state['abbreviation'].upper()
       __state_query_stmt = self.__city_state_abbr_query % (st_key, st_query, st_query)
       
     elif not st_query and city_query:
+      print "NOT State city search"
       __city_state_query = self.__city_state_query % (city_query)
       self.__Connection.cur.execute(__city_state_query)
       state = self.__Connection.cur.fetchone()
       __state_query_stmt = self.__city_state_abbr_query % (city_key, city_query, state) 
       
     elif not st_query and not city_query:
+      print "Not sure what's up here"
       return False, False
     candidates = []
     for year in range(self.start_year, self.end_year, 2):      
