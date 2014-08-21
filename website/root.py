@@ -151,7 +151,7 @@ class Root():
       return "Please enter a valid search radius"
     parameters = {'zipcode':zipcode, 'distance':distance, 'unit':distanceUnit}
     cherrypy.response.headers['Content-Type'] = 'application/json'
-    cand_ids, cand_comms = self.__SearchLocation.search_by_city_state(parameters)
+    cand_ids, cand_comms = self.__SearchLocation.search_names_by_zip(parameters)
     return str(json.dumps(cand_ids, indent=2)) + "\n" + json.dumps(cand_comms, indent=2)
   
   @cherrypy.expose
@@ -171,7 +171,7 @@ class Root():
       return "Please enter a valid name"
     parameters = {'name':searchByName}
     cherrypy.response.headers['Content-Type'] = 'application/json'
-    cand_ids, cand_comms = self.__SearchLocation.search_by_city_state(parameters)
+    cand_ids, cand_comms = self.__SearchLocation.search_by_name(parameters)
     return str(json.dumps(cand_ids, indent=2)) + "\n" + json.dumps(cand_comms, indent=2)
   if __name__ == '__main__':
     conn_settings = {'db_password': config.db_password, 
