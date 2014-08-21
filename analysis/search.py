@@ -21,17 +21,13 @@ class SearchLocation:
     self.__cand_zipcodes_query = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation," + \
                                  "cand_city, cand_st FROM candidate_master_{0} WHERE cand_zip IN %s " + \
 				 "ORDER BY cand_name;"
-    self.__state_title_query = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city," + \
-                               "cand_st FROM candidate_master_{0} WHERE %s LIKE UPPER('%%%s%%') " + \
-			       "AND %s LIKE UPPER('%%%s%%') OR cand_id LIKE '__%s%%' ESCAPE ' ';"
-    self.__city_state_abbr_query = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation, cand_city," +\
+    self.__state_query = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation, cand_city," +\
                               "cand_st FROM candidate_master_{0} WHERE %s LIKE UPPER('%%%s%%') OR cand_id LIKE '__%s%%' ESCAPE ' ';"
+    self.__city_state_query = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation, cand_city," +\
+                              "cand_st FROM candidate_master_{0} WHERE %s LIKE UPPER('%%%s%%') ESCAPE ' '"    
     self.__first_last_name_query = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city," + \
                                    "cand_st FROM candidate_master_{0} WHERE cand_name LIKE UPPER('%%%s%%')" + \
 				   "AND cand_name LIKE UPPER('%%%s%%');"
-    self.__cand_wo_state_query =  "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city, " + \
-                                  "cand_st FROM candidate_master_{0} WHERE %s LIKE UPPER('%%%s%%') "
-    self.__cand_wo_state_query_suffix = "OR cand_id LIKE '__%s%%'"
     self.__name_query = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st " + \
                         "FROM candidate_master_%s WHERE cand_name LIKE UPPER('%%%s%%');"
   def __remove_duplicates__(self, seq):
@@ -112,13 +108,14 @@ class SearchLocation:
       city_query = parameters[city_key].upper()
     except KeyError:
       raise KeyError("Please define search parameter")
+    
     if st_query and city_query:
       print "State and city search"
       print st_query, city_query
       for state in states.states_titles:
 	if state['name'].lower() == st_query.lower():
 	  st_query = state['abbreviation'].upper()
-      __state_query_stmt = self.__state_title_query % (city_key, city_query, st_key, st_query, st_query)
+      __state_query_stmt = self.__city_state_query % (city_key, city_query, st_key, st_query)
       
     elif st_query and not city_query:
       print "State NOT city search"
@@ -126,29 +123,13 @@ class SearchLocation:
       for state in states.states_titles:
 	if state['name'].lower() == st_query.lower():
 	  st_query = state['abbreviation'].upper()
-      __state_query_stmt = self.__city_state_abbr_query % (st_key, st_query, st_query)
+      __state_query_stmt = self.__state_query % (st_key, st_query, st_query)
       
-    elif not st_query and city_query:
-      print "NOT State city search"
-      print st_query, city_query
-      __city_state_query = self.__city_state_query % (city_query)
-      self.__Connection.cur.execute(__city_state_query)
-      _states = self.__Connection.cur.fetchall()
-      if not states:
-	for _state in states.states_titles:
-	  if _state['name'].lower() == city_query.lower():
-	    st_query = _state['abbreviation'].upper()
-        __state_query_stmt = self.__city_state_abbr_query % (st_key, st_query, st_query)
-      else:
-	return _states, False
-	#__state_query_stmt =  self.__cand_wo_state_query % (city_key, city_query)
-	#for _state in _states:
-	#  __state_query_stmt += self.__cand_wo_state_query_suffix % _state 
-        #__state_query_stmt += " ORDER BY cand_city;"
     elif not st_query and not city_query:
       print "Not sure what's up here"
       print st_query, city_query
       return False, False
+    
     candidates = []
     for year in range(self.start_year, self.end_year, 2):   
       print __state_query_stmt

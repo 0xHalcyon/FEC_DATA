@@ -45,7 +45,7 @@ class Root():
                                '<input type="submit" value="Go!" id="submitName">' +
                                '</form>' +
                                '<form class="form-wrapper" action="searchByCityState" method="post">' +
-                               '<input type="text" name="searchByCity" id="searchByCity" placeholder="...or Search by City/State..." required>' +
+                               '<input type="text" name="searchByCity" id="searchByCity" placeholder="...or Search by City/State...">' +
                                '<select name="searchByState" id="searchByState">' +
                                '       <option value="AL">Alabama</option>' +
                                '       <option value="AK">Alaska</option>' +
@@ -155,7 +155,7 @@ class Root():
   
   @cherrypy.expose
   def searchByCityState(self, searchByCity="", searchByState=""):
-    if not searchByCity or not searchByState:
+    if not searchByState:
       return "Please enter a valid city/state"
     cand_st = searchByState
     cand_city = searchByCity
