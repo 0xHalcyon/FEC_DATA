@@ -15,7 +15,7 @@ class SearchLocation:
     self.__1998_linkage_query = "SELECT cmte_id FROM committee_master_%s WHERE cand_id='%s'"
     self.__oth_linkage_query = "SELECT cmte_id FROM candidate_linkage_%s WHERE cand_id='%s'"
     self.__zipcode_query = "SELECT state, latitude, longitude FROM zipcodes WHERE zip LIKE'%s%%';"
-    self.__city_state_query = "SELECT DISTINCT state FROM zipcodes WHERE LOWER(primary_city) LIKE LOWER('%%%s%%');"
+    self.__city_state_query = "SELECT state, count(*) as frequency from  FROM zipcodes WHERE LOWER(primary_city) LIKE LOWER('%%%s%%');"
     self.__zipcodes_query = "SELECT zip FROM zipcodes WHERE latitude BETWEEN '%s' AND '%s'" + \
                             "AND longitude BETWEEN '%s' AND '%s' and state='%s';"
     self.__cand_zipcodes_query = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation," + \
@@ -140,10 +140,11 @@ class SearchLocation:
 	    st_query = _state['abbreviation'].upper()
         __state_query_stmt = self.__city_state_abbr_query % (st_key, st_query, st_query)
       else:
-	__state_query_stmt =  self.__cand_wo_state_query % (city_key, city_query)
-	for _state in _states:
-	  __state_query_stmt += self.__cand_wo_state_query_suffix % _state 
-        __state_query_stmt += " ORDER BY cand_city;"
+	return _states, False
+	#__state_query_stmt =  self.__cand_wo_state_query % (city_key, city_query)
+	#for _state in _states:
+	#  __state_query_stmt += self.__cand_wo_state_query_suffix % _state 
+        #__state_query_stmt += " ORDER BY cand_city;"
     elif not st_query and not city_query:
       print "Not sure what's up here"
       print st_query, city_query
