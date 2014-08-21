@@ -131,7 +131,7 @@ class SearchLocation:
       __city_state_query = self.__city_state_query % (city_query)
       self.__Connection.cur.execute(__city_state_query)
       state = self.__Connection.cur.fetchone()
-      __state_query_stmt = self.__city_state_abbr_query % (city_key, city_query, state) 
+      __state_query_stmt = self.__city_state_abbr_query % (city_key, city_query, state[0]) 
       
     elif not st_query and not city_query:
       print "Not sure what's up here"
