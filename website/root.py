@@ -180,17 +180,19 @@ class Root():
     cand_ids, cand_comms = self.__SearchLocation.search_by_name(parameters)
     cand_ids = pandas.read_json(cand_ids)
     cand_comms = pandas.read_json(cand_comms)
-    return cand_ids.to_html()+cand_comms.to_html()  if __name__ == '__main__':
+    return cand_ids.to_html()+cand_comms.to_html() 
+  
+  if __name__ == '__main__':
       
-    #conn_settings = {'db_password': config.db_password, 
-                 #'db_user': config.db_user,
-                 #'db_host': config.db_host,
-                 #'db_port': config.db_port,
-                 #'db_name': config.db_name,
-                 #'start_year': config.start_year,
-                 #'end_year': config.end_year
-                #}
-    #c = Connection(conn_settings)
-    #s = SearchLocation(c)
-    #cherrypy.quickstart(Root(c, s), '/')
+    conn_settings = {'db_password': config.db_password, 
+                 'db_user': config.db_user,
+                 'db_host': config.db_host,
+                 'db_port': config.db_port,
+                 'db_name': config.db_name,
+                 'start_year': config.start_year,
+                 'end_year': config.end_year
+                }
+    c = Connection(conn_settings)
+    s = SearchLocation(c)
+    cherrypy.quickstart(Root(c, s), '/')
     
