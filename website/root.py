@@ -46,7 +46,7 @@ class Root():
                                '</form>' +
                                '<form class="form-wrapper" action="searchByCityState" method="post">' +
                                '<input type="text" name="searchByCity" id="searchByCity" placeholder="...or Search by City/State..." required>' +
-                               '<select name="searchByState>' +
+                               '<select name="searchByState" id="searchByState">' +
                                '       <option value="AL">Alabama</option>' +
                                '       <option value="AK">Alaska</option>' +
                                '       <option value="AZ">Arizona</option>' +
