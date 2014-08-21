@@ -15,12 +15,12 @@ class SearchLocation:
     self.__1998_linkage_query = "SELECT cmte_id FROM committee_master_%s WHERE cand_id='%s'"
     self.__oth_linkage_query = "SELECT cmte_id FROM candidate_linkage_%s WHERE cand_id='%s'"
     self.__zipcode_query = "SELECT state, latitude, longitude FROM zipcodes WHERE zip LIKE'%s%%';"
-    self.__city_state_query = "SELECT state, count(*) as frequency from  FROM zipcodes WHERE LOWER(primary_city) LIKE LOWER('%%%s%%') ESCAPE ' ';"
+    self.__city_state_query = "SELECT state FROM zipcodes WHERE LOWER(primary_city) LIKE LOWER('%%%s%%') ESCAPE ' ';"
     self.__zipcodes_query = "SELECT zip FROM zipcodes WHERE latitude BETWEEN '%s' AND '%s'" + \
                             "AND longitude BETWEEN '%s' AND '%s' and state='%s';"
     self.__cand_zipcodes_query = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation," + \
                                  "cand_city, cand_st FROM candidate_master_{0} WHERE cand_zip IN %s " + \
-				 "OR cand_id LIKE '__{1}%%' ORDER BY cand_name;"
+				 "ORDER BY cand_name;"
     self.__state_title_query = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city," + \
                                "cand_st FROM candidate_master_{0} WHERE %s LIKE UPPER('%%%s%%') " + \
 			       "AND %s LIKE UPPER('%%%s%%') OR cand_id LIKE '__%s%%' ESCAPE ' ';"
