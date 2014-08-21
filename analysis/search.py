@@ -48,7 +48,7 @@ class SearchLocation:
         committee_ids = self.__Connection.cur.fetchall()
         for committee_id in committee_ids:
           cand_comms[candidate[0]]["comm_ids"].append(committee_id[0])
-    cand_comms = self.__remove_duplicates__(cand_comms)
+    #cand_comms = self.__remove_duplicates__(cand_comms)
     print cand_comms
     return cand_comms   
 	  
