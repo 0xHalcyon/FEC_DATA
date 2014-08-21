@@ -22,7 +22,7 @@ class Root():
       html {{ height: 100% }}
       body {{ height: 100%; margin: 0; padding: 0; position: relative }}
       .overlay {{ position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; background-color: rgba(0,0,0,0.5);}}
-      #map-canvas {{ height: 100%; margin-top: 10%;}}
+      #map-canvas {{ height: 100%; margin: 0;}}
     </style>
     <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key={0}">
