@@ -44,7 +44,7 @@ class Root():
                                '<input type="text" name="searchByName" id="searchByName" placeholder="Search by Name..." required>' +
                                '<input type="submit" value="Go!" id="submitName">' +
                                '</form>' +
-                               '<form class="form-wrapper" action="searchByCity" method="post">' +
+                               '<form class="form-wrapper" action="searchByCityState" method="post">' +
                                '<input type="text" name="SearchByCity" id="searchByCity" placeholder="...Search by City/State..." required>' +
                                '<input type="submit" value="Go!" id="submitCity">' +
                                '</form>' +
