@@ -20,7 +20,7 @@ class Root():
     <style type="text/css">
       html {{ height: 100% }}
       body {{ height: 100%; margin: 0; padding: 0 }}
-      #map-canvas {{ height: 100% }}
+      #map-canvas {{ height: 100%; margin-top: 10%;}}
     </style>
     <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key={0}">
