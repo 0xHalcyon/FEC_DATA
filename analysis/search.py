@@ -25,7 +25,7 @@ class SearchLocation:
                                "cand_st FROM candidate_master_{0} WHERE %s LIKE UPPER('%%%s%%')" + \
 			       "and %s LIKE UPPER('%%%s%%') OR cand_id LIKE '__%s%%';"
     self.__city_state_abbr_query = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation, cand_city," +\
-                              "cand_st FROM candidate_master_%s WHERE %s LIKE UPPER('%%%s%%') OR cand_id LIKE '__%s%%';"
+                              "cand_st FROM candidate_master_{0} WHERE %s LIKE UPPER('%%%s%%') OR cand_id LIKE '__%s%%';"
     self.__first_last_name_query = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city," + \
                                    "cand_st FROM candidate_master_%s WHERE cand_name LIKE UPPER('%%%s%%')" + \
 				   "AND cand_name LIKE UPPER('%%%s%%');"
@@ -49,6 +49,7 @@ class SearchLocation:
         committee_ids = self.__Connection.cur.fetchall()
         for committee_id in committee_ids:
           cand_comms[candidate[0]]["comm_ids"].append(committee_id[0])
+    cand_comms = self.__remove_duplicates__(cand_comms)
     return cand_comms   
 	  
   def search_names_by_zip(self, parameters):
