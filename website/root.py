@@ -2,6 +2,8 @@
 import cherrypy
 import json
 import config
+import json
+import pandas
 from db.connect import Connection
 from analysis.search import SearchLocation
 class Root():
@@ -44,7 +46,7 @@ class Root():
                                '<input type="submit" value="Go!" id="submitName">' +
                                '</form>' +
                                '<form class="form-wrapper" action="searchByCityState" method="post">' +
-                               '<input type="text" name="searchByCity" id="searchByCity" placeholder="...or Search by City/State...">' +
+                               '<input type="text" name="searchByCity" id="searchByCity" placeholder="...City/State (Specify only state to search entire state)...">' +
                                '<select name="searchByState" id="searchByState">' +
                                '       <option value="AL">Alabama</option>' +
                                '       <option value="AK">Alaska</option>' +
@@ -101,7 +103,7 @@ class Root():
                                '<input type="submit" value="Go!" id="submitCity">' +
                                '</form>' +
                                '<form class="form-wrapper" action="searchByZipcode" method="post">' +
-                               '<input type="text" name="searchByZip" id="searchByZip" placeholder="...Or Search by Zipcode..." required>' +
+                               '<input type="text" name="searchByZip" id="searchByZip" placeholder="...Or Zipcode..." required>' +
                                '<select name="distanceRadius" id="searchDistance">' +
                                '<option value="50">50</option>' +
                                '<option value="25">25</option>' +
@@ -150,9 +152,11 @@ class Root():
     except TypeError:
       return "Please enter a valid search radius"
     parameters = {'zipcode':zipcode, 'distance':distance, 'unit':distanceUnit}
-    cherrypy.response.headers['Content-Type'] = 'application/json'
+    cherrypy.response.headers['Content-Type'] = 'text/html'
     cand_ids, cand_comms = self.__SearchLocation.search_names_by_zip(parameters)
-    return str(json.dumps(cand_ids, indent=2)) + "\n" + json.dumps(cand_comms, indent=2)
+    cand_ids = pandas.read_json(cand_ids)
+    cand_comms = pandas.read_json(cand_comms)
+    return cand_ids.to_html()+cand_comms.to_html()
   
   @cherrypy.expose
   def searchByCityState(self, searchByCity="", searchByState=""):
@@ -161,28 +165,32 @@ class Root():
     cand_st = searchByState
     cand_city = searchByCity
     parameters = {'cand_st': cand_st, 'cand_city': cand_city}
-    cherrypy.response.headers['Content-Type'] = 'application/json'
+    cherrypy.response.headers['Content-Type'] = 'text/html'
     cand_ids, cand_comms = self.__SearchLocation.search_by_city_state(parameters)
-    return str(json.dumps(cand_ids, indent=2)) + "\n" + json.dumps(cand_comms, indent=2)
+    cand_ids = pandas.read_json(cand_ids)
+    cand_comms = pandas.read_json(cand_comms)
+    return cand_ids.to_html()+cand_comms.to_html()  
   
   @cherrypy.expose
   def searchByName(self, searchByName=""):
     if not searchByName:
       return "Please enter a valid name"
     parameters = {'name':searchByName}
-    cherrypy.response.headers['Content-Type'] = 'application/json'
+    cherrypy.response.headers['Content-Type'] = 'text/html'
     cand_ids, cand_comms = self.__SearchLocation.search_by_name(parameters)
-    return str(json.dumps(cand_ids, indent=2)) + "\n" + json.dumps(cand_comms, indent=2)
-  if __name__ == '__main__':
-    conn_settings = {'db_password': config.db_password, 
-                 'db_user': config.db_user,
-                 'db_host': config.db_host,
-                 'db_port': config.db_port,
-                 'db_name': config.db_name,
-                 'start_year': config.start_year,
-                 'end_year': config.end_year
-                }
-    c = Connection(conn_settings)
-    s = SearchLocation(c)
-    cherrypy.quickstart(Root(c, s), '/')
+    cand_ids = pandas.read_json(cand_ids)
+    cand_comms = pandas.read_json(cand_comms)
+    return cand_ids.to_html()+cand_comms.to_html()  if __name__ == '__main__':
+      
+    #conn_settings = {'db_password': config.db_password, 
+                 #'db_user': config.db_user,
+                 #'db_host': config.db_host,
+                 #'db_port': config.db_port,
+                 #'db_name': config.db_name,
+                 #'start_year': config.start_year,
+                 #'end_year': config.end_year
+                #}
+    #c = Connection(conn_settings)
+    #s = SearchLocation(c)
+    #cherrypy.quickstart(Root(c, s), '/')
     
