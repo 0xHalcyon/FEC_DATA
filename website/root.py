@@ -40,23 +40,23 @@ class Root():
             mapOptions);
             
 	var searchBoxString = '<div id="search-bar">' +
-                               '<form class="form-wrapper">' +
+                               '<form class="form-wrapper" action="searchByName" method="post">' +
                                '<input type="text" id="searchByName" placeholder="Search by Name..." required>' +
                                '<input type="submit" value="Go!" id="submitName">' +
                                '</form>' +
-                               '<form class="form-wrapper">' +
+                               '<form class="form-wrapper" action="searchByCity" method="post">' +
                                '<input type="text" id="searchByCity" placeholder="...Search by City/State..." required>' +
                                '<input type="submit" value="Go!" id="submitCity">' +
                                '</form>' +
-                               '<form class="form-wrapper">' +
+                               '<form class="form-wrapper" action="searchByZip" method="post">' +
                                '<input type="text" id="searchByZip" placeholder="...Or Search by Zipcode..." required>' +
-                               '<select name="distanceDropdown" id="searchDistance">' +
+                               '<select name="distanceRadius" id="searchDistance">' +
                                '<option value="50">50</option>' +
                                '<option value="25">25</option>' +
                                '<option value="10">10</option>' +
                                '<option value="5">5</option>' +
                                '</select>' +
-                               '<select name="unitDropdown" id="searchUnit">' +
+                               '<select name="distanceUnit" id="searchUnit">' +
                                '<option value="miles">Miles</option>' +
                                '<option value="kilometers">Kilometers</option>' +
                                '</select>' +
@@ -84,7 +84,12 @@ class Root():
 
 """.format(self.__api_key)
     return page
-  def search(self, params):
+  
+  def searchByZip(self, searchByZip="", distanceRadius=50, distanceUnit="kilometers"):
+    if not searchByZip:
+      return "Please enter a valid Zipcode"
+    parameters = {'zipcode':searchByZip, 'distance':distanceRadius, 'unit':distanceUnit}
+    return self.__SearchLocation.search_names_by_zip(parameters)
     pass
 
   if __name__ == '__main__':
