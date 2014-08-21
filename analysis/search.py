@@ -140,7 +140,7 @@ class SearchLocation:
 	    st_query = _state['abbreviation'].upper()
         __state_query_stmt = self.__city_state_abbr_query % (st_key, st_query, st_query)
       else:
-	__state_query_stmt = self.__city_state_abbr_query % (city_key, city_query)
+	__state_query_stmt =  self.__cand_wo_state_query % (city_key, city_query)
 	for _state in _states:
 	  _state_query_stmt += self.__cand_wo_state_query_suffix % _state 
       
