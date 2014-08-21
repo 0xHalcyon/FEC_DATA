@@ -41,15 +41,15 @@ class Root():
             
 	var searchBoxString = '<div id="search-bar">' +
                                '<form class="form-wrapper" action="searchByName" method="post">' +
-                               '<input type="text" id="searchByName" placeholder="Search by Name..." required>' +
+                               '<input type="text" name="searchByName" id="searchByName" placeholder="Search by Name..." required>' +
                                '<input type="submit" value="Go!" id="submitName">' +
                                '</form>' +
                                '<form class="form-wrapper" action="searchByCity" method="post">' +
-                               '<input type="text" id="searchByCity" placeholder="...Search by City/State..." required>' +
+                               '<input type="text" name="SearchByCity" id="searchByCity" placeholder="...Search by City/State..." required>' +
                                '<input type="submit" value="Go!" id="submitCity">' +
                                '</form>' +
                                '<form class="form-wrapper" action="searchByZip" method="post">' +
-                               '<input type="text" id="searchByZip" placeholder="...Or Search by Zipcode..." required>' +
+                               '<input type="text" name="searchByZip" id="searchByZip" placeholder="...Or Search by Zipcode..." required>' +
                                '<select name="distanceRadius" id="searchDistance">' +
                                '<option value="50">50</option>' +
                                '<option value="25">25</option>' +
