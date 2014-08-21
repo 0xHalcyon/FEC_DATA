@@ -99,7 +99,23 @@ class Root():
       return "Please enter a valid search radius"
     parameters = {'zipcode':zipcode, 'distance':distance, 'unit':distanceUnit}
     return str(self.__SearchLocation.search_names_by_zip(parameters))
-
+  
+  @cherrypy.expose
+  def searchByCityState(self, searchByCity=""):
+    if not searchByCity:
+      return "Please enter a valid city/state"
+    cand_st = searchByCity.split(",")[1]
+    cand_city = searchByCity.split(",")[0]
+    parameters = {'cand_st': cand_st, 'cand_city': cand_city})
+    return str(self.__SearchLocation.search_by_city_state(parameters))
+    
+  @cherrypy.expose
+  def searchByName(self, searchByName=""):
+    if not searchByName:
+      return "Please enter a valid name"
+    parameters = {'name':searchByName}
+    return str(self.__SearchLocation.search_by_name(parameters))
+  
   if __name__ == '__main__':
     conn_settings = {'db_password': config.db_password, 
                  'db_user': config.db_user,

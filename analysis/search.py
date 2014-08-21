@@ -19,7 +19,7 @@ class SearchLocation:
     self.__zipcodes_query = "SELECT zip FROM zipcodes WHERE latitude BETWEEN '%s' AND '%s'" + \
                             "AND longitude BETWEEN '%s' AND '%s' and state='%s';"
     self.__cand_zipcodes_query = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation," + \
-                                 "cand_city, cand_st FROM candidate_master_{0} WHERE cand_zip in %s" + \
+                                 "cand_city, cand_st FROM candidate_master_{0} WHERE cand_zip IN %s " + \
 				 "OR cand_id LIKE '__{1}%%' ORDER BY cand_name;"
     self.__state_title_query = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city," + \
                                "cand_st FROM candidate_master_{0} WHERE %s LIKE UPPER('%%%s%%')" + \
@@ -31,7 +31,11 @@ class SearchLocation:
 				   "AND cand_name LIKE UPPER('%%%s%%');"
     self.__name_query = "SELECT cand_name, cand_id, cand_pty_affiliation, cand_city, cand_st " + \
                         "FROM candidate_master_%s WHERE cand_name LIKE UPPER('%%%s%%');"
-    
+  def __remove_duplicates__(self, seq):
+    seen = set()
+    seen_add = seen.add
+    return [ x for x in seq if not (x in seen or seen_add(x))]
+  
   def __get_candidate_committees__(self, cands):
     cand_comms = {}
     for candidate in cands:
@@ -87,7 +91,7 @@ class SearchLocation:
       print __candidates_query
       self.__Connection.cur.execute(__candidates_query)
       candidates += self.__Connection.cur.fetchall()
-    
+    candidates = self.__remove_duplicates__(candidates)
     candidates_committees = self.__get_candidate_committees__(candidates)
     
     return candidates, candidates_committees
@@ -129,7 +133,8 @@ class SearchLocation:
     for year in range(self.start_year, self.end_year, 2):      
       self.__Connection.cur.execute(__state_query_stmt.format(str(year)))
       candidates += self.__Connection.cur.fetchall()
-    
+      
+    candidates = self.__remove_duplicates__(candidates)
     candidates_committees= self.__get_candidate_committees__(candidates)
       # return ([(name, cand_id, cand_pty_affiliation, cand_city, cand_st), ...], {cand_name : {cand_id: 'cand_id', comm_ids: [cmte_id]}}
     return candidates, candidates_committees    
@@ -158,6 +163,8 @@ class SearchLocation:
         query_by_name = self.__name_query % (year, name)
         self.__Connection.cur.execute(query_by_name)
         candidates = self.__Connection.cur.fetchall()
+        
+    candidates = self.__remove_duplicates__(candidates)
     candidates_committees = self.__get_candidate_committees__(candidates)
     return candidates, candidates_committees
   
