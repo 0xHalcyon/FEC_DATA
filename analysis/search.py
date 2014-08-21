@@ -118,6 +118,7 @@ class SearchLocation:
       
     elif st_query and not city_query:
       print "State NOT city search"
+      print st_query, city_query
       for state in states.states_titles:
 	if state['name'].lower() == st_query.lower():
 	  st_query = state['abbreviation'].upper()
@@ -125,6 +126,7 @@ class SearchLocation:
       
     elif not st_query and city_query:
       print "NOT State city search"
+      print st_query, city_query
       __city_state_query = self.__city_state_query % (city_query)
       self.__Connection.cur.execute(__city_state_query)
       state = self.__Connection.cur.fetchone()
@@ -132,6 +134,7 @@ class SearchLocation:
       
     elif not st_query and not city_query:
       print "Not sure what's up here"
+      print st_query, city_query
       return False, False
     candidates = []
     for year in range(self.start_year, self.end_year, 2):      
