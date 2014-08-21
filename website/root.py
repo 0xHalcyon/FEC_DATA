@@ -20,7 +20,8 @@ class Root():
     <link rel="stylesheet" href="/main/form.css">
     <style type="text/css">
       html {{ height: 100% }}
-      body {{ height: 100%; margin: 0; padding: 0 }}
+      body {{ height: 100%; margin: 0; padding: 0; position: relative }}
+      .overlay {{ position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; background-color: rgba(0,0,0,0.5);}}
       #map-canvas {{ height: 100%; margin-top: 10%;}}
     </style>
     <script type="text/javascript"
@@ -30,6 +31,7 @@ class Root():
       function initialize() {{
         var mapOptions = {{
           center: new google.maps.LatLng(39.50, -98.35),
+          disableDefaultUI: true
           zoom: 4
         }};
         var map = new google.maps.Map(document.getElementById("map-canvas"),
@@ -39,7 +41,7 @@ class Root():
     </script>
   </head>
   <body>
-    <div id="search-bar">
+    <div id="search-bar" class="overlay">
       <form class="form-wrapper">
         <input type="text" id="search" placeholder="Search for CSS3, HTML5, jQuery ..." required>
         <input type="submit" value="go" id="submit">
