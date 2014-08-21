@@ -151,7 +151,8 @@ class Root():
       return "Please enter a valid search radius"
     parameters = {'zipcode':zipcode, 'distance':distance, 'unit':distanceUnit}
     cherrypy.response.headers['Content-Type'] = 'application/json'
-    return json.dumps(self.__SearchLocation.search_names_by_zip(parameters), indent=2)
+    cand_ids, cand_comms = self.__SearchLocation.search_by_city_state(parameters)
+    return str(json.dumps(cand_ids, indent=2)) + "\n" + json.dumps(cand_comms, indent=2)
   
   @cherrypy.expose
   def searchByCityState(self, searchByCity="", searchByState=""):
@@ -161,7 +162,8 @@ class Root():
     cand_city = searchByCity
     parameters = {'cand_st': cand_st, 'cand_city': cand_city}
     cherrypy.response.headers['Content-Type'] = 'application/json'
-    return json.dumps(self.__SearchLocation.search_by_city_state(parameters), indent=2)
+    cand_ids, cand_comms = self.__SearchLocation.search_by_city_state(parameters)
+    return str(json.dumps(cand_ids, indent=2)) + "\n" + json.dumps(cand_comms, indent=2)
   
   @cherrypy.expose
   def searchByName(self, searchByName=""):
@@ -169,8 +171,8 @@ class Root():
       return "Please enter a valid name"
     parameters = {'name':searchByName}
     cherrypy.response.headers['Content-Type'] = 'application/json'
-    return json.dumps(self.__SearchLocation.search_by_name(parameters), indent=2)
-  
+    cand_ids, cand_comms = self.__SearchLocation.search_by_city_state(parameters)
+    return str(json.dumps(cand_ids, indent=2)) + "\n" + json.dumps(cand_comms, indent=2)
   if __name__ == '__main__':
     conn_settings = {'db_password': config.db_password, 
                  'db_user': config.db_user,
