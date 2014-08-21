@@ -155,8 +155,8 @@ class Root():
     cherrypy.response.headers['Content-Type'] = 'text/html'
     cand_ids, cand_comms = self.__SearchLocation.search_names_by_zip(parameters)
     cand_ids = pandas.read_json(cand_ids)
-    cand_comms = pandas.read_json(cand_comms)
-    return cand_ids.to_html()+cand_comms.to_html()
+    #cand_comms = pandas.read_json(cand_comms)
+    return cand_ids.to_html()#+cand_comms.to_html()
   
   @cherrypy.expose
   def searchByCityState(self, searchByCity="", searchByState=""):
@@ -168,8 +168,8 @@ class Root():
     cherrypy.response.headers['Content-Type'] = 'text/html'
     cand_ids, cand_comms = self.__SearchLocation.search_by_city_state(parameters)
     cand_ids = pandas.read_json(cand_ids)
-    cand_comms = pandas.read_json(cand_comms)
-    return cand_ids.to_html()+cand_comms.to_html()  
+    #cand_comms = pandas.read_json(cand_comms)
+    return cand_ids.to_html()#+cand_comms.to_html()  
   
   @cherrypy.expose
   def searchByName(self, searchByName=""):
@@ -179,8 +179,8 @@ class Root():
     cherrypy.response.headers['Content-Type'] = 'text/html'
     cand_ids, cand_comms = self.__SearchLocation.search_by_name(parameters)
     cand_ids = pandas.read_json(cand_ids)
-    cand_comms = pandas.read_json(cand_comms)
-    return cand_ids.to_html()+cand_comms.to_html() 
+    #cand_comms = pandas.read_json(cand_comms)
+    return cand_ids.to_html()#+cand_comms.to_html() 
   
   if __name__ == '__main__':
       
