@@ -45,6 +45,7 @@ class Root():
         <input type="text" id="search" placeholder="Search for CSS3, HTML5, jQuery ..." required>
         <input type="submit" value="go" id="submit">
       </form>
+    </div>
     <div id="map-canvas"/>
   </body>
 </html>
