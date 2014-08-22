@@ -222,7 +222,7 @@ class Root():
     else:
       s = self.__SearchLocation(self.__Connection)
       parameters = {'name':searchByName}
-      cand_ids, cand_comms = self.__SearchLocation.search_by_name(parameters)
+      cand_ids, cand_comms = s.search_by_name(parameters)
       self.searches[searchParameters] = (cand_ids, cand_comms)
       cand_ids = pandas.read_json(json.dumps(cand_ids)).to_html()
       cand_comms = pandas.read_json(json.dumps(cand_comms), orient='index').to_html()
