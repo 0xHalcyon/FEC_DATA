@@ -36,6 +36,11 @@ class Root():
           center: positionMap,
           disableDefaultUI: true,
           zoom: 5
+          zoomControl: false,
+          scaleControl: false,
+          panControl: false
+          overviewMapControl: false,
+          mapTypeControl: false
         }};
 	
         var map = new google.maps.Map(document.getElementById("map-canvas"),
