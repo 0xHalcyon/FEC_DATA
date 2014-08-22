@@ -53,12 +53,12 @@
     cursor: pointer;
     font: bold 16px 'lucida sans', 'trebuchet MS', 'Tahoma';
     color: #fafafa;
-    background-color: #0483a0;
+    /*background-color: #0483a0;*/
     /*background-image: linear-gradient(top, #31b2c3, #0483a0);*/
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
     border-radius: 3px;      
-    text-shadow: 0 1px 0 rgba(0, 0 ,0, .3);
+    /*text-shadow: 0 1px 0 rgba(0, 0 ,0, .3);*/
     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.3) inset, 0 1px 0 #fff;
 }
 
