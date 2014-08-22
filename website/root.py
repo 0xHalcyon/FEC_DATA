@@ -47,11 +47,11 @@ class Root():
             mapOptions);
             
 	var searchBoxString = '<div id="search-bar">' +
-                               '<form class="form-wrapper" action="searchByName" method="post"/>' +
+                               '<form class="form-wrapper" action="searchByName" method="get"/>' +
                                '<input type="text" name="searchByName" id="searchByName" placeholder="Search by Name..." required/>' +
                                '<input type="submit" value="Go!" id="submitName"/>' +
                                '</form>' +
-                               '<form class="form-wrapper" action="searchByCityState" method="post"/>' +
+                               '<form class="form-wrapper" action="searchByCityState" method="get"/>' +
                                '<input type="text" name="searchByCity" id="searchByCity" placeholder="...City/State (City not required)..."/>' +
                                '<select name="searchByState" id="searchByState" required>' +
                                '       <option value="AL" selected>Alabama</option>' +
@@ -108,7 +108,7 @@ class Root():
                                '</select>      ' +
                                '<input type="submit" value="Go!" id="submitCity"/>' +
                                '</form>' +
-                               '<form class="form-wrapper" action="searchByZipcode" method="post"/>' +
+                               '<form class="form-wrapper" action="searchByZipcode" method="get"/>' +
                                '<input type="text" name="searchByZip" id="searchByZip" placeholder="...Or Zipcode" required/>' +
                                '<select name="distanceRadius" id="searchDistance" required>' +
                                '<option value="50" selected>50</option>' +
