@@ -160,8 +160,8 @@ class SearchLocation:
           self.__Connection.cur.execute(query_by_name.format(year))
           candidates = self.__Connection.cur.fetchall()
           if len(candidates) < 1:
-	    query_by_name = self.__name_query % (__temp__[1])
-	    self.__Connection.cur.execute(query_by_name.format(year))
+	    query_by_name = self.__name_query % (year, __temp__[1])
+	    self.__Connection.cur.execute(query_by_name)
 	    candidates = self.__Connection.cur.fetchall()
       else:
         query_by_name = self.__name_query % (year, name)
