@@ -31,7 +31,7 @@ class Root():
     <script type="text/javascript">
       function initialize() {{
         var positionMap = new google.maps.LatLng(39.50, -98.35);
-        var positionMarker = new google.maps.LatLng(30.188638, -98.35);
+        var positionMarker = new google.maps.LatLng(32, -98.35);
         var mapOptions = {{
           center: positionMap,
           disableDefaultUI: true,
