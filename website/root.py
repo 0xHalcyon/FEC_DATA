@@ -35,7 +35,7 @@ class Root():
         var mapOptions = {{
           center: positionMap,
           disableDefaultUI: true,
-          zoom: 5
+          zoom: 5,
           zoomControl: false,
           scaleControl: false,
           panControl: false,
