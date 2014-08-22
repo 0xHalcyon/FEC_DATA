@@ -43,11 +43,11 @@ class SearchLocation:
 	  __linkage_query = self.__1998_linkage_query % (year, candidate[1])
         else:
 	  __linkage_query =  self.__oth_linkage_query % (year, candidate[1])
-        cand_comms[candidate[0]] = {"cand_id": candidate[1], "comm_ids":[]}
+        cand_comms[candidate[1]] = {"cand_name": candidate[0], "comm_ids":[]}
         self.__Connection.cur.execute(__linkage_query)
         committee_ids = self.__Connection.cur.fetchall()
         for committee_id in committee_ids:
-          cand_comms[candidate[0]]["comm_ids"].append(committee_id[0])
+          cand_comms[candidate[1]]["comm_ids"].append(committee_id[0])
     #cand_comms = self.__remove_duplicates__(cand_comms)
     print cand_comms
     return cand_comms   
@@ -153,14 +153,15 @@ class SearchLocation:
     candidates = []
     for year in range(self.start_year, self.end_year, 2):
       if len(name.split(" ")) > 1 or "," in name:
+	__temp__ = name.replace(",", "")
         __temp__ = name.split(" ")
         if len(__temp__) > 0:
-          query_by_name = self.__first_last_name_query % (year, __temp__[0], __temp__[1])
-          self.__Connection.cur.execute(__query_by_name)
+          query_by_name = self.__first_last_name_query % (__temp__[0], __temp__[1])
+          self.__Connection.cur.execute(__query_by_name.format(year))
           candidates = self.__Connection.cur.fetchall()
           if len(candidates) < 1:
-	    query_by_name = self.__name_query % (year, __temp__[1].strip(','))
-	    self.__Connection.cur.execute(__query_by_name)
+	    query_by_name = self.__name_query % (__temp__[1])
+	    self.__Connection.cur.execute(__query_by_name.format(year))
 	    candidates = self.__Connection.cur.fetchall()
       else:
         query_by_name = self.__name_query % (year, name)

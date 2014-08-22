@@ -1,19 +1,17 @@
 #!/usr/bin/env python
 import cherrypy
-import json
 import config
 import json
 import pandas
-from cStringIO import StringIO
 from db.connect import Connection
-from analysis.search import SearchLocation
 class Root():
   '''Define Root webpages'''
-  def __init__(self, Connection, SearchLocation, api_key):
-    self.__Connection = Connection
+  def __init__(self, Connection, api_key):
+    from analysis.search import SearchLocation
     self.__SearchLocation = SearchLocation
+    self.__Connection = Connection
     self.__api_key = api_key
-    
+    self.searches = {}
   @cherrypy.expose
   def index(self):
     if cherrypy.request.method != 'GET':
@@ -166,43 +164,79 @@ class Root():
       distance = int(distanceRadius)
     except TypeError:
       return "Please enter a valid search radius"
-    parameters = {'zipcode':zipcode, 'distance':distance, 'unit':distanceUnit}
-    cherrypy.response.headers['Content-Type'] = 'text/html'
-    cand_ids, cand_comms = self.__SearchLocation.search_names_by_zip(parameters)
-    cand_ids = pandas.read_json(json.dumps(cand_ids))
-    cand_comms = pandas.read_json(json.dumps(cand_comms), orient='index')
-    return cand_ids.to_html()+cand_comms.to_html()
+    searchParameters = 'searchByZip=%s&distanceRadius=%s&distanceUnit=%s' % (searchByZip, distanceRadius, distanceUnit)
+    print searchParameters
+    if self.searchManager(searchParameters):
+      cand_ids, cand_comms = self.seaches[searchParameters]
+      cand_ids = pandas.read_json(json.dumps(cand_ids)).to_html()
+      cand_comms = pandas.read_json(json.dumps(cand_comms), orient='index').to_html()
+      return cand_ids+cand_comms
+    else:
+      s = SearchLocation(self.__Connection)
+      parameters = {'zipcode':zipcode, 'distance':distance, 'unit':distanceUnit}
+      cand_ids, cand_comms = s.search_names_by_zip(parameters)
+      self.searches[searchParameters] = (cand_ids, cand_comms)
+      cand_ids = pandas.read_json(json.dumps(cand_ids)).to_html()
+      cand_comms = pandas.read_json(json.dumps(cand_comms), orient='index').to_html()
+      cherrypy.response.headers['Content-Type'] = 'text/html'
+      return cand_ids.+cand_comms
   
   @cherrypy.expose
   def searchByCityState(self, searchByCity="", searchByState=""):
+    searchParameters = 'searchByCity=%s&searchByState=%s' % (searchByCity, searchByState)
+    print searchParameters
     if cherrypy.request.method != 'GET':
       cherrypy.response.headers['Allow'] = 'GET'
       raise cherrypy.HTTPError(405)
     if not searchByState:
       return "Please enter a valid city/state"
-    cand_st = searchByState
-    cand_city = searchByCity
-    parameters = {'cand_st': cand_st, 'cand_city': cand_city}
-    cherrypy.response.headers['Content-Type'] = 'text/html'
-    cand_ids, cand_comms = self.__SearchLocation.search_by_city_state(parameters)
-    cand_ids = pandas.read_json(json.dumps(cand_ids))
-    cand_comms = pandas.read_json(json.dumps(cand_comms), orient='index')
-    return cand_ids.to_html()+cand_comms.to_html()  
+    if self.searchManager(searchParameters):
+      cand_ids, cand_comms = self.seaches[searchParameters]
+      cand_ids = pandas.read_json(json.dumps(cand_ids)).to_html()
+      cand_comms = pandas.read_json(json.dumps(cand_comms), orient='index').to_html()
+      return cand_ids+cand_comms
+    else
+      s = SearchLocation(self.__Connection)
+      parameters = {'cand_st': searchByState, 'cand_city': searchByCity}
+      cand_ids, cand_comms = self.__SearchLocation.search_by_city_state(parameters)
+      self.searches[searchParameters] = (cand_ids, cand_comms)
+      cand_ids = pandas.read_json(json.dumps(cand_ids)).to_html()
+      cand_comms = pandas.read_json(json.dumps(cand_comms), orient='index').to_html()
+      cherrypy.response.headers['Content-Type'] = 'text/html'
+      return cand_ids+cand_comms
   
   @cherrypy.expose
   def searchByName(self, searchByName=""):
+    searchParameters = 'searchByName=%s' % searchByName
+    print searchParameters
     if cherrypy.request.method != 'GET':
       cherrypy.response.headers['Allow'] = 'GET'
       raise cherrypy.HTTPError(405)
     if not searchByName:
       return "Please enter a valid name"
-    parameters = {'name':searchByName}
-    cherrypy.response.headers['Content-Type'] = 'text/html'
-    cand_ids, cand_comms = self.__SearchLocation.search_by_name(parameters)
-    cand_ids = pandas.read_json(json.dumps(cand_ids))
-    cand_comms = pandas.read_json(json.dumps(cand_comms), orient='index')
-    return cand_ids.to_html()+cand_comms.to_html()
+    if self.searchManager(searchParameters):
+      cand_ids, cand_comms = self.seaches[searchParameters]
+      cand_ids = pandas.read_json(json.dumps(cand_ids)).to_html()
+      cand_comms = pandas.read_json(json.dumps(cand_comms), orient='index').to_html()
+      return cand_ids+cand_comms
+    else:
+      s = SearchLocation(self.__Connection)
+      parameters = {'name':searchByName}
+      cand_ids, cand_comms = self.__SearchLocation.search_by_name(parameters)
+      self.searches[searchParameters] = (cand_ids, cand_comms)
+      cand_ids = pandas.read_json(json.dumps(cand_ids)).to_html()
+      cand_comms = pandas.read_json(json.dumps(cand_comms), orient='index').to_html()
+      cherrypy.response.headers['Content-Type'] = 'text/html'
+      return cand_ids+cand_comms
   
+  def searchManager(self, parameters):
+    if not parameters:
+      return False
+    elif parameters in self.searches.keys():
+      return True
+    else:
+      return False
+    
   if __name__ == '__main__':
       
     conn_settings = {'db_password': config.db_password, 
