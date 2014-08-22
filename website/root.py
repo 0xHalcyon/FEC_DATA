@@ -19,7 +19,7 @@ class Root():
 <html>
   <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-    <link rel="stylesheet" href="/main/form.css">
+    <link rel="stylesheet" href="/css/form.css">
     <style type="text/css">
       html {{ height: 100% }}
       body {{ height: 100%; margin: 0; padding: 0; }}
@@ -125,6 +125,7 @@ class Root():
 					      position: positionMap,
 					      map: map,
 					      title: 'FEC WATCHDOGS'
+					      icon: '/images/logo.png'
 					    }});
 	
 	google.maps.event.addListener(marker, 'visible_changed', function() {{ searchbox.open(map, marker);}});
