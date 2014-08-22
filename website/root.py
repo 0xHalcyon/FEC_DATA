@@ -52,7 +52,8 @@ class Root():
                                '<input type="submit" value="Go!" id="submitName">' +
                                '</form>' +
                                '<form class="form-wrapper" action="searchByCityState" method="post">' +
-                               '<input type="text" name="searchByCity" id="searchByCity" placeholder="...City/State (Specify only state to search entire state)...">' +
+                               '<br/>' +
+                               '<input type="text" name="searchByCity" id="searchByCity" placeholder="...City/State (City not required)...">' +
                                '<select name="searchByState" id="searchByState">' +
                                '       <option value="AL">Alabama</option>' +
                                '       <option value="AK">Alaska</option>' +
@@ -109,7 +110,8 @@ class Root():
                                '<input type="submit" value="Go!" id="submitCity">' +
                                '</form>' +
                                '<form class="form-wrapper" action="searchByZipcode" method="post">' +
-                               '<input type="text" name="searchByZip" id="searchByZip" placeholder="...Or Zipcode..." required>' +
+                               '<input type="text" name="searchByZip" id="searchByZip" placeholder="...Or Zipcode" required>' +
+                               '<br/>' +
                                '<select name="distanceRadius" id="searchDistance">' +
                                '<option value="50">50</option>' +
                                '<option value="25">25</option>' +
