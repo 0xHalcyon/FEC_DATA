@@ -172,7 +172,7 @@ class Root():
       cand_comms = pandas.read_json(json.dumps(cand_comms), orient='index').to_html()
       return cand_ids+cand_comms
     else:
-      s = SearchLocation(self.__Connection)
+      s = self.__SearchLocation(self.__Connection)
       parameters = {'zipcode':zipcode, 'distance':distance, 'unit':distanceUnit}
       cand_ids, cand_comms = s.search_names_by_zip(parameters)
       self.searches[searchParameters] = (cand_ids, cand_comms)
@@ -196,9 +196,9 @@ class Root():
       cand_comms = pandas.read_json(json.dumps(cand_comms), orient='index').to_html()
       return cand_ids+cand_comms
     else:
-      s = SearchLocation(self.__Connection)
+      s = self.__SearchLocation(self.__Connection)
       parameters = {'cand_st': searchByState, 'cand_city': searchByCity}
-      cand_ids, cand_comms = self.__SearchLocation.search_by_city_state(parameters)
+      cand_ids, cand_comms = s.search_by_city_state(parameters)
       self.searches[searchParameters] = (cand_ids, cand_comms)
       cand_ids = pandas.read_json(json.dumps(cand_ids)).to_html()
       cand_comms = pandas.read_json(json.dumps(cand_comms), orient='index').to_html()
@@ -220,7 +220,7 @@ class Root():
       cand_comms = pandas.read_json(json.dumps(cand_comms), orient='index').to_html()
       return cand_ids+cand_comms
     else:
-      s = SearchLocation(self.__Connection)
+      s = self.__SearchLocation(self.__Connection)
       parameters = {'name':searchByName}
       cand_ids, cand_comms = self.__SearchLocation.search_by_name(parameters)
       self.searches[searchParameters] = (cand_ids, cand_comms)
