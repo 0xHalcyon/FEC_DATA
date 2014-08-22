@@ -8,10 +8,16 @@ class Root():
   '''Define Root webpages'''
   def __init__(self, Connection, api_key):
     from analysis.search import SearchLocation
+    try:
+      from bs4 import BeautifulSoup as bs
+    except ImportError:
+      from BeautifulSoup import BeautifulSoup as bs
     self.__SearchLocation = SearchLocation
+    self.__bs = bs
     self.__Connection = Connection
     self.__api_key = api_key
     self.searches = {}
+    
   @cherrypy.expose
   def index(self):
     if cherrypy.request.method != 'GET':
@@ -168,6 +174,8 @@ class Root():
     print searchParameters
     if self.searchManager(searchParameters):
       cand_ids, cand_comms = self.searches[searchParameters]
+      if not cand_ids or not cand_comms:
+	return self.noResultsFound()
       cand_ids = pandas.read_json(json.dumps(cand_ids)).to_html()
       cand_comms = pandas.read_json(json.dumps(cand_comms), orient='index').to_html()
       return cand_ids+cand_comms
@@ -176,7 +184,10 @@ class Root():
       parameters = {'zipcode':zipcode, 'distance':distance, 'unit':distanceUnit}
       cand_ids, cand_comms = s.search_names_by_zip(parameters)
       self.searches[searchParameters] = (cand_ids, cand_comms)
-      cand_ids = pandas.read_json(json.dumps(cand_ids)).to_html()
+      if not cand_ids or not cand_comms:
+	return self.noResultsFound()
+      cand_ids = self.htmlHeader() + pandas.read_json(json.dumps(cand_ids)).to_html() + self.htmlFooter()
+      soup = self.__bs(cand_ids)      
       cand_comms = pandas.read_json(json.dumps(cand_comms), orient='index').to_html()
       cherrypy.response.headers['Content-Type'] = 'text/html'
       return cand_ids+cand_comms
@@ -192,6 +203,8 @@ class Root():
       return "Please enter a valid city/state"
     if self.searchManager(searchParameters):
       cand_ids, cand_comms = self.searches[searchParameters]
+      if not cand_ids or not cand_comms:
+	return self.noResultsFound()
       cand_ids = pandas.read_json(json.dumps(cand_ids)).to_html()
       cand_comms = pandas.read_json(json.dumps(cand_comms), orient='index').to_html()
       return cand_ids+cand_comms
@@ -200,6 +213,8 @@ class Root():
       parameters = {'cand_st': searchByState, 'cand_city': searchByCity}
       cand_ids, cand_comms = s.search_by_city_state(parameters)
       self.searches[searchParameters] = (cand_ids, cand_comms)
+      if not cand_ids or not cand_comms:
+	return self.noResultsFound()
       cand_ids = pandas.read_json(json.dumps(cand_ids)).to_html()
       cand_comms = pandas.read_json(json.dumps(cand_comms), orient='index').to_html()
       cherrypy.response.headers['Content-Type'] = 'text/html'
@@ -216,6 +231,8 @@ class Root():
       return "Please enter a valid name"
     if self.searchManager(searchParameters):
       cand_ids, cand_comms = self.searches[searchParameters]
+      if not cand_ids or not cand_comms:
+	return self.noResultsFound()
       cand_ids = pandas.read_json(json.dumps(cand_ids)).to_html()
       cand_comms = pandas.read_json(json.dumps(cand_comms), orient='index').to_html()
       return cand_ids+cand_comms
@@ -223,6 +240,8 @@ class Root():
       s = self.__SearchLocation(self.__Connection)
       parameters = {'name':searchByName}
       cand_ids, cand_comms = s.search_by_name(parameters)
+      if not cand_ids or not cand_comms:
+	return self.noResultsFound()
       self.searches[searchParameters] = (cand_ids, cand_comms)
       cand_ids = pandas.read_json(json.dumps(cand_ids)).to_html()
       cand_comms = pandas.read_json(json.dumps(cand_comms), orient='index').to_html()
@@ -236,7 +255,26 @@ class Root():
       return True
     else:
       return False
-    
+  
+  def noResultsFound(self):
+    return """<!DOCTYPE html><html><head></head><body><p>NO RESULTS FOUND</p></body></html>"""
+  
+  def htmlHeader(self):
+    return """<!DOCTYPE html>
+              <html>
+              <head>
+              <link rel="stylesheet" href="/css/table.css">
+              <style type="text/css">
+              html {{ height: 100% }}
+              body {{ height: 100%; margin: 0; padding: 0; }}
+              #map-canvas {{ height: 100%; margin: 0;}}
+              </style>
+              </head>
+              <body>
+              <div class="datagrid">
+              """
+  def htmlFooter(self):
+    return """</div></body></html>"""
   if __name__ == '__main__':
       
     conn_settings = {'db_password': config.db_password, 
