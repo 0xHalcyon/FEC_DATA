@@ -13,8 +13,13 @@ class Root():
     self.__Connection = Connection
     self.__SearchLocation = SearchLocation
     self.__api_key = api_key
+    
   @cherrypy.expose
   def index(self):
+    if cherrypy.request.method != 'GET':
+      cherrypy.response.headers['Allow'] = 'GET'
+      raise cherrypy.HTTPError(405)
+    
     page = """<!DOCTYPE html>
 <html>
   <head>
@@ -148,6 +153,9 @@ class Root():
   
   @cherrypy.expose
   def searchByZipcode(self, searchByZip="", distanceRadius=50, distanceUnit="kilometers"):
+    if cherrypy.request.method != 'GET':
+      cherrypy.response.headers['Allow'] = 'GET'
+      raise cherrypy.HTTPError(405)
     if not searchByZip:
       return "Please enter a valid Zipcode"
     try:
@@ -167,6 +175,9 @@ class Root():
   
   @cherrypy.expose
   def searchByCityState(self, searchByCity="", searchByState=""):
+    if cherrypy.request.method != 'GET':
+      cherrypy.response.headers['Allow'] = 'GET'
+      raise cherrypy.HTTPError(405)
     if not searchByState:
       return "Please enter a valid city/state"
     cand_st = searchByState
@@ -180,6 +191,9 @@ class Root():
   
   @cherrypy.expose
   def searchByName(self, searchByName=""):
+    if cherrypy.request.method != 'GET':
+      cherrypy.response.headers['Allow'] = 'GET'
+      raise cherrypy.HTTPError(405)
     if not searchByName:
       return "Please enter a valid name"
     parameters = {'name':searchByName}
