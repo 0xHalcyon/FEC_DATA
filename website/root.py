@@ -195,7 +195,7 @@ class Root():
       cand_ids = pandas.read_json(json.dumps(cand_ids)).to_html()
       cand_comms = pandas.read_json(json.dumps(cand_comms), orient='index').to_html()
       return cand_ids+cand_comms
-    else
+    else:
       s = SearchLocation(self.__Connection)
       parameters = {'cand_st': searchByState, 'cand_city': searchByCity}
       cand_ids, cand_comms = self.__SearchLocation.search_by_city_state(parameters)
