@@ -179,7 +179,7 @@ class Root():
       cand_ids = pandas.read_json(json.dumps(cand_ids)).to_html()
       cand_comms = pandas.read_json(json.dumps(cand_comms), orient='index').to_html()
       cherrypy.response.headers['Content-Type'] = 'text/html'
-      return cand_ids.+cand_comms
+      return cand_ids+cand_comms
   
   @cherrypy.expose
   def searchByCityState(self, searchByCity="", searchByState=""):
