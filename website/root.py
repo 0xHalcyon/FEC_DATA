@@ -54,7 +54,7 @@ class Root():
                                '<form class="form-wrapper" action="searchByCityState" method="post"/>' +
                                '<input type="text" name="searchByCity" id="searchByCity" placeholder="...City/State (City not required)..."/>' +
                                '<select name="searchByState" id="searchByState" required>' +
-                               '       <option selected value="AL">Alabama</option>' +
+                               '       <option value="AL" selected>Alabama</option>' +
                                '       <option value="AK">Alaska</option>' +
                                '       <option value="AZ">Arizona</option>' +
                                '       <option value="AR">Arkansas</option>' +
@@ -111,13 +111,13 @@ class Root():
                                '<form class="form-wrapper" action="searchByZipcode" method="post"/>' +
                                '<input type="text" name="searchByZip" id="searchByZip" placeholder="...Or Zipcode" required/>' +
                                '<select name="distanceRadius" id="searchDistance" required>' +
-                               '<option selected value="50">50</option>' +
+                               '<option value="50" selected>50</option>' +
                                '<option value="25">25</option>' +
                                '<option value="10">10</option>' +
                                '<option value="5">5</option>' +
                                '</select>' +
                                '<select name="distanceUnit" id="searchUnit" required>' +
-                               '<option selected value="miles">Miles</option>' +
+                               '<option value="miles" selected>Miles</option>' +
                                '<option value="kilometers">Kilometers</option>' +
                                '</select>' +
                                '<input type="submit" value="Go!" id="submitZipcode"/>'+
