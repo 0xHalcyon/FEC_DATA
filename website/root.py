@@ -124,7 +124,7 @@ class Root():
         var marker = new google.maps.Marker({{
 					      position: positionMap,
 					      map: map,
-					      title: 'FEC WATCHDOGS'
+					      title: 'FEC WATCHDOGS',
 					      icon: '/images/logo.png'
 					    }});
 	
