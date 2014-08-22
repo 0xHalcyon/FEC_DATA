@@ -12,7 +12,7 @@
     background-image: linear-gradient(top, #f6f6f6, #eae8e8);
 }
 
-.form-wrapper #searchByName, #searchByCity, #searchByZip {
+.form-wrapper #searchByName, #searchByCity, #searchByZip, #searchByState, #searchDistance, #searchUnit {
     width: 330px;
     height: 20px;
     padding: 10px 5px;
@@ -23,7 +23,7 @@
     border-radius: 3px;      
 }
 
-.form-wrapper #searchByName:focus, #searchByCity:focus, #searchByZip:focus {
+.form-wrapper #searchByName:focus, #searchByCity:focus, #searchByZip:focus, #searchByState:focus, #searchDistance:focus, #searchUnit:focus {
     outline: 0; 
     border-color: #aaa;
     box-shadow: 0 1px 1px #bbb inset;  
