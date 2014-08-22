@@ -167,7 +167,7 @@ class Root():
     searchParameters = 'searchByZip=%s&distanceRadius=%s&distanceUnit=%s' % (searchByZip, distanceRadius, distanceUnit)
     print searchParameters
     if self.searchManager(searchParameters):
-      cand_ids, cand_comms = self.seaches[searchParameters]
+      cand_ids, cand_comms = self.searches[searchParameters]
       cand_ids = pandas.read_json(json.dumps(cand_ids)).to_html()
       cand_comms = pandas.read_json(json.dumps(cand_comms), orient='index').to_html()
       return cand_ids+cand_comms
@@ -191,7 +191,7 @@ class Root():
     if not searchByState:
       return "Please enter a valid city/state"
     if self.searchManager(searchParameters):
-      cand_ids, cand_comms = self.seaches[searchParameters]
+      cand_ids, cand_comms = self.searches[searchParameters]
       cand_ids = pandas.read_json(json.dumps(cand_ids)).to_html()
       cand_comms = pandas.read_json(json.dumps(cand_comms), orient='index').to_html()
       return cand_ids+cand_comms
@@ -215,7 +215,7 @@ class Root():
     if not searchByName:
       return "Please enter a valid name"
     if self.searchManager(searchParameters):
-      cand_ids, cand_comms = self.seaches[searchParameters]
+      cand_ids, cand_comms = self.searches[searchParameters]
       cand_ids = pandas.read_json(json.dumps(cand_ids)).to_html()
       cand_comms = pandas.read_json(json.dumps(cand_comms), orient='index').to_html()
       return cand_ids+cand_comms
