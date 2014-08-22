@@ -31,7 +31,7 @@ class Root():
     <script type="text/javascript">
       function initialize() {{
         var positionMap = new google.maps.LatLng(39.50, -98.35);
-        
+        var positionMarker = new google.maps.LatLng(26.188638, -98.35);
         var mapOptions = {{
           center: positionMap,
           disableDefaultUI: true,
@@ -122,7 +122,7 @@ class Root():
         var searchbox = new google.maps.InfoWindow({{content: searchBoxString}});
         
         var marker = new google.maps.Marker({{
-					      position: positionMap,
+					      position: positionMarker,
 					      map: map,
 					      title: 'FEC WATCHDOGS',
 					      icon: '/images/logo.png'
