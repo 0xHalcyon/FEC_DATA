@@ -157,14 +157,17 @@ class SearchLocation:
         __temp__ = name.split(" ")
         if len(__temp__) > 0:
           query_by_name = self.__first_last_name_query % (__temp__[0], __temp__[1])
+          print query_by_name.format(year)
           self.__Connection.cur.execute(query_by_name.format(year))
           candidates = self.__Connection.cur.fetchall()
           if len(candidates) < 1:
 	    query_by_name = self.__name_query % (year, __temp__[1])
+	    print query_by_name
 	    self.__Connection.cur.execute(query_by_name)
 	    candidates = self.__Connection.cur.fetchall()
       else:
         query_by_name = self.__name_query % (year, name)
+        print query_by_name
         self.__Connection.cur.execute(query_by_name)
         candidates = self.__Connection.cur.fetchall()
         
