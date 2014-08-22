@@ -47,13 +47,13 @@ class Root():
             mapOptions);
             
 	var searchBoxString = '<div id="search-bar">' +
-                               '<form class="form-wrapper" action="searchByName" method="post">' +
-                               '<input type="text" name="searchByName" id="searchByName" placeholder="Search by Name..." required>' +
-                               '<input type="submit" value="Go!" id="submitName">' +
+                               '<form class="form-wrapper" action="searchByName" method="post"/>' +
+                               '<input type="text" name="searchByName" id="searchByName" placeholder="Search by Name..." required/>' +
+                               '<input type="submit" value="Go!" id="submitName"/>' +
                                '</form>' +
-                               '<form class="form-wrapper" action="searchByCityState" method="post">' +
-                               '<br/>' +
-                               '<input type="text" name="searchByCity" id="searchByCity" placeholder="...City/State (City not required)...">' +
+                               '<form class="form-wrapper" action="searchByCityState" method="post"/>' +
+                               '<input type="text" name="searchByCity" id="searchByCity" placeholder="...City/State (City not required)..."/>' +
+                               '<p>' +
                                '<select name="searchByState" id="searchByState">' +
                                '       <option value="AL">Alabama</option>' +
                                '       <option value="AK">Alaska</option>' +
@@ -107,22 +107,24 @@ class Root():
                                '       <option value="WI">Wisconsin</option>' +
                                '       <option value="WY">Wyoming</option>' +
                                '</select>      ' +
-                               '<input type="submit" value="Go!" id="submitCity">' +
+                               '</p>' +
+                               '<input type="submit" value="Go!" id="submitCity"/>' +
                                '</form>' +
-                               '<form class="form-wrapper" action="searchByZipcode" method="post">' +
-                               '<input type="text" name="searchByZip" id="searchByZip" placeholder="...Or Zipcode" required>' +
-                               '<br/>' +
+                               '<form class="form-wrapper" action="searchByZipcode" method="post"/>' +
+                               '<input type="text" name="searchByZip" id="searchByZip" placeholder="...Or Zipcode" required/>' +
+                               '<p>' +
                                '<select name="distanceRadius" id="searchDistance">' +
                                '<option value="50">50</option>' +
                                '<option value="25">25</option>' +
                                '<option value="10">10</option>' +
                                '<option value="5">5</option>' +
                                '</select>' +
+                               '</p>' +
                                '<select name="distanceUnit" id="searchUnit">' +
                                '<option value="miles">Miles</option>' +
                                '<option value="kilometers">Kilometers</option>' +
                                '</select>' +
-                               '<input type="submit" value="Go!" id="submitZipcode">'+
+                               '<input type="submit" value="Go!" id="submitZipcode"/>'+
                                '</form>' +
                                '</div>';
                                
