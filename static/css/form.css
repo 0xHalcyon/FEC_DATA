@@ -44,7 +44,7 @@
     font-weight: normal;
 } 
 
-.form-wrapper #submitName, #submitCity, #submitZipcode {
+.form-wrapper #submitName, #submitCity, #submitZipcode, #searchByState, #searchDistance, #searchUnit {
     float: right;    
     border: 1px solid #00748f;
     height: 42px;
