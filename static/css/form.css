@@ -47,6 +47,7 @@
 .form-wrapper #searchByState, #searchDistance, #searchUnit {
     float: left;    
     border: 1px solid #00748f;
+    padding: 6px 3px;   
     height: 20px;
     width: 300px;
     padding: 0;
