@@ -12,7 +12,7 @@
     background-image: linear-gradient(top, #f6f6f6, #eae8e8);
 }
 
-.form-wrapper #searchByName, #searchByCity, #searchByZip, #searchByState, #searchDistance, #searchUnit {
+.form-wrapper #searchByName, #searchByCity, #searchByZip {
     width: 330px;
     height: 20px;
     padding: 10px 5px;
@@ -44,7 +44,25 @@
     font-weight: normal;
 } 
 
-.form-wrapper #submitName, #submitCity, #submitZipcode, #searchByState, #searchDistance, #searchUnit {
+.form-wrapper #searchByState, #searchDistance, #searchUnit {
+    float: left;    
+    border: 1px solid #00748f;
+    height: 42px;
+    width: 100px;
+    padding: 0;
+    cursor: pointer;
+    font: bold 16px 'lucida sans', 'trebuchet MS', 'Tahoma';
+    color: #fafafa;
+    background-color: #0483a0;
+    /*background-image: linear-gradient(top, #31b2c3, #0483a0);*/
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;      
+    text-shadow: 0 1px 0 rgba(0, 0 ,0, .3);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.3) inset, 0 1px 0 #fff;
+}
+
+.form-wrapper #submitName, #submitCity, #submitZipcode {
     float: right;    
     border: 1px solid #00748f;
     height: 42px;
