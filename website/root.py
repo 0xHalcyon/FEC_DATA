@@ -38,7 +38,7 @@ class Root():
           zoom: 5
           zoomControl: false,
           scaleControl: false,
-          panControl: false
+          panControl: false,
           overviewMapControl: false,
           mapTypeControl: false
         }};
