@@ -57,7 +57,7 @@ class SearchLocation:
 	  self.__Connection.cur.execute("SAVEPOINT save_%s;" % save_point)
           self.__Connection.cur.execute(__linkage_query)
           committee_ids = self.__Connection.cur.fetchall()
-        except psycopg2.ProgrammingError:
+        except (psycopg2.ProgrammingError, psycopg2.InternalError):
           self.__Connection.cur.execute("ROLLBACK TO SAVEPOINT save_%s;" % save_point)
           continue
 	else:
@@ -112,7 +112,7 @@ class SearchLocation:
 	self.__Connection.cur.execute("SAVEPOINT save_%s;" % save_point)
         self.__Connection.cur.execute(__candidates_query)
         candidates += self.__Connection.cur.fetchall()
-      except psycopg2.ProgrammingError:
+      except (psycopg2.ProgrammingError, psycopg2.InternalError):
         self.__Connection.cur.execute("ROLLBACK TO SAVEPOINT save_%s;" % save_point)
         continue
       else:
@@ -165,7 +165,7 @@ class SearchLocation:
 	self.__Connection.cur.execute("SAVEPOINT save_%s;" % save_point)
         self.__Connection.cur.execute(__state_query_stmt.format(str(year)))        
         candidates += self.__Connection.cur.fetchall()
-      except psycopg2.ProgrammingError:
+      except (psycopg2.ProgrammingError, psycopg2.InternalError):
 	self.__Connection.cur.execute("ROLLBACK TO save_%s;" % save_point)
 	continue
       else:
@@ -197,7 +197,7 @@ class SearchLocation:
 	    self.__Connection.cur.execute("SAVEPOINT save_%s;" % save_point)	    
             self.__Connection.cur.execute(query_by_name.format(year))
             candidates = self.__Connection.cur.fetchall()
-          except psycopg2.ProgrammingError:
+          except (psycopg2.ProgrammingError, psycopg2.InternalError):
 	    self.__Connection.cur.execute("ROLLBACK TO save_%s;" % save_point)
 	    continue
 	  else:
