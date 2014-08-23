@@ -110,7 +110,7 @@ class Root():
             <option value="miles" selected>Miles</option>
             <option value="kilometers">Kilometers</option>
           </select>
-        <input type="submit" value="Go!" id="submitZipcode"/>'+
+        <input type="submit" value="Go!" id="submitZipcode"/>
       </form>
     </div>
   </body>
