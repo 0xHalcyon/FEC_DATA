@@ -20,8 +20,6 @@ class Root():
     
   @cherrypy.expose
   def index(self):
-    def test(self):
-      return "Hello, I'm a nested directory"
     if cherrypy.request.method != 'GET':
       cherrypy.response.headers['Allow'] = 'GET'
       raise cherrypy.HTTPError(405)
@@ -54,8 +52,7 @@ class Root():
           mapTypeControl: false
         }};
 	
-        var map = new google.maps.Map(document.getElementById("map-canvas"),
-            mapOptions);
+        var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
             
 	var searchBoxString = '<div id="search-bar">' +
                                '<form class="form-wrapper" action="searchByName" method="get"/>' +
