@@ -31,13 +31,13 @@ class Root():
     <link rel="stylesheet" href="/css/form.css">
     <style type="text/css">
       html {{ height: 100% }}
-      body {{ height: 100%; margin: 0; padding: 0; }}
+      body {{ height: 100%; margin: 0; padding: 0; background-image: url("/images/bkg.png");}}
       #map-canvas {{ height: 100%; margin: 0;}}
     </style>            
   </head>
   <body>
     <div id="search-bar">
-      <img src="/images/logo.png" alt="Logo" height="408" width="300"/>
+      <img src="/images/logo.png" alt="Logo" height="408" width="300" align="middle"/>
       <form class="form-wrapper" action="searchByName" method="get"/>
         <input type="text" name="searchByName" id="searchByName" placeholder="Search by Name..." required/>
         <input type="submit" value="Go!" id="submitName"/>
