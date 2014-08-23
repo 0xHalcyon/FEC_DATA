@@ -129,7 +129,7 @@ class Root():
       return "Please enter a valid Zipcode"
     try:
       zipcode = int(searchByZip)
-    except TypeError:
+    except (ValueError, TypeError):
       return "Please enter a valid Zipcode"
     try:
       distance = int(distanceRadius)
