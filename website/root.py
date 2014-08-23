@@ -250,6 +250,8 @@ class Root():
   def parameterWrapper(self):
     def deco(wrappee):
       def wrapper(*args, **kwargs):
+	try:
+	  return wrappee(*args, **kwargs)
 	except cherrypy.HTTPError:
 	  raise cherrypy.HTTPError(404)
       return wrapper
