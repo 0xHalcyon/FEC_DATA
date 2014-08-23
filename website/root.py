@@ -19,6 +19,7 @@ class Root():
     self.searches = {}
     
   @cherrypy.expose
+  @self.parameterWrapper()
   def index(self):
     if cherrypy.request.method != 'GET':
       cherrypy.response.headers['Allow'] = 'GET'
@@ -121,6 +122,7 @@ class Root():
     return page
   
   @cherrypy.expose
+  @self.parameterWrapper()
   def searchByZipcode(self, searchByZip="", distanceRadius=50, distanceUnit="kilometers"):
     if cherrypy.request.method != 'GET':
       cherrypy.response.headers['Allow'] = 'GET'
@@ -160,6 +162,7 @@ class Root():
       return cand_ids+cand_comms
   
   @cherrypy.expose
+  @self.parameterWrapper()
   def searchByCityState(self, searchByCity="", searchByState=""):
     searchParameters = 'searchByCity=%s&searchByState=%s' % (searchByCity, searchByState)
     print searchParameters
@@ -188,6 +191,7 @@ class Root():
       return cand_ids+cand_comms
   
   @cherrypy.expose
+  @self.parameterWrapper()
   def searchByName(self, searchByName=""):
     searchParameters = 'searchByName=%s' % searchByName
     print searchParameters
@@ -242,6 +246,16 @@ class Root():
               """
   def htmlFooter(self):
     return """</div></body></html>"""
+  
+  def parameterWrapper(self):
+    def deco(wrappee):
+      def wrapper(*args, **kwargs):
+	except cherrypy.HTTPError:
+	  raise cherrypy.HTTPError(404)
+      return wrapper
+    return deco
+    
+    
   if __name__ == '__main__':
       
     conn_settings = {'db_password': config.db_password, 
