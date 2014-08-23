@@ -9,6 +9,13 @@ from geo.geolocation import GeoLocation
 class SearchLocation:  
   'Provides search functions for database queries'
   def __init__(self, Connection):
+    import random
+    import string
+    import os
+    self.save_point_length = 25
+    self.random = random
+    self.random.seed = os.urandom(1024)
+    self.random_chars = string.ascii_letters + string.digits
     self.__Connection = Connection
     self.start_year = Connection.start_year
     self.end_year = Connection.end_year
@@ -44,8 +51,17 @@ class SearchLocation:
         else:
 	  __linkage_query =  self.__oth_linkage_query % (year, candidate[1])
         cand_comms[candidate[1]] = {"cand_name": candidate[0], "comm_ids":[]}
-        self.__Connection.cur.execute(__linkage_query)
-        committee_ids = self.__Connection.cur.fetchall()
+        try:
+	  self.__Connection.cur.execute("BEGIN;")
+	  save_point = ''.join(self.random.choice(self.random_chars) for i in range(self.save_point_length))
+	  self.__Connection.cur.execute("SAVEPOINT save_%s;" % save_point)
+          self.__Connection.cur.execute(__linkage_query)
+          committee_ids = self.__Connection.cur.fetchall()
+        except psycopg2.ProgrammingError:
+          self.__Connection.cur.execute("ROLLBACK TO SAVEPOINT save_%s;" % save_point)
+          continue
+	else:
+	  self.__Connection.cur.execute("RELEASE SAVEPOINT save_%s;" % save_point)
         for committee_id in committee_ids:
           cand_comms[candidate[1]]["comm_ids"].append(committee_id[0])
     #cand_comms = self.__remove_duplicates__(cand_comms)
@@ -90,8 +106,17 @@ class SearchLocation:
       print __candidates_query
       __candidates_query = self.__Connection.cur.mogrify(__candidates_query, (tuple(__zipcodes),))
       print __candidates_query
-      self.__Connection.cur.execute(__candidates_query)
-      candidates += self.__Connection.cur.fetchall()
+      try:
+	self.__Connection.cur.execute("BEGIN;")
+	save_point = ''.join(self.random.choice(self.random_chars) for i in range(self.save_point_length))
+	self.__Connection.cur.execute("SAVEPOINT save_%s;" % save_point)
+        self.__Connection.cur.execute(__candidates_query)
+        candidates += self.__Connection.cur.fetchall()
+      except psycopg2.ProgrammingError:
+        self.__Connection.cur.execute("ROLLBACK TO SAVEPOINT save_%s;" % save_point)
+        continue
+      else:
+	self.__Connection.cur.execute("RELEASE SAVEPOINT save_%s;" % save_point)
     candidates = self.__remove_duplicates__(candidates)
     candidates_committees = self.__get_candidate_committees__(candidates)
     
@@ -134,9 +159,17 @@ class SearchLocation:
     candidates = []
     for year in range(self.start_year, self.end_year, 2):   
       print __state_query_stmt
-      self.__Connection.cur.execute(__state_query_stmt.format(str(year)))
-      candidates += self.__Connection.cur.fetchall()
-      
+      try:
+	self.__Connection.cur.execute("BEGIN;")
+	save_point = ''.join(self.random.choice(self.random_chars) for i in range(self.save_point_length))
+	self.__Connection.cur.execute("SAVEPOINT save_%s;" % save_point)
+        self.__Connection.cur.execute(__state_query_stmt.format(str(year)))        
+        candidates += self.__Connection.cur.fetchall()
+      except psycopg2.ProgrammingError:
+	self.__Connection.cur.execute("ROLLBACK TO save_%s;" % save_point)
+	continue
+      else:
+	self.__Connection.cur.execute("RELEASE SAVEPOINT save_%s;" % save_point)      
     candidates = self.__remove_duplicates__(candidates)
     candidates_committees= self.__get_candidate_committees__(candidates)
       # return ([(name, cand_id, cand_pty_affiliation, cand_city, cand_st), ...], {cand_name : {cand_id: 'cand_id', comm_ids: [cmte_id]}}
@@ -158,8 +191,17 @@ class SearchLocation:
         if len(__temp__) > 0:
           query_by_name = self.__first_last_name_query % (__temp__[0], __temp__[1])
           print query_by_name.format(year)
-          self.__Connection.cur.execute(query_by_name.format(year))
-          candidates = self.__Connection.cur.fetchall()
+          try:
+	    self.__Connection.cur.execute("BEGIN;")
+	    save_point = ''.join(self.random.choice(self.random_chars) for i in range(self.save_point_length))
+	    self.__Connection.cur.execute("SAVEPOINT save_%s;" % save_point)	    
+            self.__Connection.cur.execute(query_by_name.format(year))
+            candidates = self.__Connection.cur.fetchall()
+          except psycopg2.ProgrammingError:
+	    self.__Connection.cur.execute("ROLLBACK TO save_%s;" % save_point)
+	    continue
+	  else:
+	    self.__Connection.cur.execute("RELEASE SAVEPOINT save_%s;" % save_point)
           if len(candidates) < 1:
 	    query_by_name = self.__name_query % (year, __temp__[1])
 	    print query_by_name
