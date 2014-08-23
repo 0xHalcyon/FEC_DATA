@@ -18,6 +18,16 @@ class Root():
     self.__api_key = api_key
     self.searches = {}
     
+  def parameterWrapper():
+    def deco(wrappee):
+      def wrapper(*args, **kwargs):
+	try:
+	  return wrappee(*args, **kwargs)
+	except cherrypy.HTTPError:
+	  raise cherrypy.HTTPError(404)
+      return wrapper
+    return deco
+  
   @cherrypy.expose
   @parameterWrapper()
   def index(self):
@@ -246,16 +256,6 @@ class Root():
               """
   def htmlFooter(self):
     return """</div></body></html>"""
-  
-  def parameterWrapper():
-    def deco(wrappee):
-      def wrapper(*args, **kwargs):
-	try:
-	  return wrappee(*args, **kwargs)
-	except cherrypy.HTTPError:
-	  raise cherrypy.HTTPError(404)
-      return wrapper
-    return deco
     
     
   if __name__ == '__main__':
