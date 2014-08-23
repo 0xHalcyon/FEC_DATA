@@ -133,7 +133,7 @@ class Root():
       return "Please enter a valid Zipcode"
     try:
       distance = int(distanceRadius)
-    except TypeError:
+    except (ValueError, TypeError):
       return "Please enter a valid search radius"
     searchParameters = 'searchByZip=%s&distanceRadius=%s&distanceUnit=%s' % (searchByZip, distanceRadius, distanceUnit)
     print searchParameters
