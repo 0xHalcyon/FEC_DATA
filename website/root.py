@@ -20,6 +20,8 @@ class Root():
     
   @cherrypy.expose
   def index(self):
+    def test(self):
+      return "Hello, I'm a nested directory"
     if cherrypy.request.method != 'GET':
       cherrypy.response.headers['Allow'] = 'GET'
       raise cherrypy.HTTPError(405)
@@ -186,8 +188,10 @@ class Root():
       self.searches[searchParameters] = (cand_ids, cand_comms)
       if not cand_ids or not cand_comms:
 	return self.noResultsFound()
-      cand_ids = self.htmlHeader() + pandas.read_json(json.dumps(cand_ids)).to_html() + self.htmlFooter()
-      soup = self.__bs(cand_ids)      
+      cand_ids = self.htmlHeader() + pandas.read_json(json.dumps(cand_ids))[1:5].to_html() + self.htmlFooter()
+      soup = self.__bs(cand_ids)   
+      for th in soup.find("thead").findAll("th"):
+	
       cand_comms = pandas.read_json(json.dumps(cand_comms), orient='index').to_html()
       cherrypy.response.headers['Content-Type'] = 'text/html'
       return cand_ids+cand_comms
