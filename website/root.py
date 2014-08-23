@@ -190,7 +190,7 @@ class Root():
 	return self.noResultsFound()
       cand_ids = self.htmlHeader() + pandas.read_json(json.dumps(cand_ids))[1:5].to_html() + self.htmlFooter()
       soup = self.__bs(cand_ids)   
-      for th in soup.find("thead").findAll("th"):
+      #for th in soup.find("thead").findAll("th"):
 	
       cand_comms = pandas.read_json(json.dumps(cand_comms), orient='index').to_html()
       cherrypy.response.headers['Content-Type'] = 'text/html'
