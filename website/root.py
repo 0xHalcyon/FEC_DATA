@@ -40,6 +40,7 @@ class Root():
       <p id="logo" style="text-align: center">
         <img src="/images/logo.png" alt="Logo" height="408" width="300"/>
       </p>
+      <p>
       <form class="form-wrapper" action="searchByName" method="get"/>
         <input type="text" name="searchByName" id="searchByName" placeholder="Search by Name..." required/>
         <input type="submit" value="Go!" id="submitName"/>
@@ -115,6 +116,7 @@ class Root():
           </select>
         <input type="submit" value="Go!" id="submitZipcode"/>
       </form>
+      </p>
     </div>
   </body>
 </html>"""
