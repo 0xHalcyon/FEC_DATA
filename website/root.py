@@ -23,7 +23,8 @@ class Root():
       def wrapper(*args, **kwargs):
 	try:
 	  return wrappee(*args, **kwargs)
-	except cherrypy.HTTPError:
+	except (cherrypy.HTTPError, TypeError) as e:
+	  print "Error: %s" % e
 	  raise cherrypy.HTTPError(404)
       return wrapper
     return deco
