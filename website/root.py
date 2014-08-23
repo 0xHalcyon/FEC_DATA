@@ -37,7 +37,7 @@ class Root():
   </head>
   <body>
     <div id="search-bar">
-      <p id="logo" text-align="center">
+      <p id="logo" style="text-align: center">
         <img src="/images/logo.png" alt="Logo" height="408" width="300"/>
       </p>
       <form class="form-wrapper" action="searchByName" method="get"/>
