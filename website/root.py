@@ -19,7 +19,7 @@ class Root():
     self.searches = {}
     
   @cherrypy.expose
-  @self.parameterWrapper()
+  @parameterWrapper()
   def index(self):
     if cherrypy.request.method != 'GET':
       cherrypy.response.headers['Allow'] = 'GET'
