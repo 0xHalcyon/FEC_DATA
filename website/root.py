@@ -37,6 +37,7 @@ class Root():
   </head>
   <body>
     <div id="search-bar">
+      <img src="/images/logo.png" alt="Logo" height="408" width="300"/>
       <form class="form-wrapper" action="searchByName" method="get"/>
         <input type="text" name="searchByName" id="searchByName" placeholder="Search by Name..." required/>
         <input type="submit" value="Go!" id="submitName"/>
