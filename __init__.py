@@ -55,14 +55,16 @@ def wrapper(function):
       threads[thread].start()
     while True:
       for thread in sorted(threads):
-	if threads[thread].complete:
-	  print "Thread: %s is complete" % threads[thread].name 
-	  threads[thread].join()
-	  threads[thread] = None
-	elif all(None == x for x in threads.values()):
+	if all(None == x for x in threads.values()):
 	  print "Complete"
 	  connections.closeall()
 	  return
+	elif threads[thread] == None:
+	  pass
+	elif threads[thread].complete:
+	  print "Thread: %s is complete" % threads[thread].name 
+	  threads[thread].join()
+	  threads[thread] = None
 	else:
 	  time.sleep(1)
 	  continue
