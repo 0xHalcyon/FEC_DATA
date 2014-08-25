@@ -97,7 +97,6 @@ class PopulateDatabase():
 		cand_zip = int(cand_zip[0:5])
 	        temp1[14] = cand_zip
 	      except ValueError as e:
-		print e, line
 		temp1[7] = 0
 		
 	    temp1 = tuple(temp1)
@@ -107,13 +106,13 @@ class PopulateDatabase():
 	      self.__Connection.cur.execute("SAVEPOINT save_point;")
               self.__Connection.cur.execute(query)
             except (psycopg2.DataError, psycopg2.InternalError) as e:
-	      print e, line
+	      print "DataError or InternalError: %s, %s" % (e, line)
               self.log_error(f, line)
 	      self.__Connection.cur.execute("ROLLBACK TO SAVEPOINT save_point;")
 	      continue
 	    except psycopg2.IntegrityError as e:
-	      print "Error: %s" % e, line
-              #self.log_error(year, line)
+	      print "IntegrityError: %s, %s" % (e, line)
+              self.log_error(year, e + ": " + line)
 	      self.__Connection.cur.execute("ROLLBACK TO SAVEPOINT save_point;")
 	      continue
 	    else:
