@@ -94,7 +94,7 @@ class PopulateDatabase():
       template = str(tuple(template.split(","))).replace("'", "").lower()
       i = 0
       for chunk in read_some_lines(table_file):
-	self.__cur.execute("BEGIN work_%s;" % i)
+	self.__cur.execute("BEGIN WORK")
         for line in chunk:
 	  table_row = line.replace("\x92", "")
 	  table_row = table_row.replace("\xa0", " ")
@@ -149,7 +149,7 @@ class PopulateDatabase():
 	    continue
 	  else:
 	    self.__cur.execute("RELEASE SAVEPOINT save_point;" % save_point)
-	self.__cur.execute("END work_%s;" %i ) 
+	self.__cur.execute("END WORK;") 
 	i+=1
         #print "Committing database"
     self.__cur.close()
