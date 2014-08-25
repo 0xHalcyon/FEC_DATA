@@ -139,7 +139,7 @@ class PopulateDatabase():
 	    continue
 	  else:
 	    self.__cur.execute("RELEASE SAVEPOINT save_point;")
-      print "Committing database"
-      self.__Connection.commit()
+        print "Committing database"
+        self.__Connection.commit()
     self.__cur.close()
     self.errors.close()
