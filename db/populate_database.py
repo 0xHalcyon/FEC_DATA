@@ -26,11 +26,18 @@ class threadedPopulate(threading.Thread):
     populate_db = PopulateDatabase(self.cwd, self.name, self.conn)
     populate_db.populate_database()
     print "Done populating %s" % self.name 
-    self.Connections.putconn(self.conn, key=self.name, close=True)
+    self.Connections.conns.putconn(self.conn, key=self.name, close=True)
     self.complete = True
     
 class PopulateDatabase():
   def __init__(self, cwd, year, Connection):
+    import random
+    import string
+    import os
+    self.save_point_length = 25
+    self.random = random
+    self.random.seed = os.urandom(1024)
+    self.random_chars = string.ascii_letters + string.digits
     self.cwd = cwd
     #print self.cwd
     self.year = int(year)
@@ -85,7 +92,9 @@ class PopulateDatabase():
         print "Have you run 'make download && make extract yet'?"
 	os.sys.exit(1)
       template = str(tuple(template.split(","))).replace("'", "").lower()
+      i = 0
       for chunk in read_some_lines(table_file):
+	self.__cur.execute("BEGIN work_%s;" % i)
         for line in chunk:
 	  table_row = line.replace("\x92", "")
 	  table_row = table_row.replace("\xa0", " ")
@@ -127,19 +136,21 @@ class PopulateDatabase():
 	  try:
 	    query = "INSERT INTO %s %s VALUES %s;" % (f, template, table_row)
 	    self.__cur.execute("BEGIN;")
-	    self.__cur.execute("SAVEPOINT save_point;")
+	    save_point = ''.join(self.random.choice(self.random_chars) for i in range(self.save_point_length))
+	    self.__cur.execute("SAVEPOINT save_point_%s;" % save_point)
             self.__cur.execute(query)
           except (psycopg2.DataError, psycopg2.InternalError) as e:
             self.log_error(f, e.pgerror + "::" + line)
-	    self.__cur.execute("ROLLBACK TO SAVEPOINT save_point;")
+	    self.__cur.execute("ROLLBACK TO SAVEPOINT save_point;" % save_point)
 	    continue
 	  except psycopg2.IntegrityError as e:
             self.log_error(f, e.pgerror + "::" + line)
-	    self.__cur.execute("ROLLBACK TO SAVEPOINT save_point;")
+	    self.__cur.execute("ROLLBACK TO SAVEPOINT save_point;" % save_point)
 	    continue
 	  else:
-	    self.__cur.execute("RELEASE SAVEPOINT save_point;")
+	    self.__cur.execute("RELEASE SAVEPOINT save_point;" % save_point)
+	self.__cur.execute("END work_%s;" %i ) 
+	i+=1
         #print "Committing database"
-        self.__Connection.commit()
     self.__cur.close()
     self.errors.close()

@@ -60,6 +60,7 @@ def wrapper(function):
 	  threads[thread] = None
 	elif all(None == x for x in threads.values()):
 	  print "Complete"
+	  connections.closeall()
 	  return
 	else:
 	  time.sleep(1)
