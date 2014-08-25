@@ -76,14 +76,16 @@ class SearchLocation:
     parameters = {'zipcode':zip, 'distance':distance, 'unit':measure_unit}
     'unit' must be miles or kilometers
     'distance' is any arbitrary integer value
-    'zipcode' is integer or string
+    'zipcode' is integer
     """
     try:
-      zipcode = parameters['zipcode']
+      zipcode = int(parameters['zipcode'])
       distance = parameters['distance']
       unit = parameters['unit']
     except KeyError:
       raise KeyError("Please define zipcode, distance, and unit")
+    except (ValueError, TypeError):
+      raise ValueError("Invalid Zipcode")
     
     if unit == "miles":
       distance = distance/0.62137
@@ -98,7 +100,7 @@ class SearchLocation:
     SW_loc, NE_loc = loc.bounding_locations(distance)
     __zipcodes_stmt = self.__zipcodes_query % (SW_loc.deg_lat, NE_loc.deg_lat, SW_loc.deg_lon, NE_loc.deg_lon, state)
     self.__Connection.cur.execute(__zipcodes_stmt)
-    zipcodes = self.__Connection.cur.fetchall()
+    zipcodes = self.__Connection.cur.fetchone()
     print zipcodes
     __zipcodes = []
     candidates = []
