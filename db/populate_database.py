@@ -97,7 +97,7 @@ class PopulateDatabase():
 		cand_zip = int(cand_zip[0:5])
 	        temp1[14] = cand_zip
 	      except ValueError as e:
-		temp1[7] = 0
+		temp1[14] = 0
 		
 	    temp1 = tuple(temp1)
 	    try:
