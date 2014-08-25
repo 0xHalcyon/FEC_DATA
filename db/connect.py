@@ -23,6 +23,7 @@ class Connection:
 	                                       host=self.__db_host,
 			                       port=self.__db_port
 			                       )
+      self.cur = None
     except psycopg2.Error:
       raise Exception("Did you define database parameters in config and run make?")
     

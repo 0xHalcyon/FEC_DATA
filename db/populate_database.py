@@ -32,7 +32,7 @@ class PopulateDatabase():
     self.cwd = cwd
     self.year = year
     self.__Connection = Connection
-    self.__Connection.cur = self.__Connection.cursor()
+    self.__cur = self.__Connection.cursor()
     self.files = {"committee_master_%s"  : ["%s/data/%s/cm%s/cm.txt", "%s/db/headers/cm_header_file.csv"],
                   "candidate_master_%s"  : ["%s/data/%s/cn%s/cn.txt", "%s/db/headers/cn_header_file.csv"],
                   "candidate_linkage_%s" : ["%s/data/%s/ccl%s/ccl.txt", "%s/db/headers/ccl_header_file.csv"],
@@ -119,19 +119,19 @@ class PopulateDatabase():
 	  temp1 = tuple(temp1)
 	  try:
 	    query = "INSERT INTO %s %s VALUES %s;" % (f, template, temp1)
-	    self.__Connection.cur.execute("BEGIN;")
-	    self.__Connection.cur.execute("SAVEPOINT save_point;")
+	    self.__cur.execute("BEGIN;")
+	    self.__cur.execute("SAVEPOINT save_point;")
             self.__Connection.cur.execute(query)
           except (psycopg2.DataError, psycopg2.InternalError) as e:
             self.log_error(f, e + "::" + line)
-	    self.__Connection.cur.execute("ROLLBACK TO SAVEPOINT save_point;")
+	    self.__cur.execute("ROLLBACK TO SAVEPOINT save_point;")
 	    continue
 	  except psycopg2.IntegrityError as e:
             self.log_error(f, e + "::" + line)
-	    self.__Connection.cur.execute("ROLLBACK TO SAVEPOINT save_point;")
+	    self.__cur.execute("ROLLBACK TO SAVEPOINT save_point;")
 	    continue
 	  else:
-	    self.__Connection.cur.execute("RELEASE SAVEPOINT save_point;")
-      self.__Connection.conn.commit()
-    self.__Connection.cur.close()
+	    self.__cur.execute("RELEASE SAVEPOINT save_point;")
+      self.__Connection.commit()
+    self.__cur.close()
     self.errors.close()
