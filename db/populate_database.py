@@ -100,7 +100,7 @@ class PopulateDatabase():
 		continue
 	      table_row[13] = date.strftime("%Y%m%d")
 	    else:
-	      date = datetime(month=01, day=01, year=self.year)
+	      date = datetime(month=01, day=01, year=int(self.year))
 	      self.log_error(f, line)
 	      table_row[13] = date.strftime("%Y%m%d")	   
 	       
