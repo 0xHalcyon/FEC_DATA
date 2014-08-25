@@ -64,6 +64,7 @@ def wrapper(function):
 	elif threads[thread].complete:
 	  print "Thread: %s is complete" % threads[thread].name 
 	  threads[thread].join()
+	  print "Thread: %s is joined" % threads[thread].name
 	  threads[thread] = None
 	else:
 	  time.sleep(1)
