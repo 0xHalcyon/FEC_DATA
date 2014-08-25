@@ -66,6 +66,7 @@ class PopulateDatabase():
 	    temp1 = temp1.replace("\xa0", " ")
 	    temp1 = temp1.replace("\x85", "...")
 	    temp1 = temp1.strip().replace("'", "").split("|")
+	    
 	    if f in ("comm_to_comm_%s" % year, "cand_to_comm_%s" % year, "indiv_contrib_%s" % year):
 	      if temp1[13]:
 	        date = temp1[13]
@@ -80,6 +81,25 @@ class PopulateDatabase():
 	        date = datetime(month=01, day=01, year=1900)
 	        self.log_error(f, line)
 	        temp1[13] = date.strftime("%Y%m%d")	   
+	        
+	    elif f == "committee_master_%s" % year:
+	      cmte_zip = temp1[7]
+	      try:
+	        cmte_zip = int(cmte_zip[0:5])
+	        temp1[7] = cmte_zip
+	      except ValueError as e:
+		print e, line
+		temp1[7] = 0
+		
+	    elif f == "candidate_master_%s" % year:
+	      cand_zip = temp1[14]
+	      try:
+		cand_zip = int(cand_zip[0:5])
+	        temp1[14] = cand_zip
+	      except ValueError as e:
+		print e, line
+		temp1[7] = 0
+		
 	    temp1 = tuple(temp1)
 	    try:
 	      query = "INSERT INTO %s %s VALUES %s;" % (f, template, temp1)

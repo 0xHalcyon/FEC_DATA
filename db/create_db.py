@@ -21,8 +21,8 @@ candidate_master_sql = """CREATE TABLE candidate_master_%s ( \
                                            CAND_ST1 VARCHAR(40), \
                                            CAND_ST2 VARCHAR(40), \
                                            CAND_CITY VARCHAR(35), \
-                                           CAND_ST BIGINT, \
-                                           CAND_ZIP VARCHAR(14));"""
+                                           CAND_ST VARCHAR(5), \
+                                           CAND_ZIP BIGINT);"""
 
 #http://www.fec.gov/finance/disclosure/metadata/DataDictionaryCommitteeMaster.shtml
 committee_master_sql = """CREATE TABLE committee_master_%s ( \
