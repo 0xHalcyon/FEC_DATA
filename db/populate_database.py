@@ -50,7 +50,7 @@ class PopulateDatabase():
     if not os.path.isdir("%s/db/errors" % self.cwd):
       os.mkdir("%s/db/errors" % self.cwd)
   
-    self.errors = open("%s/db/errors/errors_%s.txt" % (self.cwd, self.year) "wb")
+    self.errors = open("%s/db/errors/errors_%s.txt" % (self.cwd, self.year), "wb")
     
   def log_error(self, table, string):
     to_write = "%s::%s\n" % (table, string)
