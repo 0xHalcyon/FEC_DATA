@@ -28,6 +28,10 @@ class threadedPopulate(threading.Thread):
     print "Done populating %s" % self.name 
     self.Connections.conns.putconn(self.conn, key=self.name, close=True)
     self.complete = True
+    self.join()
+    
+  #def __del__(self):
+    #pass
     
 class PopulateDatabase():
   def __init__(self, cwd, year, Connection):

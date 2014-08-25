@@ -52,7 +52,6 @@ def wrapper(function):
     for year in range(config.start_year, config.end_year, 2):
       threads[year] = populate_database.threadedPopulate(year, year, config.cwd, connections)
     for thread in sorted(threads):
-      threads[thread].daemon = True
       threads[thread].start()
     while True:
       for thread in sorted(threads):
