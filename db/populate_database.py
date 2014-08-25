@@ -21,16 +21,16 @@ class threadedPopulate(threading.Thread):
     self.conn = Connections.conns.getconn(key=self.name)
     self.complete = False
   def run(self):
-    print "Starting to populate %s" % self.name
+    #print "Starting to populate %s" % self.name
     populate_db = PopulateDatabase(self.cwd, self.name, self.conn)
     populate_db.populate_database()
+    print "Done populating %s" % self.name   
     self.complete = True
-    print "Done populating %s" % self.name    
-
+    
 class PopulateDatabase():
   def __init__(self, cwd, year, Connection):
     self.cwd = cwd
-    print self.cwd
+    #print self.cwd
     self.year = year
     self.__Connection = Connection
     self.__cur = self.__Connection.cursor()

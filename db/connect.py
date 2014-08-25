@@ -18,12 +18,12 @@ class Connection:
     try:       
       self.conns = pool.ThreadedConnectionPool(0,
 					       self.max_conns, 
+                                               database=self.__db_name.lower(),
                                                user=self.__db_user,
                                                password=self.__db_password,
 	                                       host=self.__db_host,
 			                       port=self.__db_port
 			                       )
-      self.cur = None
     except psycopg2.Error:
       raise Exception("Did you define database parameters in config and run make?")
     

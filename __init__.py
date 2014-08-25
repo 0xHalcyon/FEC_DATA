@@ -50,10 +50,10 @@ def wrapper(function):
     threads = {}
     for year in range(config.start_year, config.end_year, 2):
       threads[year] = populate_database.threadedPopulate(year, year, config.cwd, connections)
-    for thread in threads:
+    for thread in sorted(threads):
       threads[thread].start()
     while True:
-      for thread in threads:
+      for thread in sorted(threads):
 	if threads[thread].complete:
 	  threads[thread].join()
 	  threads[thread] = True
