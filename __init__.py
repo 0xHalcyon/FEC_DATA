@@ -45,12 +45,22 @@ def wrapper(function):
 	             'end_year': config.end_year
 	            }
     from db.connect import Connection
-    connection = Connection(conn_settings)
+    connections = Connection(conn_settings)
     from db import populate_database
-    populate_db = populate_database.PopulateDatabase(config.cwd, connection)
-    populate_db.populate_database(config.start_year,
-				  config.end_year,
-				 )
+    threads = {}
+    for year in range(config.start_year, config.end_year):
+      threads[year] = populate_database.threadedPopulate(year, year, config.cwd, connections)
+    for thread in threads:
+      threads[thread].start()
+    while True:
+      for thread in threads:
+	if threads[thread].complete:
+	  threads[thread].join()
+	  threads[thread] = True
+	elif all(True == x for x in threads.values()):
+	  break
+	else:
+	  continue
 
   elif function == "createuser":
     print "Will now create new user in PostgresSQL"
