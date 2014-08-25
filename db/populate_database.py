@@ -135,20 +135,19 @@ class PopulateDatabase():
 	  table_row = tuple(table_row)
 	  try:
 	    query = "INSERT INTO %s %s VALUES %s;" % (f, template, table_row)
-	    self.__cur.execute("BEGIN;")
 	    save_point = ''.join(self.random.choice(self.random_chars) for i in range(self.save_point_length))
 	    self.__cur.execute("SAVEPOINT save_point_%s;" % save_point)
             self.__cur.execute(query)
           except (psycopg2.DataError, psycopg2.InternalError) as e:
             self.log_error(f, e.pgerror + "::" + line)
-	    self.__cur.execute("ROLLBACK TO SAVEPOINT save_point;" % save_point)
+	    self.__cur.execute("ROLLBACK TO SAVEPOINT save_point_%s;" % save_point)
 	    continue
 	  except psycopg2.IntegrityError as e:
             self.log_error(f, e.pgerror + "::" + line)
-	    self.__cur.execute("ROLLBACK TO SAVEPOINT save_point;" % save_point)
+	    self.__cur.execute("ROLLBACK TO SAVEPOINT save_point_%s;" % save_point)
 	    continue
 	  else:
-	    self.__cur.execute("RELEASE SAVEPOINT save_point;" % save_point)
+	    self.__cur.execute("RELEASE SAVEPOINT save_point_%s;" % save_point)
 	self.__cur.execute("END WORK;") 
 	i+=1
         #print "Committing database"
