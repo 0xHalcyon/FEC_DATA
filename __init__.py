@@ -3,6 +3,7 @@
 import os
 import config
 import sys
+import time
 #db.create_db.create_db(start_year, end_year, cwd, db_prefix, db_user, db_password, db_host, db_port)
 #db.populate_database.populate_database(start_year, end_year, cwd, db_prefix, db_user, db_password, db_host, db_port)
 #ftp.download_files.download_files(start_year, end_year, cwd)
@@ -60,6 +61,7 @@ def wrapper(function):
 	elif all(True == x for x in threads.values()):
 	  break
 	else:
+	  time.sleep(1)
 	  continue
 
   elif function == "createuser":
