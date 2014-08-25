@@ -121,7 +121,7 @@ class PopulateDatabase():
 	    query = "INSERT INTO %s %s VALUES %s;" % (f, template, temp1)
 	    self.__cur.execute("BEGIN;")
 	    self.__cur.execute("SAVEPOINT save_point;")
-            self.__Connection.cur.execute(query)
+            self.__cur.execute(query)
           except (psycopg2.DataError, psycopg2.InternalError) as e:
             self.log_error(f, e + "::" + line)
 	    self.__cur.execute("ROLLBACK TO SAVEPOINT save_point;")
