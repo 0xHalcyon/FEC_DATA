@@ -104,6 +104,7 @@ class SearchLocation:
     candidates = []
     for __zipcode in zipcodes:
       __zipcodes.append(__zipcode[0].split(".")[0])
+    print __zipcodes
     for year in range(self.start_year, self.end_year, 2):
       print state
       __candidates_query = self.__cand_zipcodes_query.format(year)
