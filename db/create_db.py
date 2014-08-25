@@ -34,7 +34,7 @@ committee_master_sql = """CREATE TABLE committee_master_%s ( \
                                            CMTE_ST2 VARCHAR(40), \
                                            CMTE_CITY VARCHAR(35), \
                                            CMTE_ST VARCHAR(4), \
-                                           CMTE_ZIP VARCHAR(14), \
+                                           CMTE_ZIP BIGINT, \
                                            CMTE_DSGN VARCHAR(4), \
                                            CMTE_TP VARCHAR(4), \
                                            CMTE_PTY_AFFILIATION VARCHAR(5), \
