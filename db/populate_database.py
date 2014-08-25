@@ -88,7 +88,6 @@ class PopulateDatabase():
 	        cmte_zip = int(cmte_zip[0:5])
 	        temp1[7] = cmte_zip
 	      except ValueError as e:
-		print e, line
 		temp1[7] = 0
 		
 	    elif f == "candidate_master_%s" % year:
