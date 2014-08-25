@@ -57,7 +57,7 @@ def wrapper(function):
       for thread in sorted(threads):
 	if all(None == x for x in threads.values()):
 	  print "Complete"
-	  connections.closeall()
+	  connections.conns.closeall()
 	  return
 	elif threads[thread] == None:
 	  continue
