@@ -52,12 +52,15 @@ def wrapper(function):
     for year in range(config.start_year, config.end_year, 2):
       threads[year] = populate_database.threadedPopulate(year, year, config.cwd, connections)
     for thread in sorted(threads):
+      threads[thread].daemon = True
       threads[thread].start()
     while True:
       for thread in sorted(threads):
 	if threads[thread].complete:
+	  print "Thread: %s is complete" % threads[thread].name 
 	  threads[thread].join()
-	elif all(True == x.complete for x in threads.values()):
+	  threads[thread] = None
+	elif all(None == x for x in threads.values()):
 	  print "Complete"
 	  connections.closeall()
 	  return
