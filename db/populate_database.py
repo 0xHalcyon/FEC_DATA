@@ -78,7 +78,8 @@ class PopulateDatabase():
 	print table_filename, template_filename
         table_file = open(table_filename)
         template = open(template_filename).read().strip()
-      except IOError:
+      except IOError as e:
+	print e
         print "Have you run 'make download && make extract yet'?"
 	os.sys.exit(1)
       template = str(tuple(template.split(","))).replace("'", "").lower()
