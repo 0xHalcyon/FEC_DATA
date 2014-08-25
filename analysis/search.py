@@ -109,7 +109,7 @@ class SearchLocation:
       __candidates_query = self.__cand_zipcodes_query.format(year)
       print __candidates_query
       #__candidates_query = self.__Connection.cur.mogrify(__candidates_query, (tuple(__zipcodes),))
-      __candidates_query = __candidates_query % (__zipcodes[0]. __zipcodes[1])
+      __candidates_query = __candidates_query % (__zipcodes[0], __zipcodes[1])
       print __candidates_query
       try:
 	self.__Connection.cur.execute("BEGIN;")
