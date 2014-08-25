@@ -60,7 +60,7 @@ def wrapper(function):
 	  connections.closeall()
 	  return
 	elif threads[thread] == None:
-	  pass
+	  continue
 	elif threads[thread].complete:
 	  print "Thread: %s is complete" % threads[thread].name 
 	  threads[thread].join()
