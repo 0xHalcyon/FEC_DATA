@@ -23,11 +23,14 @@ class SearchLocation:
     self.__oth_linkage_query = "SELECT cmte_id FROM candidate_linkage_%s WHERE cand_id='%s'"
     self.__zipcode_query = "SELECT state, latitude, longitude FROM zipcodes WHERE zip LIKE'%s%%';"
     self.__city_state_query = "SELECT state FROM zipcodes WHERE LOWER(primary_city) LIKE LOWER('%%%s%%');"
-    self.__zipcodes_query = "SELECT zip FROM zipcodes WHERE latitude BETWEEN '%s' AND '%s'" + \
+    self.__zipcodes_query = "SELECT MAX(zip), MIN(zip) FROM zipcodes WHERE latitude BETWEEN '%s' AND '%s'" + \
                             "AND longitude BETWEEN '%s' AND '%s' and state='%s';"
-    self.__cand_zipcodes_query = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation," + \
-                                 "cand_city, cand_st FROM candidate_master_{0} WHERE cand_zip IN %s " + \
-				 "ORDER BY cand_name;"
+    #self.__cand_zipcodes_query = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation," + \
+                                 #"cand_city, cand_st FROM candidate_master_{0} WHERE cand_zip IN %s " + \
+				 #"ORDER BY cand_name;"
+    self.__cand_zipcodes_query = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation, " + \
+                                 "cand_city, cand_st FROM candidate_master_{0} WHERE cand_zip >= '%s'" + \
+				 " and cand_zip <= '%s';"
     self.__state_query = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation, cand_city," +\
                               "cand_st FROM candidate_master_{0} WHERE %s LIKE UPPER('%%%s%%') OR cand_id LIKE '__%s%%' ESCAPE ' ';"
     self.__city_state_query = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation, cand_city," +\
@@ -96,15 +99,17 @@ class SearchLocation:
     __zipcodes_stmt = self.__zipcodes_query % (SW_loc.deg_lat, NE_loc.deg_lat, SW_loc.deg_lon, NE_loc.deg_lon, state)
     self.__Connection.cur.execute(__zipcodes_stmt)
     zipcodes = self.__Connection.cur.fetchall()
+    print zipcodes
     __zipcodes = []
     candidates = []
     for __zipcode in zipcodes:
       __zipcodes.append(__zipcode[0].split(".")[0])
     for year in range(self.start_year, self.end_year, 2):
       print state
-      __candidates_query = self.__cand_zipcodes_query.format(year, state)
+      __candidates_query = self.__cand_zipcodes_query.format(year)
       print __candidates_query
-      __candidates_query = self.__Connection.cur.mogrify(__candidates_query, (tuple(__zipcodes),))
+      #__candidates_query = self.__Connection.cur.mogrify(__candidates_query, (tuple(__zipcodes),))
+      __candidates_query = __candidates_query
       print __candidates_query
       try:
 	self.__Connection.cur.execute("BEGIN;")
