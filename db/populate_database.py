@@ -61,7 +61,7 @@ class PopulateDatabase():
   def populate_database(self):
     """Populates FEC databases based on parameters listed in the config.py file in the root of this package"""
     
-    print "CURRENT YEAR: %s" % self.year
+    #print "CURRENT YEAR: %s" % self.year
     year_suffix = str(self.year)[2:]
     
     if self.year <= 1998:
