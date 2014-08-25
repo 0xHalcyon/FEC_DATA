@@ -30,6 +30,7 @@ class threadedPopulate(threading.Thread):
 class PopulateDatabase():
   def __init__(self, cwd, year, Connection):
     self.cwd = cwd
+    print self.cwd
     self.year = year
     self.__Connection = Connection
     self.__cur = self.__Connection.cursor()
@@ -72,53 +73,56 @@ class PopulateDatabase():
       f = table % self.year
       print "CURRENT TABLE: %s" % f
       try:
-        temp = open(temp_files[table][0] % (self.cwd, self.year, year_suffix))
-        template = open(temp_files[table][1] % self.cwd).read().strip()
+	table_filename = temp_files[table][0] % (self.cwd, self.year, year_suffix)
+	template_filename = temp_files[table][1] % self.cwd
+	print table_filename, template_filename
+        table_file = open(temp_filename)
+        template = open(template_filename).read().strip()
       except IOError:
         print "Have you run 'make download && make extract yet'?"
 	os.sys.exit(1)
       template = str(tuple(template.split(","))).replace("'", "").lower()
-      for chunk in read_some_lines(temp):
+      for chunk in read_some_lines(table_file):
         for line in chunk:
-	  temp1 = line.replace("\x92", "")
-	  temp1 = temp1.replace("\xa0", " ")
-	  temp1 = temp1.replace("\x85", "...")
-	  temp1 = temp1.strip().replace("'", "").split("|")
+	  table_row = line.replace("\x92", "")
+	  table_row = table_row.replace("\xa0", " ")
+	  table_row = table_row.replace("\x85", "...")
+	  table_row = table_row.strip().replace("'", "").split("|")
 	  
 	  if f in ("comm_to_comm_%s" % self.year, "cand_to_comm_%s" % self.year, "indiv_contrib_%s" % self.year):
-	    if temp1[13]:
-	      date = temp1[13]
+	    if table_row[13]:
+	      date = table_row[13]
 	      try:
 	        date = datetime(month=int(date[0:2]), day=int(date[2:4]), year=int(date[4:]))
 	      except ValueError as e:
-	        temp1[13] = datetime(month=1, day=1, year=self.year).strftime("%Y%m%d")
+	        table_row[13] = datetime(month=1, day=1, year=self.year).strftime("%Y%m%d")
 		self.log_error(f, line)
 		continue
-	      temp1[13] = date.strftime("%Y%m%d")
+	      table_row[13] = date.strftime("%Y%m%d")
 	    else:
 	      date = datetime(month=01, day=01, year=self.year)
 	      self.log_error(f, line)
-	      temp1[13] = date.strftime("%Y%m%d")	   
+	      table_row[13] = date.strftime("%Y%m%d")	   
 	       
 	  elif f == "committee_master_%s" % self.year:
-	    cmte_zip = temp1[7]
+	    cmte_zip = table_row[7]
 	    try:
 	      cmte_zip = int(cmte_zip[0:5])
-	      temp1[7] = cmte_zip
+	      table_row[7] = cmte_zip
 	    except ValueError as e:
-              temp1[7] = 0
+              table_row[7] = 0
 
 	  elif f == "candidate_master_%s" % self.year:
-	    cand_zip = temp1[14]
+	    cand_zip = table_row[14]
 	    try:
               cand_zip = int(cand_zip[0:5])
-	      temp1[14] = cand_zip
+	      table_row[14] = cand_zip
 	    except ValueError as e:
-	      temp1[14] = 0
+	      table_row[14] = 0
 		
-	  temp1 = tuple(temp1)
+	  table_row = tuple(table_row)
 	  try:
-	    query = "INSERT INTO %s %s VALUES %s;" % (f, template, temp1)
+	    query = "INSERT INTO %s %s VALUES %s;" % (f, template, table_row)
 	    self.__cur.execute("BEGIN;")
 	    self.__cur.execute("SAVEPOINT save_point;")
             self.__cur.execute(query)
