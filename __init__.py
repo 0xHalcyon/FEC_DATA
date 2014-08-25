@@ -48,7 +48,7 @@ def wrapper(function):
     connections = Connection(conn_settings)
     from db import populate_database
     threads = {}
-    for year in range(config.start_year, config.end_year):
+    for year in range(config.start_year, config.end_year, 2):
       threads[year] = populate_database.threadedPopulate(year, year, config.cwd, connections)
     for thread in threads:
       threads[thread].start()
