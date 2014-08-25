@@ -87,6 +87,7 @@ class PopulateDatabase():
 	      self.__Connection.cur.execute("SAVEPOINT save_point;")
               self.__Connection.cur.execute(query)
             except (psycopg2.DataError, psycopg2.InternalError) as e:
+	      print e, line
               self.log_error(f, line)
 	      self.__Connection.cur.execute("ROLLBACK TO SAVEPOINT save_point;")
 	      continue
