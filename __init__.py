@@ -57,9 +57,10 @@ def wrapper(function):
       for thread in sorted(threads):
 	if threads[thread].complete:
 	  threads[thread].join()
-	  threads[thread] = True
-	elif all(True == x for x in threads.values()):
-	  break
+	  threads[thread] = None
+	elif all(None == x for x in threads.values()):
+	  print "Complete"
+	  return
 	else:
 	  time.sleep(1)
 	  continue
