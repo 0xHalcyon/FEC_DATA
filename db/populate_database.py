@@ -15,23 +15,25 @@ def read_some_lines(file_object, chunk_size=1024):
 class threadedPopulate(threading.Thread):
   def __init__(self, threadID, year, cwd, Connections):
     threading.Thread.__init__(self)
+    self.Connections = Connections
     self.cwd = cwd
     self.threadID = threadID
     self.name = year
-    self.conn = Connections.conns.getconn(key=self.name)
+    self.conn = self.Connections.conns.getconn(key=self.name)
     self.complete = False
   def run(self):
     #print "Starting to populate %s" % self.name
     populate_db = PopulateDatabase(self.cwd, self.name, self.conn)
     populate_db.populate_database()
-    print "Done populating %s" % self.name   
+    print "Done populating %s" % self.name 
+    self.Connections.putconn(self.conn, key=self.name, close=True)
     self.complete = True
     
 class PopulateDatabase():
   def __init__(self, cwd, year, Connection):
     self.cwd = cwd
     #print self.cwd
-    self.year = year
+    self.year = int(year)
     self.__Connection = Connection
     self.__cur = self.__Connection.cursor()
     self.files = {"committee_master_%s"  : ["%s/data/%s/cm%s/cm.txt", "%s/db/headers/cm_header_file.csv"],
@@ -137,6 +139,7 @@ class PopulateDatabase():
 	    continue
 	  else:
 	    self.__cur.execute("RELEASE SAVEPOINT save_point;")
+      print "Committing database"
       self.__Connection.commit()
     self.__cur.close()
     self.errors.close()
