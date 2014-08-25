@@ -18,7 +18,7 @@ class threadedPopulate(threading.Thread):
     self.cwd = cwd
     self.threadID = threadID
     self.name = year
-    self.conn = Connections.getconn(key=self.name)
+    self.conn = Connections.conns.getconn(key=self.name)
     self.complete = False
   def run(self):
     print "Starting to populate %s" % self.name
