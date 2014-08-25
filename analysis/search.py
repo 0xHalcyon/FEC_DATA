@@ -23,7 +23,7 @@ class SearchLocation:
     self.__oth_linkage_query = "SELECT cmte_id FROM candidate_linkage_%s WHERE cand_id='%s'"
     self.__zipcode_query = "SELECT state, latitude, longitude FROM zipcodes WHERE zip LIKE'%s%%';"
     self.__city_state_query = "SELECT state FROM zipcodes WHERE LOWER(primary_city) LIKE LOWER('%%%s%%');"
-    self.__zipcodes_query = "SELECT MAX(zip), MIN(zip) FROM zipcodes WHERE latitude BETWEEN '%s' AND '%s'" + \
+    self.__zipcodes_query = "SELECT MIN(zip), MAX(zip) FROM zipcodes WHERE latitude BETWEEN '%s' AND '%s'" + \
                             "AND longitude BETWEEN '%s' AND '%s' and state='%s';"
     #self.__cand_zipcodes_query = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation," + \
                                  #"cand_city, cand_st FROM candidate_master_{0} WHERE cand_zip IN %s " + \
@@ -109,7 +109,7 @@ class SearchLocation:
       __candidates_query = self.__cand_zipcodes_query.format(year)
       print __candidates_query
       #__candidates_query = self.__Connection.cur.mogrify(__candidates_query, (tuple(__zipcodes),))
-      __candidates_query = __candidates_query
+      __candidates_query = __candidates_query % (__zipcodes[0]. __zipcodes[1])
       print __candidates_query
       try:
 	self.__Connection.cur.execute("BEGIN;")
