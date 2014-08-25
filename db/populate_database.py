@@ -75,7 +75,7 @@ class PopulateDatabase():
       try:
 	table_filename = temp_files[table][0] % (self.cwd, self.year, year_suffix)
 	template_filename = temp_files[table][1] % self.cwd
-	print table_filename, template_filename
+	#print table_filename, template_filename
         table_file = open(table_filename)
         template = open(template_filename).read().strip()
       except IOError as e:
