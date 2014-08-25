@@ -103,6 +103,7 @@ class SearchLocation:
     __zipcodes = []
     candidates = []
     for __zipcode in zipcodes:
+      print __zipcode
       __zipcodes.append(__zipcode[0].split(".")[0])
     print __zipcodes
     for year in range(self.start_year, self.end_year, 2):
