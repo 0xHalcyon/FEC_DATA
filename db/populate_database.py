@@ -4,7 +4,7 @@ import psycopg2
 from psycopg2 import pool
 import os
 from datetime import datetime
-
+import threading
 def read_some_lines(file_object, chunk_size=1024):
   while True:
     data = file_object.readlines(chunk_size)
