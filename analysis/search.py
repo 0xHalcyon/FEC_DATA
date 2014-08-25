@@ -29,8 +29,8 @@ class SearchLocation:
                                  #"cand_city, cand_st FROM candidate_master_{0} WHERE cand_zip IN %s " + \
 				 #"ORDER BY cand_name;"
     self.__cand_zipcodes_query = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation, " + \
-                                 "cand_city, cand_st FROM candidate_master_{0} WHERE cand_zip >= %s" + \
-				 " and cand_zip <= %s;"
+                                 "cand_city, cand_st FROM candidate_master_{0} WHERE cand_zip >= '%s'" + \
+				 " and cand_zip <= '%s';"
     self.__state_query = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation, cand_city," +\
                               "cand_st FROM candidate_master_{0} WHERE %s LIKE UPPER('%%%s%%') OR cand_id LIKE '__%s%%' ESCAPE ' ';"
     self.__city_state_query = "SELECT DISTINCT cand_name, cand_id, cand_pty_affiliation, cand_city," +\

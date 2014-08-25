@@ -91,6 +91,7 @@ class PopulateDatabase():
 	      self.__Connection.cur.execute("ROLLBACK TO SAVEPOINT save_point;")
 	      continue
 	    except psycopg2.IntegrityError as e:
+	      print "Error: %s" % e, line
               #self.log_error(year, line)
 	      self.__Connection.cur.execute("ROLLBACK TO SAVEPOINT save_point;")
 	      continue
